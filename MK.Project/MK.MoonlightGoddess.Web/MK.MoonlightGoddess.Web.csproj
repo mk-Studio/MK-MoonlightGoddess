@@ -153,6 +153,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\VerifyLoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -305,11 +306,12 @@
     <Content Include="Scripts\layui-v2.2.6\文档与示例\快速上手.url" />
     <Content Include="Scripts\layui-v2.2.6\更新日志.url" />
     <Content Include="Views\Index\Index.cshtml" />
-    <Content Include="Views\VerifyLogin\Login.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
