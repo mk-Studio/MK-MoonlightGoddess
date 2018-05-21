@@ -13,5 +13,18 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public JsonResult OnLogin(string title,string password)
+        {
+            if (title == "mk" && password == "123")
+            {
+                return Json(new { result = "Y" });
+            }
+            else
+            {
+                return Json(new { result = "N" });
+            }
+        }
     }
 }
