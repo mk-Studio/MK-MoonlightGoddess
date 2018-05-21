@@ -33,7 +33,7 @@
                                 <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <button class="layui-btn layui-btn-fluid" style="width:260px;">登录</button><br />
+                        <button class="layui-btn layui-btn-fluid " lay-submit=""  lay-filter="onLogin"style="width:260px;">登录</button><br />
                         <a class="wjmm" href="#">忘记密码>></a>
                     </form>
                 </div>
@@ -60,14 +60,24 @@
     </div>
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script>
-        layui.use('element', function () {
+        layui.use(['element', 'form'], function () {
             var $ = layui.jquery
                 , element = layui.element;
             var layid = location.hash.replace(/^#test=/, '');
+            var form = layui.form;
+            
             element.tabChange('test', layid);
 
             element.on('tab(test)', function (elem) {
                 location.hash = 'test=' + $(this).attr('lay-id');
+            });
+
+            //监听提交
+            form.on('submit(onLogin)', function (data) {
+                layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息'
+                })
+                return false;
             });
 
         });
