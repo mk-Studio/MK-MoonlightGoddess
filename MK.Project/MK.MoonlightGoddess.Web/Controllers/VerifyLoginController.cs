@@ -14,5 +14,10 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             return View();
         }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+        }
     }
 }
