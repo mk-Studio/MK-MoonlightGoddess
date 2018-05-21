@@ -15,8 +15,15 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View();
         }
 
+        protected override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            AuthorizationContext test = filterContext;
+            base.OnAuthorization(filterContext);
+        }
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            ActionExecutingContext test = filterContext;
             base.OnActionExecuting(filterContext);
         }
     }

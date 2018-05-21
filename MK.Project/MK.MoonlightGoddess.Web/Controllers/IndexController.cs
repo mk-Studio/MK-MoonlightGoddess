@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MK.MoonlightGoddess.Web.Controllers
 {
-    public class IndexController : Controller
+    public class IndexController : VerifyLoginController
     {
         // GET: Index
         public ActionResult Index()
