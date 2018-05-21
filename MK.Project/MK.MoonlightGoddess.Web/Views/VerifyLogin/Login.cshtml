@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/logintext.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="height:100px;text-align: center;">
+        <h1>XX管理系统</h1>
+    </div>
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="width:400px; margin: 0px auto;border-bottom:1px dotted #808080;">
+        <ul class="layui-tab-title">
+            <li class="layui-this">登录</li>
+            <li>注册</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div>
+                    <form class="layui-form" action="" style="text-align: center;">
+                        <div class="dljj">
+                            <div class="layui-input-inline" style="width:260px;">
+                                <input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="dljj">
+                            <div class="layui-input-inline" style="width:260px;">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <button class="layui-btn layui-btn-fluid" style="width:260px;">登录</button><br />
+                        <a class="wjmm" href="#">忘记密码>></a>
+                    </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div>
+                    <form class="layui-form" action="" style="text-align: center;">
+                        <div  class="dljj">
+                            <div class="layui-input-inline"style="width:260px;">
+                                <input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div  class="dljj">
+                            <div class="layui-input-inline"style="width:260px;">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <button  class="layui-btn layui-btn-fluid" style="width:260px;">注册</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script>
+        layui.use('element', function () {
+            var $ = layui.jquery
+                , element = layui.element;
+            var layid = location.hash.replace(/^#test=/, '');
+            element.tabChange('test', layid);
+
+            element.on('tab(test)', function (elem) {
+                location.hash = 'test=' + $(this).attr('lay-id');
+            });
+
+        });
+    </script>
+</body >
+</html >

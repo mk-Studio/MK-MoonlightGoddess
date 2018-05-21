@@ -1,0 +1,14 @@
+﻿body {
+    background: url(../../images/loginbeijing.jpg );
+    background-size: 100%  880px;
+    background-repeat: no-repeat;
+    margin-top: 100px;
+    /*border: solid red 1px;*/
+}
+.dljj {
+    padding-bottom:10px;
+}
+.wjmm {
+    float: right;
+    color:blue;
+}
