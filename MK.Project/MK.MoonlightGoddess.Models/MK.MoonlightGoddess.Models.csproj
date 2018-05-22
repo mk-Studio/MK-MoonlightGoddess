@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="EntityModels\MK_Type_WuLiao.cs" />
     <Compile Include="ResultModels\LayuiTableResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModels\AjaxResultModel.cs" />

@@ -11,18 +11,21 @@ namespace MK.MoonlightGoddess.Data
     public class SqlDBHelper
     {
         //链接数据库
-        public static string connectionString = "server=.;database=MK_MoonlightGoddess;uid=sa;pwd123456;";
+        public static string connectionString = "server=.;database=MK_MoonlightGoddess;uid=sa;pwd=123456;";
 
         /// <summary>
         /// 根据sql查询表返回DataSet
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static DataSet GetDataSetBySql(string sql)
+        public static DataSet GetDataSetBySql(string sql, SqlParameter[] sqlParameter, CommandType cmdType = CommandType.Text)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
-            SqlDataAdapter sdr = new SqlDataAdapter(sql,conn);
+            SqlDataAdapter sdr = new SqlDataAdapter();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SetSqlCmd(cmd,sqlParameter, cmdType);
+            sdr.SelectCommand = cmd;
             DataSet ds = new DataSet();
             try
             {
@@ -44,11 +47,14 @@ namespace MK.MoonlightGoddess.Data
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static DataTable GetDataTableBySql(string sql)
+        public static DataTable GetDataTableBySql(string sql, SqlParameter[] sqlParameter, CommandType cmdType = CommandType.Text)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
-            SqlDataAdapter sdr = new SqlDataAdapter(sql, conn);
+            SqlDataAdapter sdr = new SqlDataAdapter();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SetSqlCmd(cmd, sqlParameter, cmdType);
+            sdr.SelectCommand = cmd;
             DataTable dt = new DataTable();
             try
             {
@@ -70,11 +76,12 @@ namespace MK.MoonlightGoddess.Data
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static string GetSingleBySql(string sql)
+        public static string GetSingleBySql(string sql, SqlParameter[] sqlParameter, CommandType cmdType = CommandType.Text)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand comm = new SqlCommand(sql,conn);
+            SetSqlCmd(comm, sqlParameter, cmdType);
             string str = string.Empty;
             try
             {
@@ -96,12 +103,13 @@ namespace MK.MoonlightGoddess.Data
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static int GetNumberBySql(string sql)
+        public static int GetNumberBySql(string sql, SqlParameter[] sqlParameter, CommandType cmdType = CommandType.Text)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand comm = new SqlCommand(sql,conn);
-            int number = 0;
+            SetSqlCmd(comm, sqlParameter, cmdType);
+            int number = -1;
             try
             {
                 number = comm.ExecuteNonQuery();
@@ -115,7 +123,50 @@ namespace MK.MoonlightGoddess.Data
             {
                 conn.Close();
             }
-
         }
+
+        /// <summary>
+        /// 批量数据插入数据库
+        /// </summary>
+        /// <param name="dt">要插入的数据（字段列必须一致）</param>
+        /// <param name="TabName">要插入的表名</param>
+        public static bool DataTableToSQLServer(DataTable dt, string TabName)
+        {
+            bool result = false;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(con))
+                {
+                    try
+                    {
+                        //将DataTable表名作为待导入库中的目标表名 
+                        bulkCopy.DestinationTableName = TabName;
+                        foreach (DataColumn item in dt.Columns)
+                        {
+                            bulkCopy.ColumnMappings.Add(item.ColumnName, item.ColumnName);
+                        }
+                        bulkCopy.WriteToServer(dt);
+                        result = true;
+                    }
+                    catch
+                    {
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static void SetSqlCmd(SqlCommand currSqlCmd, SqlParameter[] cmdParms, CommandType cmdType = CommandType.Text)
+        {
+            currSqlCmd.CommandType = cmdType;
+            if (cmdParms != null)
+            {
+                foreach (SqlParameter parm in cmdParms)
+                    currSqlCmd.Parameters.Add(parm);
+            }
+        }
+
     }
 }

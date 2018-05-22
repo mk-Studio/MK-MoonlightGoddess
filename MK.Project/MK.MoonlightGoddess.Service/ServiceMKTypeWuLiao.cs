@@ -1,24 +1,23 @@
 ﻿using MK.MoonlightGoddess.Data;
+using MK.MoonlightGoddess.Models;
+using MK.MoonlightGoddess.Models.EntityModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MK.MoonlightGoddess.Service
 {
-    public class ServiceMKTypeWuLiao : ServiceAbstract
+    public static class ServiceMKTypeWuLiao
     {
-        public static string SelectWuLiaoType()
+        public static LayuiTableResultModel SelectWuLiaoType(string xmlName, string sqlName)
         {
-            Content = new DBContent();
-            return Content.GetSql();
-        }
-
-        public static string SelectWuLiaoType(string xmlName, string sqlName)
-        {
-            Content = new DBContent();
-            return Content.GetSql(xmlName,sqlName);
+            using (ServiceContent<MK_Type_WuLiao> sc = new ServiceContent<MK_Type_WuLiao>())
+            {
+                return sc.Select(new MK_Type_WuLiao(), xmlName, sqlName);
+            }
         }
     }
 }

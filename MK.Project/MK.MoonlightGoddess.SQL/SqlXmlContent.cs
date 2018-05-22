@@ -14,16 +14,26 @@ namespace MK.MoonlightGoddess.SQL
         /// </summary>
         private readonly string SQL_XML_PATH = AppDomain.CurrentDomain.BaseDirectory.Replace("Web","SQL");
 
-        public string GetSqlByXML()
+        private string commandText;
+        /// <summary>
+        /// 命令语句
+        /// </summary>
+        public string CommandText
         {
-            return SQL_XML_PATH;
+            get { return commandText; }
+            set { commandText = value; }
+        }
+        
+        public SqlXmlContent(string xmlName, string sqlName)
+        {
+            CommandText = GetSqlByXML(xmlName, sqlName);
         }
 
         public string GetSqlByXML(string xmlName,string sqlName)
         {
             string xmlPath = SQL_XML_PATH + xmlName + ".xml";
-            string sql = ConfigHelper.GetXmlText(xmlPath, sqlName);
-            return sql;
+            CommandText = ConfigHelper.GetXmlText(xmlPath, sqlName);
+            return CommandText;
         }
     }
 }

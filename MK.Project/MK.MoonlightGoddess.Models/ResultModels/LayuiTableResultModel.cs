@@ -25,7 +25,7 @@ namespace MK.MoonlightGoddess.Models
         /// <summary>
         /// 数据总行数
         /// </summary>
-        public string count { get; set; }
+        public int count { get; set; }
 
         /// <summary>
         /// 填充的数据

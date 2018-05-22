@@ -13,7 +13,7 @@ namespace MK.MoonlightGoddess.Models
     {
         public bool IsError { get; set; }
         public string Msg { get; set; }
-        public string Code { get; set; }
+        public int Code { get; set; }
         public object Data { get; set; }
     }
 }
