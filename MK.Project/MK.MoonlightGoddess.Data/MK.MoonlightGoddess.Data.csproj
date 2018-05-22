@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DBContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlDBHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MK.MoonlightGoddess.Core\MK.MoonlightGoddess.Core.csproj">
