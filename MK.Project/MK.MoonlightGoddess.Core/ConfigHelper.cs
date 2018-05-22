@@ -110,6 +110,26 @@ namespace MK.MoonlightGoddess.Core
         /// </summary>
         /// <param name="virtualPath">虚拟路径</param>
         /// <returns>虚拟路径对应的物理路径</returns>
-        public static string MapPath(string virtualPath,bool z = true) => System.Web.Hosting.HostingEnvironment.MapPath("~/") + virtualPath;
+        public static string MapPath(string virtualPath, bool z = true) => System.Web.Hosting.HostingEnvironment.MapPath("~/") + virtualPath;
+
+        public static string GetXmlText(string xmlPath, string sqlName)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(xmlPath);    //加载Xml文件,全路径    
+            XmlElement zElem = doc.DocumentElement;   //获取根节点    
+            XmlNodeList sqlNodes = zElem.GetElementsByTagName("sql"); //获取sql子节点集合    
+            string result = "";
+            foreach (XmlNode node in sqlNodes)
+            {
+                string strName = ((XmlElement)node).GetAttribute("name");   //获取name属性值    
+                if (strName != sqlName)
+                {
+                    continue;
+                }
+                result = node.InnerXml;
+                break;
+            }
+            return result;
+        }
     }
 }

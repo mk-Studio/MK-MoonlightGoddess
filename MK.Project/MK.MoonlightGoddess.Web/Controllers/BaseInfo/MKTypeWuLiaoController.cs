@@ -19,5 +19,10 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
         {
             return Content(ServiceMKTypeWuLiao.SelectWuLiaoType());
         }
+
+        public ActionResult Select2(string sqlName)
+        {
+            return Content(ServiceMKTypeWuLiao.SelectWuLiaoType("MK_Type_WuLiao", sqlName));
+        }
     }
 }

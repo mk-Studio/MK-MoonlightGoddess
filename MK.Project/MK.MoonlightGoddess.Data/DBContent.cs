@@ -23,5 +23,11 @@ namespace MK.MoonlightGoddess.Data
             SqlXmlContent sqlXmlContent = new SqlXmlContent();
             return sqlXmlContent.GetSqlByXML();
         }
+
+        public string GetSql(string xmlName, string sqlName)
+        {
+            SqlXmlContent sqlXmlContent = new SqlXmlContent();
+            return sqlXmlContent.GetSqlByXML(xmlName, sqlName);
+        }
     }
 }

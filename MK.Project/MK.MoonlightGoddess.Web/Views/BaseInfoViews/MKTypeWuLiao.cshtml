@@ -17,12 +17,15 @@
     <script type="text/javascript">
         $(function () {
             $.ajax({
-                url: "/MKTypeWuLiao/Select",
+                url: "/MKTypeWuLiao/Select2",
                 type: "get",
+                data: { sqlName: "QueryTest"},
+                async: false,
                 success: function (r) {
                     $("#Content").html(r);
                 }
             })
+            
         })
     </script>
 </body>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MK.MoonlightGoddess.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,21 @@ namespace MK.MoonlightGoddess.SQL
 {
     public class SqlXmlContent
     {
-        //AppDomain.CurrentDomain.RelativeSearchPath = 
-        //E:\GitHub\Project\BS\MK-MoonlightGoddess\MK-MoonlightGoddess\MK.Project\MK.MoonlightGoddess.Web\bin
+        /// <summary>
+        /// xml文件根路径
+        /// </summary>
         private readonly string SQL_XML_PATH = AppDomain.CurrentDomain.BaseDirectory.Replace("Web","SQL");
 
         public string GetSqlByXML()
         {
             return SQL_XML_PATH;
+        }
+
+        public string GetSqlByXML(string xmlName,string sqlName)
+        {
+            string xmlPath = SQL_XML_PATH + xmlName + ".xml";
+            string sql = ConfigHelper.GetXmlText(xmlPath, sqlName);
+            return sql;
         }
     }
 }

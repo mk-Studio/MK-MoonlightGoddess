@@ -14,5 +14,11 @@ namespace MK.MoonlightGoddess.Service
             Content = new DBContent();
             return Content.GetSql();
         }
+
+        public static string SelectWuLiaoType(string xmlName, string sqlName)
+        {
+            Content = new DBContent();
+            return Content.GetSql(xmlName,sqlName);
+        }
     }
 }
