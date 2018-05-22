@@ -14,7 +14,7 @@
   </sql>
   
   <sql name="QueryTest">
-    select * from MK_Type_WuLiao
+    select * from MK_Type_WuLiao where XX = @XX AND PP = @PP
   </sql>
   
 </MK_Type_WuLiao>

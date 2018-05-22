@@ -122,10 +122,7 @@ namespace MK.MoonlightGoddess.Core
             foreach (XmlNode node in sqlNodes)
             {
                 string strName = ((XmlElement)node).GetAttribute("name");   //获取name属性值    
-                if (strName != sqlName)
-                {
-                    continue;
-                }
+                if (strName != sqlName) continue;
                 result = node.InnerXml;
                 break;
             }
