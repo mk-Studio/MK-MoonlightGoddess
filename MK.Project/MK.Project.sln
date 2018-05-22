@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MoonlightGoddess.Models"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MoonlightGoddess.Data", "MK.MoonlightGoddess.Data\MK.MoonlightGoddess.Data.csproj", "{875324E9-AAA2-4113-BC68-56187EA7A952}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MoonlightGoddess.SQL", "MK.MoonlightGoddess.DBData\MK.MoonlightGoddess.SQL.csproj", "{B143BE00-B2AD-401E-972E-BDD823254587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MoonlightGoddess.SQL", "MK.MoonlightGoddess.SQL\MK.MoonlightGoddess.SQL.csproj", "{B143BE00-B2AD-401E-972E-BDD823254587}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MoonlightGoddess.Service", "MK.MoonlightGoddess.Service\MK.MoonlightGoddess.Service.csproj", "{4C49CF41-07C3-4083-84D7-42AAE9DDDB6C}"
 EndProject

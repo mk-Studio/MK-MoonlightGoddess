@@ -1,0 +1,152 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">Moonlight Goddess</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item"><a href=""> <i class="layui-icon layui-icon-home"></i>控制台</a></li>
+                <li class="layui-nav-item"><a href="">商品管理</a></li>
+                <li class="layui-nav-item"><a href="">用户</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">其它系统</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">邮件管理</a></dd>
+                        <dd><a href="">消息管理</a></dd>
+                        <dd><a href="">授权管理</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                        贤心
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">安全设置</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">退了</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="模板" lay-direction="2">
+                            <i class="layui-icon layui-icon-app"></i>
+                            <cite>模板</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a name='a' title="http://www.baidu.com/">百度一下</a></dd>
+                            <dd><a name='a' title="http://www.layui.com/">layui官网</a></dd>
+                            <dd><a name='a' title="https://github.com/">github官网</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;" lay-direction="2"><i class="layui-icon layui-icon-template"></i>解决方案</a>
+                        <dl class="layui-nav-child">
+                            <dd><a name='a' title="/Home/Unit">列表一</a></dd>
+                            <dd><a name='a' title="/Home/Unit">列表二</a></dd>
+                            <dd><a name='a' title="/Home/Unit">超链接</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a name='a' title="/Home/Unit" lay-direction="2"><i class="layui-icon layui-icon-component"></i>云市场</a></li>
+                    <li class="layui-nav-item"><a name='a' title="/Home/Unit" lay-direction="2"><i class="layui-icon layui-icon-senior"></i>发布商品</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            @*<div style="padding: 15px;">内容主体区域</div>*@
+            <div class="layui-tab" lay-filter="demo" lay-allowClose="true">
+                <ul id="tabTitle" class="layui-tab-title"></ul>
+                <div id="tabContainers" class="layui-tab-content">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script>
+
+        //调整iframe高度
+        function reinitIframe() {
+            var iframes = document.getElementsByName("iframe");
+            try {
+                for (var i = 0; i < iframes.length; i++)
+                    //iframes[i].height = iframes[i].contentWindow.document.documentElement.scrollHeight;
+                    iframes[i].height = window.screen.height - 320;
+            } catch (ex) { }
+        }
+        window.setInterval("reinitIframe()", 200);
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var $ = layui.jquery,
+                element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+            //触发事件
+            var active = {
+                tabAdd: function () {
+                    //新增一个Tab项
+                    element.tabAdd('demo', {
+                        title: $(this).text(),
+                        content: '<iframe name="iframe" src="' + this.title + '" frameborder="0" style="width: 100%;"></iframe>',
+                        id: $(this).text()
+                    });
+                    //增加点击关闭事件
+                    var r = $("#tabTitle").find("li");
+                    //每次新打开tab都是最后一个，所以只对最后一个tab添加点击关闭事件
+                    r.eq(r.length - 1).children("i.layui-tab-close").on("click", function () {
+                        element.tabDelete("demo", $(this).parent("li").index());
+                    }), element.tabChange("demo", r.length - 1);
+                    element.init();
+                },
+                tabDelete: function (index) {
+                    //删除指定Tab项
+                    element.tabDelete('demo', index); //删除（注意序号是从0开始计算）
+                },
+                tabChange: function (index) {
+                    //切换到指定Tab项
+                    element.tabChange('demo', index); //切换（注意序号是从0开始计算）
+                }
+            };
+
+            $("a[name='a']").on("click", function () {
+                var title = $(this).text();
+                var tabs = $(".layui-tab-title").children();
+                for (var i = 0; i < tabs.length; i++) {
+                    if ($(tabs[i]).html().substr(0, $(tabs[i]).html().indexOf("i") - 1) === title) {
+                        element.tabChange('demo', $(this).text());
+                        return;
+                    }
+                }
+                active["tabAdd"].call(this);
+                active.tabChange($(this).text());
+            });
+        });
+    </script>
+</body>
+</html>

@@ -40,12 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MK.MoonlightGoddess.Core\MK.MoonlightGoddess.Core.csproj">
       <Project>{ce5aa296-8a98-4201-98d4-7c79ed3a1c4b}</Project>
       <Name>MK.MoonlightGoddess.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MK.MoonlightGoddess.SQL\MK.MoonlightGoddess.SQL.csproj">
+      <Project>{b143be00-b2ad-401e-972e-bdd823254587}</Project>
+      <Name>MK.MoonlightGoddess.SQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\MK.MoonlightGoddess.Models\MK.MoonlightGoddess.Models.csproj">
       <Project>{8f9fb3c5-78d5-417b-bf45-bff3ed19a728}</Project>

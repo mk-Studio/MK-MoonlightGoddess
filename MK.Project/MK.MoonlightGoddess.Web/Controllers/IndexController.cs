@@ -13,5 +13,14 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             return View();
         }
+        public ActionResult Home()
+        {
+            return View("../Index/Home");
+        }
+
+        public ActionResult Admin()
+        {
+            return View("../Index/Admin");
+        }
     }
 }

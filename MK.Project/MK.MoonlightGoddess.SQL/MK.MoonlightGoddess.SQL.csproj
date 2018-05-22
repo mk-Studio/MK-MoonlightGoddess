@@ -7,8 +7,8 @@
     <ProjectGuid>{B143BE00-B2AD-401E-972E-BDD823254587}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MK.MoonlightGoddess.DBData</RootNamespace>
-    <AssemblyName>MK.MoonlightGoddess.DBData</AssemblyName>
+    <RootNamespace>MK.MoonlightGoddess.SQL</RootNamespace>
+    <AssemblyName>MK.MoonlightGoddess.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,15 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlXmlContent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MK.MoonlightGoddess.Core\MK.MoonlightGoddess.Core.csproj">
       <Project>{ce5aa296-8a98-4201-98d4-7c79ed3a1c4b}</Project>
       <Name>MK.MoonlightGoddess.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MK.MoonlightGoddess.Data\MK.MoonlightGoddess.Data.csproj">
-      <Project>{875324e9-aaa2-4113-bc68-56187ea7a952}</Project>
-      <Name>MK.MoonlightGoddess.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\MK.MoonlightGoddess.Models\MK.MoonlightGoddess.Models.csproj">
       <Project>{8f9fb3c5-78d5-417b-bf45-bff3ed19a728}</Project>
@@ -58,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DB-Create.sql" />
+    <Content Include="MK_Type_WuLiao.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

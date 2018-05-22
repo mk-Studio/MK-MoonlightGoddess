@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Type_WuLiao>
+  
+  <sql name="AddTest">
+    add * from MK_Type_WuLiao
+  </sql>
+
+  <sql name="DeleteTest">
+    delete * from MK_Type_WuLiao
+  </sql>
+
+  <sql name="UpdateTest">
+    update * from MK_Type_WuLiao
+  </sql>
+  
+  <sql name="QueryTest">
+    select * from MK_Type_WuLiao
+  </sql>
+  
+</MK_Type_WuLiao>
