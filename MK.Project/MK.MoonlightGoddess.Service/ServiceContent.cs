@@ -41,6 +41,12 @@ namespace MK.MoonlightGoddess.Service
             return ajaxResult;
         }
 
+        public static void Disposable()
+        {
+            ajaxResult = null;
+            layuiTableResult = null;
+        }
+
         private static AjaxResultModel ajaxResult = new AjaxResultModel(){
             IsError = false,
             Code = -1,
@@ -54,11 +60,5 @@ namespace MK.MoonlightGoddess.Service
             data = null,
             msg = "N"
         };
-        
-        public void Dispose()
-        {
-            ajaxResult = null;
-            layuiTableResult = null;
-        }
     }
 }
