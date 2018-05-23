@@ -1,4 +1,5 @@
-﻿using MK.MoonlightGoddess.Service;
+﻿using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             return View("../BaseInfoViews/MKTypeWuLiao");
         }
 
-        public JsonResult Select(string sqlName)
+        public JsonResult Select(MK_Type_WuLiao model)
         {
-            return Json(ServiceMKTypeWuLiao.SelectWuLiaoType("MK_Type_WuLiao", sqlName));
+            return Json(ServiceContent<MK_Type_WuLiao>.Select(model, "MK_Type_WuLiao","QueryTest"));
         }
     }
 }

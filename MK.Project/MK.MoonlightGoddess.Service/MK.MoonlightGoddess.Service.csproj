@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContent.cs" />
-    <Compile Include="ServiceMKTypeWuLiao.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MK.MoonlightGoddess.Core\MK.MoonlightGoddess.Core.csproj">

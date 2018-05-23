@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace MK.MoonlightGoddess.Service
 {
-    public class ServiceContent<TModel>: IDisposable where TModel : BaseModel
+    public static class ServiceContent<TModel> where TModel : BaseModel
     {
-        public LayuiTableResultModel Select(TModel model, string xmlName, string sqlName)
+        public static LayuiTableResultModel Select(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
             if (_Data != null ? true : false)
@@ -25,7 +25,7 @@ namespace MK.MoonlightGoddess.Service
             return layuiTableResult;
         }
 
-        public AjaxResultModel AjaxSIDU(TModel model, string xmlName, string sqlName)
+        public static AjaxResultModel AjaxSIDU(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
             if (_Data != null ? false : true)
@@ -41,14 +41,14 @@ namespace MK.MoonlightGoddess.Service
             return ajaxResult;
         }
 
-        private AjaxResultModel ajaxResult = new AjaxResultModel(){
+        private static AjaxResultModel ajaxResult = new AjaxResultModel(){
             IsError = false,
             Code = -1,
             Msg = "获取失败",
             Data = null
         };
 
-        private LayuiTableResultModel layuiTableResult = new LayuiTableResultModel() {
+        private static LayuiTableResultModel layuiTableResult = new LayuiTableResultModel() {
             code = -1,
             count = 0,
             data = null,
