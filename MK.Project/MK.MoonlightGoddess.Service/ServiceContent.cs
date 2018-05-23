@@ -26,7 +26,13 @@ namespace MK.MoonlightGoddess.Service
             return layuiTableResult;
         }
 
-        public static Object SelectSingle(TModel model, string xmlName, string sqlName)
+        public static string SelectSingle(TModel model, string xmlName, string sqlName)
+        {
+            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName);
+            return _Data;
+        }
+
+        public static Object AjaxSingle(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName);
             if (_Data != null ? true : false)
@@ -39,7 +45,7 @@ namespace MK.MoonlightGoddess.Service
                     Data = _Data
                 };
             }
-            return ajaxResult;
+            return _Data;
         }
 
         public static Object AjaxSIDU(TModel model, string xmlName, string sqlName)
