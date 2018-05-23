@@ -26,6 +26,22 @@ namespace MK.MoonlightGoddess.Service
             return layuiTableResult;
         }
 
+        public static Object SelectSingle(TModel model, string xmlName, string sqlName)
+        {
+            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName);
+            if (_Data != null ? true : false)
+            {
+                ajaxResult = new AjaxResultModel()
+                {
+                    IsError = true,
+                    Code = 0,
+                    Msg = "success",
+                    Data = _Data
+                };
+            }
+            return ajaxResult;
+        }
+
         public static Object AjaxSIDU(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
