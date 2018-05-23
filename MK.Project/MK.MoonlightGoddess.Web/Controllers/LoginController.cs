@@ -19,10 +19,15 @@ namespace MK.MoonlightGoddess.Web.Controllers
         [HttpPost]
         public JsonResult OnLogin(MK_Info_User model)
         {
-            var jsonResult = ServiceContent<MK_Info_User>.Select(model, "MK_Info_User", "QueryTest");
-            return Json(jsonResult);
-            //var jsonResult = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogon");
-            //return Json(jsonResult);
+            var jsonResult = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogon");
+            if (!string.IsNullOrEmpty(jsonResult))
+            {
+                return Json(new { result = "Y" });
+            }
+            else
+            {
+                return Json(new { result = "N" });
+            }
         }
     }
 }
