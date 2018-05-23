@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_User>
+
+  <sql name="ValidateLogon">
+    select * from MK_Info_User where UserName = @UserName and Passwor = @Passwor and ShowMark = 'Y'
+  </sql>
+
+  <sql name="QueryTest">
+    select * from MK_Info_User where ShowMark = 'Y'
+  </sql>
+
+</MK_Info_User>

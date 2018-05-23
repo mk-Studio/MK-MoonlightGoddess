@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,16 +17,12 @@ namespace MK.MoonlightGoddess.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult OnLogin(string title,string password)
+        public JsonResult OnLogin(MK_Info_User model)
         {
-            if (title == "mk" && password == "123")
-            {
-                return Json(new { result = "Y" });
-            }
-            else
-            {
-                return Json(new { result = "N" });
-            }
+            var jsonResult = ServiceContent<MK_Info_User>.Select(model, "MK_Info_User", "QueryTest");
+            return Json(jsonResult);
+            //var jsonResult = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogon");
+            //return Json(jsonResult);
         }
     }
 }
