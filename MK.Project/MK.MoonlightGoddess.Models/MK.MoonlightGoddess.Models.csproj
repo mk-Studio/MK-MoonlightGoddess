@@ -46,5 +46,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModels\AjaxResultModel.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

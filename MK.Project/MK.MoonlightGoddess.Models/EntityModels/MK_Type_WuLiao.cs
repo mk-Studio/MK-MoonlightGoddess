@@ -11,6 +11,7 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// <summary>
         /// 物料类型名称
         /// </summary>
-        public string WuLiaoTypeName { get; set; }
+        public string WuLiaoTypeName { get; set; }  
+
     }
 }
