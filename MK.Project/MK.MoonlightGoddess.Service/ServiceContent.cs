@@ -39,7 +39,7 @@ namespace MK.MoonlightGoddess.Service
             {
                 ajaxResult = new AjaxResultModel()
                 {
-                    IsError = true,
+                    IsError = false,
                     Code = 0,
                     Msg = "success",
                     Data = _Data
@@ -55,7 +55,7 @@ namespace MK.MoonlightGoddess.Service
             {
                 ajaxResult = new AjaxResultModel()
                 {
-                    IsError = true,
+                    IsError = false,
                     Code = 0,
                     Msg = "success",
                     Data = ConvertHelper.TableToList<TModel>(_Data)
