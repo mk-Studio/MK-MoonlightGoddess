@@ -1,4 +1,5 @@
-﻿using MK.MoonlightGoddess.Data;
+﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Data;
 using MK.MoonlightGoddess.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace MK.MoonlightGoddess.Service
 {
     public static class ServiceContent<TModel> where TModel : BaseModel
     {
-        public static LayuiTableResultModel Select(TModel model, string xmlName, string sqlName)
+        public static Object Select(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
             if (_Data != null ? true : false)
@@ -18,14 +19,14 @@ namespace MK.MoonlightGoddess.Service
                 layuiTableResult = new LayuiTableResultModel(){
                     code = _Data != null ? 0 : -1,
                     count = _Data.Rows.Count,
-                    data = _Data,
+                    data = ConvertHelper.TableToList<TModel>(_Data),
                     msg = "success"
                 };
             }
             return layuiTableResult;
         }
 
-        public static AjaxResultModel AjaxSIDU(TModel model, string xmlName, string sqlName)
+        public static Object AjaxSIDU(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
             if (_Data != null ? false : true)
@@ -34,8 +35,8 @@ namespace MK.MoonlightGoddess.Service
                 {
                     IsError = true,
                     Code = 0,
-                    Msg = "执行成功",
-                    Data = _Data
+                    Msg = "success",
+                    Data = ConvertHelper.TableToList<TModel>(_Data)
                 };
             }
             return ajaxResult;
@@ -48,9 +49,9 @@ namespace MK.MoonlightGoddess.Service
         }
 
         private static AjaxResultModel ajaxResult = new AjaxResultModel(){
-            IsError = false,
+            IsError = true,
             Code = -1,
-            Msg = "获取失败",
+            Msg = "fail",
             Data = null
         };
 
@@ -58,7 +59,7 @@ namespace MK.MoonlightGoddess.Service
             code = -1,
             count = 0,
             data = null,
-            msg = "N"
+            msg = "fail"
         };
     }
 }

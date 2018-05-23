@@ -47,6 +47,13 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_WuLiao', 'COLUMN', N'CreateDate'
 GO
+INSERT MK_Type_WuLiao(WuLiaoTypeName,CreateUser,CreateDate) VALUES
+(N'数码产品','System','2018-05-20'),
+(N'黑科技产品','System','2018-05-20'),
+(N'农作物产品','System','2018-05-20'),
+(N'生活产品','System','2018-05-20'),
+(N'饮料产品','System','2018-05-20'),
+(N'机械零件产品','System','2018-05-20')
 
 --物料具体信息
 CREATE TABLE MK_Info_WuLiao(

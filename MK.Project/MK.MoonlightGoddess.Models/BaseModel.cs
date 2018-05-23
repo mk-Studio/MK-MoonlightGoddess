@@ -26,11 +26,13 @@ namespace MK.MoonlightGoddess.Models
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreateDate
+        public string CreateDate
         {
-            get { return DateTime.Now; }
+            get { return FormatDate.ToString("yyyy-MM-dd"); }
+            set { FormatDate = Convert.ToDateTime(value); }
         }
 
+        private DateTime FormatDate { get; set; }
         /// <summary>
         /// layui 分页数
         /// </summary>

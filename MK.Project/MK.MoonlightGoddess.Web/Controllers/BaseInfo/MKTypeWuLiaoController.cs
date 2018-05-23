@@ -1,4 +1,6 @@
-﻿using MK.MoonlightGoddess.Models.EntityModels;
+﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models;
+using MK.MoonlightGoddess.Models.EntityModels;
 using MK.MoonlightGoddess.Service;
 using System;
 using System.Collections.Generic;
@@ -16,9 +18,11 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             return View("../BaseInfoViews/MKTypeWuLiao");
         }
 
+        [HttpPost]
         public JsonResult Select(MK_Type_WuLiao model)
         {
-            return Json(ServiceContent<MK_Type_WuLiao>.Select(model, "MK_Type_WuLiao","QueryTest"));
+            var jsonResult = ServiceContent<MK_Type_WuLiao>.Select(model, "MK_Type_WuLiao", "QueryTest");
+            return Json(jsonResult);
         }
     }
 }
