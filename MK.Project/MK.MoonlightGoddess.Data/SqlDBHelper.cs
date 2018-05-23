@@ -23,8 +23,8 @@ namespace MK.MoonlightGoddess.Data
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlDataAdapter sdr = new SqlDataAdapter();
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            SetSqlCmd(cmd,sqlParameter, cmdType);
+            SqlCommand cmd = new SqlCommand();
+            SetSqlCmd(conn, cmd, sql, sqlParameter, cmdType);
             sdr.SelectCommand = cmd;
             DataSet ds = new DataSet();
             try
@@ -52,8 +52,8 @@ namespace MK.MoonlightGoddess.Data
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlDataAdapter sdr = new SqlDataAdapter();
-            SqlCommand cmd = new SqlCommand(sql, conn);
-            SetSqlCmd(cmd, sqlParameter, cmdType);
+            SqlCommand cmd = new SqlCommand();
+            SetSqlCmd(conn,cmd,sql, sqlParameter, cmdType);
             sdr.SelectCommand = cmd;
             DataTable dt = new DataTable();
             try
@@ -80,8 +80,8 @@ namespace MK.MoonlightGoddess.Data
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
-            SqlCommand comm = new SqlCommand(sql,conn);
-            SetSqlCmd(comm, sqlParameter, cmdType);
+            SqlCommand comm = new SqlCommand();
+            SetSqlCmd(conn, comm, sql, sqlParameter, cmdType);
             string str = string.Empty;
             try
             {
@@ -107,8 +107,8 @@ namespace MK.MoonlightGoddess.Data
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
-            SqlCommand comm = new SqlCommand(sql,conn);
-            SetSqlCmd(comm, sqlParameter, cmdType);
+            SqlCommand comm = new SqlCommand();
+            SetSqlCmd(conn, comm, sql, sqlParameter, cmdType);
             int number = -1;
             try
             {
@@ -158,8 +158,10 @@ namespace MK.MoonlightGoddess.Data
             return result;
         }
 
-        private static void SetSqlCmd(SqlCommand currSqlCmd, SqlParameter[] cmdParms, CommandType cmdType = CommandType.Text)
+        private static void SetSqlCmd(SqlConnection con, SqlCommand currSqlCmd, string cmdText, SqlParameter[] cmdParms, CommandType cmdType = CommandType.Text)
         {
+            currSqlCmd.Connection = con;
+            currSqlCmd.CommandText = cmdText;
             currSqlCmd.CommandType = cmdType;
             if (cmdParms != null)
             {
