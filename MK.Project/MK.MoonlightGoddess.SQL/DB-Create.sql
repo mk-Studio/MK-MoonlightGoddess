@@ -266,6 +266,27 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_User', 'COLUMN', N'CreateDate'
 GO
+INSERT INTO dbo.MK_Info_User
+(
+    ID,
+    UserName,
+    Passwor,
+    WuLiuYeWuID,
+    PowerGroupID,
+    ShowMark,
+    CreateUser,
+    CreateDate
+)
+VALUES
+(   NEWID(),      -- ID - nvarchar(36)
+    N'mk',      -- UserName - nvarchar(30)
+    N'123',      -- Passwor - nvarchar(30)
+    N'1',      -- WuLiuYeWuID - nvarchar(36)
+    N'1',      -- PowerGroupID - nvarchar(36)
+    'Y',       -- ShowMark - char(1)
+    N'mk',      -- CreateUser - nvarchar(30)
+    GETDATE() -- CreateDate - datetime
+)
 
 CREATE TABLE MK_Info_PowerGroup(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,

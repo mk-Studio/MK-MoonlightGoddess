@@ -56,7 +56,7 @@
             //监听提交
             form.on('submit(onLogin)', function (data) {
                 $.ajax({
-                    url: "Login/OnLogin",
+                    url: "/Login/OnLogin",
                     type: "post",
                     data: { UserName: data.field.title, passwor: data.field.password },
                     dataType: "json",

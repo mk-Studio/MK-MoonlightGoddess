@@ -85,7 +85,7 @@ namespace MK.MoonlightGoddess.Data
             string str = string.Empty;
             try
             {
-                str = (string)comm.ExecuteScalar();
+                str = comm.ExecuteScalar().ToString();
                 return str;
             }
             catch

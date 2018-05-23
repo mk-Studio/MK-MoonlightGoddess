@@ -20,12 +20,17 @@
     <script type="text/javascript">
         $(function () {
             $.ajax({
-                url: "/MKTypeWuLiao/Select",
+                url: "/MKTypeWuLiao/GetSingleResult",
                 type: "POST",
                 async: false,
+                data: { WuLiaoTypeName : "数码产品"},
                 dataType: "json",
                 success: function (r) {
-                    $("#Content").html(r);
+                    if (!r.IsError) {
+                        alert(r.Data)
+                    } else {
+                        alert(r.Msg +"~ 错误代码："+r.Code )
+                    }
                 }
             })
 

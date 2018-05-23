@@ -24,5 +24,12 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             var jsonResult = ServiceContent<MK_Type_WuLiao>.Select(model, "MK_Type_WuLiao", "QueryTest");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult GetSingleResult(MK_Type_WuLiao model)
+        {
+            var jsonResult = ServiceContent<MK_Type_WuLiao>.AjaxSingle(model, "MK_Type_WuLiao", "QuerySingleTest");
+            return Json(jsonResult);
+        }
     }
 }

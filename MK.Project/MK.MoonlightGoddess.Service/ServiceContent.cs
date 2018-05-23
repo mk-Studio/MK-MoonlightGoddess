@@ -11,6 +11,11 @@ namespace MK.MoonlightGoddess.Service
 {
     public static class ServiceContent<TModel> where TModel : BaseModel
     {
+        public static Object AjaxSelect(TModel model, string xmlName, string sqlName)
+        {
+            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
+            return _Data;
+        }
         public static Object Select(TModel model, string xmlName, string sqlName)
         {
             var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
@@ -20,7 +25,7 @@ namespace MK.MoonlightGoddess.Service
                     code = _Data != null ? 0 : -1,
                     count = _Data.Rows.Count,
                     data = ConvertHelper.TableToList<TModel>(_Data),
-                    msg = "success"
+                    msg = "success"                     
                 };
             }
             return layuiTableResult;
@@ -45,6 +50,12 @@ namespace MK.MoonlightGoddess.Service
                     Data = _Data
                 };
             }
+            return ajaxResult;
+        }
+
+        public static Object SelectSIDU(TModel model, string xmlName, string sqlName)
+        {
+            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName);
             return _Data;
         }
 

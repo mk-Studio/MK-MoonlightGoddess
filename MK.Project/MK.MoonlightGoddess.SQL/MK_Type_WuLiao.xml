@@ -17,4 +17,7 @@
     select * from MK_Type_WuLiao
   </sql>
   
+  <sql name="QuerySingleTest">
+    select count(ID) from MK_Type_WuLiao where WuLiaoTypeName = @WuLiaoTypeName
+  </sql>
 </MK_Type_WuLiao>
