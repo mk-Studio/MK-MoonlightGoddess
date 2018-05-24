@@ -13,11 +13,6 @@ namespace MK.MoonlightGoddess.Web.Controllers
         // GET: VerifyLogin
 
         public MK_Info_User CurrAccount { get; set; }
-
-        public ActionResult Login()
-        {
-            return View();
-        }
         
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -27,7 +22,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
             {
                 CurrAccount.ID = _id.ToString();
                 CurrAccount.UserName = _username.ToString();
-                filterContext.Result = Login();
+                filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
                 return;
             }
             base.OnActionExecuting(filterContext);
