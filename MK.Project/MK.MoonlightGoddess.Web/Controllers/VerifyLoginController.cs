@@ -27,7 +27,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
             {
                 CurrAccount.ID = _id.ToString();
                 CurrAccount.UserName = _username.ToString();
-                filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
+                filterContext.Result = Login();
                 return;
             }
             base.OnActionExecuting(filterContext);
