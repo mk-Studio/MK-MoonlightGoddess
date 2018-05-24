@@ -24,7 +24,7 @@ namespace MK.MoonlightGoddess.Data
         {
             string cmdText = GetCommandText(xmlName,sqlName);
             SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
-            return SqlDBHelper.GetDataSetBySql(cmdText, sqlParameter);
+            return SqlDBHelper.GetDataSetBySql(cmdText, sqlParameter, cmdType);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace MK.MoonlightGoddess.Data
         {
             string cmdText = GetCommandText(xmlName, sqlName);
             SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
-            return SqlDBHelper.GetDataTableBySql(cmdText, sqlParameter);
+            return SqlDBHelper.GetDataTableBySql(cmdText, sqlParameter, cmdType);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace MK.MoonlightGoddess.Data
         {
             string cmdText = GetCommandText(xmlName, sqlName);
             SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
-            return SqlDBHelper.GetSingleBySql(cmdText, sqlParameter);
+            return SqlDBHelper.GetSingleBySql(cmdText, sqlParameter, cmdType);
         }
 
         /// <summary>
@@ -62,10 +62,26 @@ namespace MK.MoonlightGoddess.Data
         /// <param name="parms">实体model</param>
         /// <param name="cmdType">执行方式</param>
         /// <returns></returns>
-        public static bool GetExecResult(string cmdText, TModel parms, CommandType cmdType = CommandType.Text)
+        public static bool GetExecResult(TModel parms, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
         {
+            string cmdText = GetCommandText(xmlName, sqlName);
             SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
-            return SqlDBHelper.GetNumberBySql(cmdText, sqlParameter) > 0 ? true : false;
+            return SqlDBHelper.GetNumberBySql(cmdText, sqlParameter,cmdType) > 0 ? true : false;
+        }
+
+        /// <summary>
+        /// 获取单行Model
+        /// </summary>
+        /// <param name="cmdText">命令语句[sql语句、存储过程名称]</param>
+        /// <param name="commandType">执行方式</param>
+        /// <param name="parma">实体model</param>
+        /// <returns></returns>
+        public static TModel GetSingleRowModel(TModel parma, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        {
+            string cmdText = GetCommandText(xmlName, sqlName);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parma);
+            TModel data = SqlDBHelper.GetSingleRowModel<TModel>(cmdText, sqlParameter, cmdType);
+            return data;
         }
 
         /// <summary>
