@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MK.MoonlightGoddess.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,6 +24,11 @@ namespace MK.MoonlightGoddess.Web.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            if (SessionHelper.GetSession("ID") == null || SessionHelper.GetSession("UserName") == null)
+            {
+                filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
+                return;
+            }
             ActionExecutingContext test = filterContext;
             base.OnActionExecuting(filterContext);
         }
