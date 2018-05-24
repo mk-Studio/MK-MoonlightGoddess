@@ -1,4 +1,5 @@
 ﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models.EntityModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,25 +12,24 @@ namespace MK.MoonlightGoddess.Web.Controllers
     {
         // GET: VerifyLogin
 
+        public MK_Info_User CurrAccount { get; set; }
+
         public ActionResult Login()
         {
             return View();
         }
-
-        protected override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            AuthorizationContext test = filterContext;
-            base.OnAuthorization(filterContext);
-        }
-
+        
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (SessionHelper.GetSession("ID") == null || SessionHelper.GetSession("UserName") == null)
+            var _id = SessionHelper.GetSession("ID");
+            var _username = SessionHelper.GetSession("UserName");
+            if (_id == null || _username == null)
             {
+                CurrAccount.ID = _id.ToString();
+                CurrAccount.UserName = _username.ToString();
                 filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
                 return;
             }
-            ActionExecutingContext test = filterContext;
             base.OnActionExecuting(filterContext);
         }
     }
