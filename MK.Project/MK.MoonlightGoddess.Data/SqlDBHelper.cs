@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MK.MoonlightGoddess.Core;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -123,6 +124,22 @@ namespace MK.MoonlightGoddess.Data
             {
                 conn.Close();
             }
+        }
+
+        /// <summary>
+        /// 执行操作，根据索引，返回单个指定类型
+        /// </summary>
+        /// <returns>T</returns>
+        public static TModel GetSingleRowModel<TModel>(string sql, SqlParameter[] sqlParameter, CommandType cmdType = CommandType.Text)
+        {
+            DataTable dt = GetDataTableBySql(sql, sqlParameter, cmdType);
+            List<TModel> resultList = ConvertHelper.TableToList<TModel>(dt);
+            if (resultList.Count <= 0)
+            {
+                throw new NullReferenceException("not exists result data");
+            }
+            TModel result = resultList[0];
+            return result;
         }
 
         /// <summary>
