@@ -156,6 +156,7 @@
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SeletcOptionsController.cs" />
     <Compile Include="Controllers\VerifyLoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -171,6 +172,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\loginbeijing.jpg" />
+    <Content Include="Js\MKCom.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
