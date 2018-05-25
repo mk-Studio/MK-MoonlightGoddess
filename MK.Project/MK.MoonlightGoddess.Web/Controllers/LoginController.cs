@@ -22,7 +22,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
         public JsonResult OnLogin(MK_Info_User model)
         {
             DataTable Userdt = new DataTable();
-            Userdt = (DataTable)ServiceContent<MK_Info_User>.SelectSIDU(model, "MK_Info_User", "ValidateLogon");
+            Userdt = ServiceContent<MK_Info_User>.SelectData(model, "MK_Info_User", "ValidateLogon");
             if (Userdt.Rows.Count==1)
             {
                 foreach (DataColumn dc in Userdt.Columns)
