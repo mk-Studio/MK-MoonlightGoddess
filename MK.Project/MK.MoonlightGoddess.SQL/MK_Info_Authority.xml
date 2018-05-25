@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<MK_Info_Authority>
+  
+  <sql name="SelectAuthority">
+    SELECT * FROM MK_Type_Power WHERE ShowMark = 'Y'
+  </sql>
+  
+</MK_Info_Authority>
