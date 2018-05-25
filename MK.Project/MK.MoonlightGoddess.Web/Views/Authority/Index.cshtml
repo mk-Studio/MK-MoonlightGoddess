@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>authority management</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="Content"></div>
+    <form class="layui-form" action="">
+        <div class="layui-inline">
+            <label class="layui-form-label">搜索选择框</label>
+            <div class="layui-input-inline">
+                <select id="wuliaoType" name="modules" lay-verify="required" lay-search="" lay-filter="wuliaoType"></select>
+            </div>
+        </div>
+    </form>
+    <table class="layui-hide" id="tbWuliaoType" lay-filter="tbWuliaoType"></table>
+
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        var table,  //表格
+            form;  //表单
+        layui.use(['table', 'form'], function () {
+            var table = layui.table
+                , form = layui.form;
+            table.render({
+                elem: '#tbWuliaoType'
+                , height: 332
+                , url: '/MKTypeWuLiao/Select' //数据接口
+                , method: 'post'
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
+                    , { field: 'PowerName', title: '菜单名称', width: 150 }
+                    , { field: 'ShowMark', title: '显示标识', width: 80, sort: true }
+                    , { field: 'CreateUser', title: '创建人', width: 120 }
+                    , { field: 'CreateDate', title: '创建时间', width: 140 }
+                    , { field: 'Notes', title: '备注', width: 140 }
+                ]]
+            });
+        });
+    </script>
+</body>
+</html>
