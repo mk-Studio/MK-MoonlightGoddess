@@ -13,14 +13,14 @@
 </head>
 <body>
     <div id="Content"></div>
-    <form class="layui-form" action="">
+    @*<form class="layui-form" action="">
         <div class="layui-inline">
             <label class="layui-form-label">搜索选择框</label>
             <div class="layui-input-inline">
                 <select id="wuliaoType" name="modules" lay-verify="required" lay-search="" lay-filter="wuliaoType"></select>
             </div>
         </div>
-    </form>
+    </form>*@
     <table class="layui-hide" id="tbWuliaoType" lay-filter="tbWuliaoType"></table>
 
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
@@ -34,7 +34,7 @@
             table.render({
                 elem: '#tbWuliaoType'
                 , height: 332
-                , url: '/MKTypeWuLiao/Select' //数据接口
+                , url: '/Authority/Select' //数据接口
                 , method: 'post'
                 , page: true //开启分页
                 , cols: [[ //表头
