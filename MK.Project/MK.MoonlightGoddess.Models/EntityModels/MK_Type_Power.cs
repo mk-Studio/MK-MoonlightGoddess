@@ -14,6 +14,11 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         public string PowerName { get; set; }
 
         /// <summary>
+        /// 菜单地址
+        /// </summary>
+        public string MenuAddress { get; set; }
+
+        /// <summary>
         /// 备注
         /// </summary>
         public string Notes { get; set; }

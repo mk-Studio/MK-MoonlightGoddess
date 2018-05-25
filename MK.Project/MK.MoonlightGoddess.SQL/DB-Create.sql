@@ -234,7 +234,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'T
 GO
 
 
-
+--用户信息
 CREATE TABLE MK_Info_User(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	UserName NVARCHAR(30) NOT NULL,
@@ -288,6 +288,7 @@ VALUES
     GETDATE() -- CreateDate - datetime
 )
 
+--权限组
 CREATE TABLE MK_Info_PowerGroup(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	PowerGroupName NVARCHAR(30),
@@ -308,9 +309,11 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerGroup', 'COLUMN', N'CreateDate'
 GO
 
+--权限表(菜单)
 CREATE TABLE MK_Type_Power(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	PowerName  NVARCHAR(30),
+	MenuAddress NVARCHAR(255),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
@@ -322,6 +325,8 @@ EXEC sp_addextendedproperty N'MS_Description', N'权限ID【GUID】', 'SCHEMA', N'db
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'权限名', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'PowerName'
 GO
+EXEC sp_addextendedproperty N'MS_Description', N'菜单地址', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'MenuAddress'
+GO
 EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'ShowMark'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'CreateUser'
@@ -331,6 +336,51 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'备注', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'Notes'
 GO
 
+INSERT INTO dbo.MK_Type_Power
+(
+    ID,
+    PowerName,
+	MenuAddress,
+    ShowMark,
+    CreateUser,
+    CreateDate,
+    Notes
+)
+VALUES
+(   NEWID(),       -- ID - nvarchar(36)
+    N'申请',       -- PowerName - nvarchar(30)
+	N'../Quanxian/Index',
+    'Y',        -- ShowMark - char(1)
+    N'mk',       -- CreateUser - nvarchar(30)
+    GETDATE(), -- CreateDate - datetime
+    N'物料申请'        -- Notes - nvarchar(100)
+)
+
+--功能(菜单-功能)
+CREATE TABLE MK_Info_Features(
+	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	PowerID NVARCHAR(36),
+	FeaturesName NVARCHAR(36),
+	ShowMark CHAR(1) DEFAULT 'Y',
+	CreateUser NVARCHAR(30),
+	CreateDate DATETIME,
+)
+EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 功能', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Features', NULL, NULL
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'功能ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'菜单ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'PowerID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'功能名称', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'FeaturesName'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'ShowMark'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'CreateUser'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'CreateDate'
+GO
+
+--权限分配表
 CREATE TABLE MK_Info_PowerAllot(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	PowerGroupID NVARCHAR(36),
