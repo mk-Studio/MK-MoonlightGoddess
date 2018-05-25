@@ -32,11 +32,5 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             return Json(jsonResult);
         }
 
-        [HttpPost]
-        public JsonResult GetSelectOptions(MK_Type_WuLiao model)
-        {
-            var jsonResult = ServiceContent<MK_Type_WuLiao>.GetSelectOptionsBySqlName(model, "WuLiaoType");
-            return Json(jsonResult);
-        }
     }
 }
