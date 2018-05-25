@@ -16,7 +16,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
         }
         public ActionResult Home()
         {
-            ViewBag.UserName = CookieHelper.GetCookieValue("UserName");
+            ViewBag.UserName = CurrAccount.UserName;
             return View("../Index/Home");
         }
 

@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
 {
-    public class MKTypeWuLiaoController : Controller
+    public class MKTypeWuLiaoController : VerifyLoginController
     {
         // GET: MKTypeWuLiao
         public ActionResult Index()

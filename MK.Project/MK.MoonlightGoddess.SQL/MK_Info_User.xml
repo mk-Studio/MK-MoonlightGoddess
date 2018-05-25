@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MK_Info_User>
 
-  <sql name="ValidateLogon">
-    select * from MK_Info_User where UserName = @UserName and Passwor = @Passwor and ShowMark = 'Y'
+  <sql name="ValidateLogin">
+    select count(UserName) from MK_Info_User where UserName = @UserName and Passwor = @Passwor and ShowMark = 'Y'
   </sql>
 
   <sql name="QueryTest">

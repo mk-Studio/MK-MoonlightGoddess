@@ -16,15 +16,16 @@ namespace MK.MoonlightGoddess.Web.Controllers
         
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var  _id= CookieHelper.GetCookieValue("ID");
-            var _userName = CookieHelper.GetCookieValue("UserName");
-            if (_id == null || _userName == null)
-            {
-                CurrAccount.ID = _id.ToString();
-                filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
-                return;
-            }
             base.OnActionExecuting(filterContext);
+            var _userName = CookieHelper.GetCookieValue("MoonlightGoddess");
+            if (!string.IsNullOrEmpty(_userName))
+            {
+                CurrAccount = new MK_Info_User() { UserName = EncryptHelper.AES_Decrypt(_userName) };
+            }
+            else
+            {
+                Response.Redirect("~/");
+            }
         }
     }
 }

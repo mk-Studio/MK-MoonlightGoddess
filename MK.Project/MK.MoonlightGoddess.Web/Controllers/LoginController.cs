@@ -1,4 +1,5 @@
 ﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models;
 using MK.MoonlightGoddess.Models.EntityModels;
 using MK.MoonlightGoddess.Service;
 using System;
@@ -21,16 +22,12 @@ namespace MK.MoonlightGoddess.Web.Controllers
         [HttpPost]
         public JsonResult OnLogin(MK_Info_User model)
         {
-            DataTable Userdt = new DataTable();
-            Userdt = ServiceContent<MK_Info_User>.SelectData(model, "MK_Info_User", "ValidateLogon");
-            if (Userdt.Rows.Count==1)
+            var user = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogin");
+            if (Convert.ToInt32(user) > 0)
             {
-                foreach (DataColumn dc in Userdt.Columns)
-                {
-                    var cookiename = dc.ColumnName.ToString();
-                    var cookivalue = Userdt.Rows[0][cookiename].ToString();
-                    CookieHelper.SetCookie(cookiename,cookivalue);
-                }
+                var userName = EncryptHelper.AES_Encrypt(model.UserName);
+                CookieHelper.SetCookie("MoonlightGoddess", userName);
+                //EncryptHelper.AES_Encrypt("");
                 return Json(new { result = "Y" });
             }
             else
