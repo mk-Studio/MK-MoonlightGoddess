@@ -46,6 +46,7 @@
     <Compile Include="ResultModels\LayuiTableResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModels\AjaxResultModel.cs" />
+    <Compile Include="ResultModels\SelectOptionsResultModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

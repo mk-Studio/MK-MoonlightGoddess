@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DB-Create.sql" />
+    <Content Include="MK_Info_SelectOptions.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="MK_Info_User.xml" />
     <Content Include="MK_Type_WuLiao.xml" />
   </ItemGroup>
