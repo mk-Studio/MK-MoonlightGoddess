@@ -21,16 +21,15 @@ namespace MK.MoonlightGoddess.Web.Controllers
         [HttpPost]
         public JsonResult OnLogin(MK_Info_User model)
         {
-            var jsonResult = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogon");
-            if (!string.IsNullOrEmpty(jsonResult))
+            DataTable Userdt = new DataTable();
+            Userdt = (DataTable)ServiceContent<MK_Info_User>.SelectSIDU(model, "MK_Info_User", "ValidateLogon");
+            if (Userdt.Rows.Count==1)
             {
-                DataTable Userdt = new DataTable();
-                Userdt = (DataTable)ServiceContent<MK_Info_User>.SelectSIDU(model, "MK_Info_User", "ValidateLogon");
-                foreach (DataColumn dr in Userdt.Columns)
+                foreach (DataColumn dc in Userdt.Columns)
                 {
-                    string ColumnsTitle = dr.ToString();
-                    string strValue = EncryptHelper.GetMD5_32(Userdt.Rows[0][ColumnsTitle].ToString());
-                    SessionHelper.SetSession(ColumnsTitle, strValue);
+                    var cookiename = dc.ColumnName.ToString();
+                    var cookivalue = Userdt.Rows[0][cookiename].ToString();
+                    CookieHelper.SetCookie(cookiename,cookivalue);
                 }
                 return Json(new { result = "Y" });
             }

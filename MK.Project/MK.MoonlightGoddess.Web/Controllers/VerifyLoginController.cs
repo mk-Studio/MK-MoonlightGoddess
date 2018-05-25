@@ -16,12 +16,11 @@ namespace MK.MoonlightGoddess.Web.Controllers
         
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var _id = SessionHelper.GetSession("ID");
-            var _username = SessionHelper.GetSession("UserName");
-            if (_id == null || _username == null)
+            var  _id= CookieHelper.GetCookieValue("ID");
+            var _userName = CookieHelper.GetCookieValue("UserName");
+            if (_id == null || _userName == null)
             {
                 CurrAccount.ID = _id.ToString();
-                CurrAccount.UserName = _username.ToString();
                 filterContext.Result = RedirectToRoute(new { Controller = "Login", Action = "Index" });
                 return;
             }
