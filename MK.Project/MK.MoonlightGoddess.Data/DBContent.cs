@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MK.MoonlightGoddess.Data
 {
-    public static class DBContent<TModel> where TModel : BaseModel
+    public static class DBContent<TModel> where TModel : class
     {
         /// <summary>
         /// 获取多表数据

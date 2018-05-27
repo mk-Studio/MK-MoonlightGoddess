@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataDictionary>
+  
+  <sql name="QueryInfoWuLiao">
+    SELECT TOP (@limit)
+    ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY wlinfo.CreateDate DESC ) AS RowID,
+    wlinfo.ID,wltype.WuLiaoTypeName AS WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,wlinfo.ShowMark,wlinfo.CreateUser,wlinfo.CreateDate
+    FROM MK_Info_WuLiao wlinfo JOIN dbo.MK_Type_WuLiao wltype ON wltype.ID = wlinfo.WuLiaoTypeID
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    order by t.RowID
+
+    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_WuLiao'
+  </sql>
+  
+  <sql name="CheckInfoWuLiaoEXISTS">
+    SELECT COUNT(ID) FROM dbo.MK_Info_WuLiao WHERE ShangPinName = @ShangPinName AND GuiGe = @GuiGe
+  </sql>
+  
+  <sql name="InsertInfoWuLiao">
+    INSERT MK_Info_WuLiao
+    (WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,CreateUser,CreateDate)
+    VALUES
+    (@WuLiaoTypeID,@ShangPinName,@GuiGe,@HaiGuanNo,@CreateUser,@CreateDate)
+  </sql>
+  
+</DataDictionary>

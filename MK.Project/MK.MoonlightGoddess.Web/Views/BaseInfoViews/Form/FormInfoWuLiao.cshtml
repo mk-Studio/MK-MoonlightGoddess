@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = null;
+}
+
+<form class="layui-form layui-form-pane" action="" style="padding:20px 20px;">
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">物料类别</label>
+        <div class="layui-input-inline">
+            <select id="WuLiaoTypeID" name="WuLiaoTypeID" lay-verify="required" lay-search="" lay-filter="WuLiaoTypeID">
+            </select>
+        </div>
+
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ShangPinName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">规格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="GuiGe" required lay-verify="required" placeholder="请输入规格" autocomplete="off" class="layui-input">
+        </div>
+        @*<div class="layui-form-mid layui-word-aux">辅助文字</div>*@
+
+        <label class="layui-form-label">海关编号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="HaiGuanNo" required lay-verify="required" placeholder="请输入海关编号" autocomplete="off" class="layui-input">
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+        </div>
+    </div>
+</form>

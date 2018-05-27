@@ -54,6 +54,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataDictionary.xml" />
     <Content Include="DB-Create.sql" />
     <Content Include="MK_Info_Authority.xml" />
     <Content Include="MK_Info_SelectOptions.xml">
