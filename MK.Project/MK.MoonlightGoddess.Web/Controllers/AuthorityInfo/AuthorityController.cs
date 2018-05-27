@@ -22,5 +22,12 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = ServiceContent<MK_Type_Power>.Select(model, "MK_Info_Authority", "SelectAuthority");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult SelectPowerGroup(MK_Type_Power model)
+        {
+            var jsonResult = ServiceContent<MK_Type_Power>.Select(model, "MK_Info_PowerGroup", "SelectPowerGroup");
+            return Json(jsonResult);
+        }
     }
 }
