@@ -1,0 +1,89 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DataDictionary</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>数据字典</legend>
+    </fieldset>
+    <div>
+        <div class="layui-row">
+            <div class="layui-col-lg2">
+                <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+                    <ul id="treeDataDictionary"></ul>
+                </div>
+            </div>
+            <div class="layui-col-lg10">
+                <div id="dataContent">
+                    <table class="layui-hide" id="tbDataDictionary" lay-filter="tbDataDictionary"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        var table;
+        layui.use(['table', 'form', 'tree'], function () {
+            table = layui.table
+            layui.tree({
+                elem: '#treeDataDictionary',  //指定元素
+                click: function (item) { //点击节点回调
+                    getTabelByUrl(item.url);
+                    layer.msg(item.name + '<br/> URL = ' + item.url);
+                    console.log(item);
+                }, 
+                nodes: [
+                     //节点数据
+                    { 
+                        name: '物料信息',
+                        url:'/DataDictionary/GetQueryInfoWuLiao'
+                    },
+                    { 
+                        name: '供应商信息',
+                        url: '/DataDictionary/GetQueryInfoWuLiao'
+                    },
+                    { 
+                        name: '供应商物料信息',
+                        url: '/DataDictionary/GetQueryInfoWuLiao'
+                    }
+                ] 
+            });
+
+            function getTabelByUrl(url) {
+                //执行一个 table 实例
+                table.render({
+                    elem: '#tbDataDictionary'
+                    , height: 332
+                    , url: url//数据接口
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                          { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
+                        , { field: 'WuLiaoTypeID', title: '物料类型名称', width: 150 }
+                        , { field: 'ShangPinName', title: '商品名称', width: 80, sort: true }
+                        , { field: 'GuiGe', title: '规格', width: 120 }
+                        , { field: 'HaiGuanNo', title: '海关编号', width: 140 }
+                        , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140 }
+                        , { field: 'ShowMark', title: '显示标识', width: 140 }
+                        , { field: 'CreateUser', title: '创建人', width: 140 }
+                        , { field: 'CreateDate', title: '创建时间', width: 140 }
+                    ]]
+                });
+            }
+        })
+    </script>
+</body>
+</html>

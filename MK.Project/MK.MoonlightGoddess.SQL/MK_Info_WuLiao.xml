@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_WuLiao>
+  <sql name ="QueryToInfoWuLiao">
+    SELECT ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate FROM MK_Info_WuLiao
+  </sql>
+</MK_Info_WuLiao>
