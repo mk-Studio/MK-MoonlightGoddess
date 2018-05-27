@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_WuLiao>
+  <sql name ="QueryToInfoWuLiao">
+    SELECT wlinfo.ID,wltype.WuLiaoTypeName AS WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,wlinfo.ShowMark,wlinfo.CreateUser,wlinfo.CreateDate
+    FROM MK_Info_WuLiao wlinfo JOIN dbo.MK_Type_WuLiao wltype ON wltype.ID = wlinfo.WuLiaoTypeID
+  </sql>
+</MK_Info_WuLiao>

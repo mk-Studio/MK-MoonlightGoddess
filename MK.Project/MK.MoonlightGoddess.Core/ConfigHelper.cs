@@ -126,7 +126,7 @@ namespace MK.MoonlightGoddess.Core
                 {
                     continue;
                 }
-                result = node.InnerXml;
+                result = node.InnerText;
                 break;
             }
             return result;

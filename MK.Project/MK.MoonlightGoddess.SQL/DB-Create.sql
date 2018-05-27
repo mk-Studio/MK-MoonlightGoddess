@@ -87,6 +87,13 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiao', 'COLUMN', N'CreateDate'
 GO
+INSERT MK_Info_WuLiao(WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,CreateUser,CreateDate) VALUES
+('CED180AC-6003-4436-B09D-3428B3FD4B66',N'小米8',N'256G','No001','','System','2018-05-20'),
+('CED180AC-6003-4436-B09D-3428B3FD4B66',N'小米7',N'256G','No001','','System','2018-05-20'),
+('CED180AC-6003-4436-B09D-3428B3FD4B66',N'HUAWEI-P20',N'256G','No001','','System','2018-05-20'),
+('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-512G',N'S','No002','','System','2018-05-20'),
+('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-256G',N'S','No002','','System','2018-05-20'),
+('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-128G',N'S','No002','','System','2018-05-20')
 
 --供应商信息
 CREATE TABLE MK_Info_Supplier(

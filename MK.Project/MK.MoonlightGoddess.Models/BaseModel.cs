@@ -28,7 +28,7 @@ namespace MK.MoonlightGoddess.Models
         /// </summary>
         public string CreateDate
         {
-            get { return FormatDate.ToString("yyyy-MM-dd"); }
+            get { return FormatDate.ToString("yyyy-MM-dd hh:mm:ss"); }
             set { FormatDate = Convert.ToDateTime(value); }
         }
 
