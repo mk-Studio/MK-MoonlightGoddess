@@ -10,6 +10,12 @@
     <meta name="viewport" content="width=device-width" />
     <title>DataDictionary</title>
     <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <style type="text/css">
+        .layui-table-click {
+            background-color: #009688 !important;
+            color:white;
+        }
+    </style>
 </head>
 <body>
 
@@ -71,18 +77,26 @@
                     , method: 'post'
                     , page: true //开启分页
                     , cols: [[ //表头
-                          { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
-                        , { field: 'WuLiaoTypeID', title: '物料类型名称', width: 150 }
-                        , { field: 'ShangPinName', title: '商品名称', width: 80, sort: true }
-                        , { field: 'GuiGe', title: '规格', width: 120 }
-                        , { field: 'HaiGuanNo', title: '海关编号', width: 140 }
-                        , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140 }
-                        , { field: 'ShowMark', title: '显示标识', width: 140 }
-                        , { field: 'CreateUser', title: '创建人', width: 140 }
-                        , { field: 'CreateDate', title: '创建时间', width: 140 }
+                        { field: 'WuLiaoTypeID', title: '物料类型名称', width: 150, sort: true, event: 'select' }
+                        , { field: 'ShangPinName', title: '商品名称', width: 80, sort: true, event: 'select' }
+                        , { field: 'GuiGe', title: '规格', width: 120, event: 'select' }
+                        , { field: 'HaiGuanNo', title: '海关编号', width: 140, event: 'select' }
+                        , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140, event: 'select' }
+                        , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                        , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select'  }
+                        , { field: 'CreateDate', title: '创建时间', width: 140, sort: true, event: 'select' }
                     ]]
                 });
             }
+
+            //监听单元格事件
+            table.on('tool(tbDataDictionary)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'select') {
+                    //提示：只要sql查出来的数据里面有ID，列无需显示也可以获取
+                    layer.msg(data.ID);
+                }
+            });
         })
     </script>
 </body>
