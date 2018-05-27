@@ -176,9 +176,9 @@
                     { model: data.field },
                     function (r) {  
                         if (!r.IsError) {
-                            layer.close();
-                            getTabelByUrl(SelectTreeNode.url);
+                            layer.closeAll();
                             layer.msg("保存成功");
+                            getTabelByUrl(SelectTreeNode.url);
                         }
                     });
                 return false;
