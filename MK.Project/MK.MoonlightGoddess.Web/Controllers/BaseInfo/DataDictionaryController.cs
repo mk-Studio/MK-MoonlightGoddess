@@ -37,7 +37,7 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
         public JsonResult ExceResult(MK_Info_WuLiao model)
         {
             model.CreateUser = CurrAccount.UserName;
-            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd");
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
             var jsonResult = ServiceContent<MK_Info_WuLiao>.AjaxSIDU(model, "DataDictionary", "InsertInfoWuLiao");
             return Json(jsonResult);
         }
