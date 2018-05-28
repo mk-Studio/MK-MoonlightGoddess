@@ -47,7 +47,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_WuLiao', 'COLUMN', N'CreateDate'
 GO
---创建MK_Type_WuLiao的默认测试数据
 INSERT MK_Type_WuLiao(WuLiaoTypeName,CreateUser,CreateDate) VALUES
 (N'数码产品','System','2018-05-20'),
 (N'黑科技产品','System','2018-05-20'),
@@ -55,9 +54,6 @@ INSERT MK_Type_WuLiao(WuLiaoTypeName,CreateUser,CreateDate) VALUES
 (N'生活产品','System','2018-05-20'),
 (N'饮料产品','System','2018-05-20'),
 (N'机械零件产品','System','2018-05-20')
---创建MK_Type_WuLiao的索引
-CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiao_CreateDate ON dbo.MK_Type_WuLiao(CreateDate DESC)
-
 
 --物料具体信息
 CREATE TABLE MK_Info_WuLiao(
@@ -91,7 +87,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiao', 'COLUMN', N'CreateDate'
 GO
---创建MK_Info_WuLiao的默认测试数据
 INSERT MK_Info_WuLiao(WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,CreateUser,CreateDate) VALUES
 ('CED180AC-6003-4436-B09D-3428B3FD4B66',N'小米8',N'256G','No001','','System','2018-05-20'),
 ('CED180AC-6003-4436-B09D-3428B3FD4B66',N'小米7',N'256G','No001','','System','2018-05-20'),
@@ -99,15 +94,11 @@ INSERT MK_Info_WuLiao(WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,
 ('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-512G',N'S','No002','','System','2018-05-20'),
 ('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-256G',N'S','No002','','System','2018-05-20'),
 ('F06AB1E8-468A-41DD-A1A3-0AE4D7D7C286',N'PCIE-128G',N'S','No002','','System','2018-05-20')
---创建MK_Info_WuLiao的索引
-CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiao_CreateDate ON dbo.MK_Info_WuLiao(CreateDate DESC)
-CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiao_ShowMark ON dbo.MK_Info_WuLiao(ShowMark)
-CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiao_ShangPinName ON dbo.MK_Info_WuLiao(ShangPinName)
-
 
 --供应商信息
 CREATE TABLE MK_Info_Supplier(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	SupplierShangPinID NVARCHAR(36),
 	SupplierName NVARCHAR(50),
 	LianXiRen NVARCHAR(30),
 	LianXiFangShi NVARCHAR(50),
@@ -119,6 +110,8 @@ CREATE TABLE MK_Info_Supplier(
 EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 供应商信息', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Supplier', NULL, NULL
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'供应商ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'供应商商品ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier', 'COLUMN', N'SupplierShangPinID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'供应商名称', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier', 'COLUMN', N'SupplierName'
 GO
@@ -134,13 +127,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier', 'COLUMN', N'CreateDate'
 GO
---创建MK_Info_WuLiao的默认测试数据
-
---创建MK_Info_WuLiao的索引
-CREATE NONCLUSTERED INDEX IX_MK_Info_Supplier_CreateDate ON dbo.MK_Info_Supplier(CreateDate DESC)
-CREATE NONCLUSTERED INDEX IX_MK_Info_Supplier_ShowMark ON dbo.MK_Info_Supplier(ShowMark)
-CREATE NONCLUSTERED INDEX IX_MK_Info_Supplier_ShangPinName ON dbo.MK_Info_Supplier(SupplierName)
-
 
 --供应商所生产的物料商品信息
 CREATE TABLE MK_Info_Supplier_WuLiao(
@@ -153,11 +139,17 @@ CREATE TABLE MK_Info_Supplier_WuLiao(
 )
 EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 供应商所生产的物料商品信息', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Supplier_WuLiao', NULL, NULL
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'供应商物料ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'ID'
+EXEC sp_addextendedproperty N'MS_Description', N'供应商ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'ID'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'供应商ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'SupplierShangPinID'
+EXEC sp_addextendedproperty N'MS_Description', N'供应商商品ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'SupplierShangPinID'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'商品信息ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'SupplierName'
+EXEC sp_addextendedproperty N'MS_Description', N'供应商名称', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'SupplierName'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'联系人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'LianXiRen'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'联系时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'LianXiFangShi'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'地址', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'Address'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'ShowMark'
 GO
@@ -165,10 +157,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Supplier_WuLiao', 'COLUMN', N'CreateDate'
 GO
-SELECT ID,SupplierID,ShangPinID,ShowMark,CreateUser,CreateDate FROM MK_Info_Supplier_WuLiao
---创建MK_Info_Supplier_WuLiao的默认测试数据
-
---创建MK_Info_Supplier_WuLiao的索引
 
 
 --物流公司业务维护

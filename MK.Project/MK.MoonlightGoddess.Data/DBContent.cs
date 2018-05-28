@@ -85,18 +85,6 @@ namespace MK.MoonlightGoddess.Data
         }
 
         /// <summary>
-        /// 将datatable保存到数据库
-        /// </summary>
-        /// <param name="dt">要保存的数据，注意:表格式必须一致</param>
-        /// <param name="dbMappingTableName">对应的数据库表名</param>
-        /// <returns></returns>
-        public static bool DataTableToSQLServer(DataTable dt, string dbMappingTableName)
-        {
-            bool result = SqlDBHelper.DataTableToSQLServer(dt,dbMappingTableName);
-            return result;
-        }
-
-        /// <summary>
         /// <remarks>
         /// <para>将实体类/匿名对象转换为SqlParameter列表</para>
         /// </remarks>

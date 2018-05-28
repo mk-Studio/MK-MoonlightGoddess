@@ -12,11 +12,11 @@
     <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         .layui-table-hover {
-            background-color: #a7e698 !important;
+            background-color: #afcbc8 !important;
         }
 
         .layui-table-click {
-            background-color: #5FB878 !important;
+            background-color: #009688 !important;
             color: white;
         }
     </style>
@@ -27,10 +27,6 @@
         <legend>数据字典</legend>
     </fieldset>
     <div>
-        @*<select id="testSelect" xm-select="select" xm-select-type="3" xm-select-icon="&#xe605;" xm-select-placeholder="请选择" xm-select-skin="primary" xm-select-search style="width:230px">
-            
-        </select>*@
-
         <div class="layui-row">
             <div class="layui-col-lg2">
                 <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
@@ -40,10 +36,9 @@
             <div class="layui-col-lg10">
                 <div id="dataContent">
                     <div class="layui-btn-group tbTools">
-                        <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1">&#xe654;</i>添加</button>
-                        <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit">&#xe642;</i>修改</button>
-                        <button class="layui-btn layui-btn-sm" data-type="delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
-                        <button class="layui-btn layui-btn-sm" data-type="test"><i class="layui-icon">&#xe609;</i>测试</button>
+                        <button class="layui-btn" data-type="add">添加</button>
+                        <button class="layui-btn" data-type="edit">修改</button>
+                        <button class="layui-btn" data-type="delete">删除</button>
                     </div>
                     <table class="layui-hide" id="tbDataDictionary" lay-filter="tbDataDictionary"></table>
                 </div>
@@ -53,150 +48,70 @@
 
 
 
-    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
-        layui.config({
-            base: '../Js/'
-        }).extend({
-            formSelects: 'formSelects-v3'
-        })
-        layui.use(['table', 'form', 'tree', 'upload', 'formSelects'], function () {
+
+
+        layui.use(['table', 'form', 'tree', 'upload'], function () {
             var
                 table,//数据表对象
-                active,//表上面的按钮事件管理对象
+                active,//表按钮事件管理对象
                 SelectData, //表格选中的行对象
                 SelectTreeNode, //选中的树节点对象
-                activeName,//执行的sqlName
                 form,//form表单
-                upload, //上传
-                tbCols, //数据表列对象
-                formSelects;
+                upload //上传
 
             table = layui.table;
             form = layui.form;
             upload = layui.upload;
-            formSelects = layui.formSelects;
 
-            //var s = formSelects.value('select');			//获取选中的值
-            //formSelects.value('select', 'val');		//获取选中的val数组
-            //formSelects.value('select', 'name');		//获取选中的name数组
-            //formSelects.value('select', [1, 3]);	//动态赋值
-
-            tbCols = {
-                TypeWuLiao: [[ //表头
-                    { field: 'WuLiaoTypeName', title: '物料类型名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
-                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
-                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
-                ]],
-                InfoWuLiao: [[ //表头
-                    { field: 'WuLiaoTypeID', title: '物料类型名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'ShangPinName', title: '商品名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'GuiGe', title: '规格', width: 120, event: 'select' }
-                    , { field: 'HaiGuanNo', title: '海关编号', width: 140, event: 'select' }
-                    , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
-                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
-                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
-                ]]
-            }
-
-            //InitNewCombobox("#testSelect", "WuLiaoType", form, false); //绑定下拉框
-           
             layui.tree({
                 elem: '#treeDataDictionary',  //指定元素
                 click: function (item) { //点击节点回调
-                    getTabelByUrl(item.tbUrl, item.tbCols);
+                    getTabelByUrl(item.url);
                     SelectTreeNode = item;
-                    SelectData = undefined;
                 },
                 width: 500,
                 nodes: [
                     //节点数据
                     {
-                        name: '物料类型',
-                        tbUrl: '/DataDictionary/GetQueryTypeWuLiao',
-                        tbCols: tbCols.TypeWuLiao,
-                        formUrl: '/FormDataDictionary/FormTypeWuLiao',
-                        postUrl: '/DataDictionary/ExceTypeWuLiao',
-                        formVal: function (isVal) {
-                            //赋值修改的数据
-                            if (isVal) {
-                                form.val('formTypeWuLiao', {
-                                    "WuLiaoTypeName": SelectData.WuLiaoTypeName
-                                })
-                            }
-                        }
-                    },
-                    {
                         name: '物料信息',
-                        tbUrl: '/DataDictionary/GetQueryInfoWuLiao',
-                        tbCols: tbCols.InfoWuLiao,
-                        formUrl: '/FormDataDictionary/FormInfoWuLiao',
-                        postUrl: '/DataDictionary/ExceInfoWuLiao',
-                        formVal: function (isVal) {
-                            InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, false); //绑定下拉框
-                            //赋值修改的数据
-                            if (isVal) {
-                                form.val('formInfoWuLiao', {
-                                    "WuLiaoTypeID": getWuLiaoTypeID()
-                                    , "ShangPinName": SelectData.ShangPinName
-                                    , "GuiGe": SelectData.GuiGe
-                                    , "HaiGuanNo": SelectData.HaiGuanNo
-                                })
-                            }
-                        }
+                        url: '/DataDictionary/GetQueryInfoWuLiao',
+                        formUrl: '/FormDataDictionary/FormInfoWuLiao'
                     },
                     {
                         name: '供应商信息',
-                        tbUrl: '/DataDictionary/GetQueryInfoSupplier',
-                        tbCols: tbCols.InfoWuLiao,
-                        formUrl: '/FormDataDictionary/FormInfoSupplier',
-                        postUrl: '/DataDictionary/ExceInfoWuLiao',
-                        formVal: function (isVal) {
-                            InitNewCombobox("#detailModel", "WuLiaoType", form, false); //绑定下拉框
-                            //赋值修改的数据
-                            if (isVal) {
-
-                            }
-                        }
+                        url: '/DataDictionary/GetQueryInfoWuLiao',
+                        formUrl: '/FormDataDictionary/FormInfoWuLiao'
                     },
                     {
                         name: '供应商物料信息',
-                        tbUrl: '/DataDictionary/GetQueryInfoWuLiao',
-                        tbCols: tbCols.InfoWuLiao,
-                        formUrl: '/FormDataDictionary/FormInfoWuLiao',
-                        postUrl: '/DataDictionary/ExceInfoWuLiao',
-                        formVal: function (isVal) {
-                            InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, false); //绑定下拉框
-                            //赋值修改的数据
-                            if (isVal) {
-                                form.val('formInfoWuLiao', {
-                                    "WuLiaoTypeID": getWuLiaoTypeID()
-                                    , "ShangPinName": SelectData.ShangPinName
-                                    , "GuiGe": SelectData.GuiGe
-                                    , "HaiGuanNo": SelectData.HaiGuanNo
-                                })
-                            }
-                        }
+                        url: '/DataDictionary/GetQueryInfoWuLiao',
+                        formUrl: '/FormDataDictionary/FormInfoWuLiao'
                     }
                 ]
             });
 
-            function getTabelByUrl(url, cols) {
+            function getTabelByUrl(url) {
                 //执行一个 table 实例
                 table.render({
                     elem: '#tbDataDictionary'
-                    , height: 520 - 40
-                    , url: url
+                    , height: 332
+                    , url: url//数据接口
                     , method: 'post'
                     , page: true //开启分页
-                    , text: {
-                        none: '暂无相关数据'
-                    }
-                    , cols: cols
+                    , cols: [[ //表头
+                        { field: 'WuLiaoTypeID', title: '物料类型名称', width: 150, sort: true, event: 'select' }
+                        , { field: 'ShangPinName', title: '商品名称', width: 80, sort: true, event: 'select' }
+                        , { field: 'GuiGe', title: '规格', width: 120, event: 'select' }
+                        , { field: 'HaiGuanNo', title: '海关编号', width: 140, event: 'select' }
+                        , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140, event: 'select' }
+                        , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                        , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                        , { field: 'CreateDate', title: '创建时间', width: 140, sort: true, event: 'select' }
+                    ]]
                 });
             }
 
@@ -206,106 +121,48 @@
                 if (obj.event === 'select') {
                     //提示：只要sql查出来的数据里面有ID，列无需显示也可以获取
                     SelectData = data;
-                    //layer.msg('ID<br/><span style="color:red;">' + data.ID + '</span><br/><span style="color:yellow;">' + JSON.stringify(data) + '</span>');
+                    layer.msg('ID<br/><span style="color:red;">' + data.ID + '</span><br/><span style="color:yellow;">' + JSON.stringify(data) + '</span>');
                 }
             });
 
-            //根据物料信息获取物料类型的ID
-            function getWuLiaoTypeID() {
-                var result = "";
-                $.ajax({
-                    url: "/DataDictionary/GetWuLiaoTypeID",
-                    type: "get",
-                    data: { id: SelectData.ID },
-                    dataType: "html",
-                    async: false,
-                    success: function (r) {
-                        result = r
-                    }
-                })
-                return result;
-            }
-
             active = {
                 add: function () { //添加
-                    activeName = "Insert";
                     if (SelectTreeNode) {
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
-                                title:"添加信息",
                                 area: ['731px', '386px'],
                                 type: 1,
                                 content: str, //注意，如果str是object，那么需要字符拼接。
                                 cancel: function () {
                                     //右上角关闭回调
-                                    //layer.msg("关闭啦~");
+                                    layer.msg("关闭啦~");
                                     //return false 开启该代码可禁止点击该按钮关闭
                                 }
                             });
                             //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
                             form.render();
-                            SelectTreeNode.formVal(false); //绑定下拉框
+                            InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, false); //绑定下拉框
                         });
                     }
                     else {
                         layer.msg("请选择左边要添加的基础信息");
                     }
-                },
-                //修改
-                edit: function () {
-                    activeName = "Update";
+                }
+                , edit: function () { //修改
                     if (SelectData) {
-                        $.post(SelectTreeNode.formUrl, {}, function (str) {
-                            layer.open({
-                                title: "修改信息",
-                                area: ['731px', '386px'],
-                                type: 1,
-                                content: str,
-                                cancel: function () {
-                                    //右上角关闭回调
-                                    //return false 开启该代码可禁止点击该按钮关闭
-                                }
-                            });
-                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
-                            form.render();
-                            SelectTreeNode.formVal(true);
-                        });
+                        layer.msg("点击了修改,ID=" + SelectData.ID);
                     } else {
                         layer.msg("请选择要修改的数据");
                     }
-                },
-                //删除
-                delete: function () {
-                    activeName = "Delete";
+                }
+                , delete: function () { //删除
                     if (SelectData) {
-                        layer.confirm('确定是否要彻底删除该信息？', {
-                            title: "删除信息",
-                            btn: ['确定', '算了']
-                        }, function (index, layero) {
-                            $.post(SelectTreeNode.postUrl,
-                                { model: { ID: SelectData.ID }, name: activeName },
-                                function (r) {
-                                    if (!r.IsError) {
-                                        layer.msg("删除成功");
-                                        getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                                    } else {
-                                        layer.msg('删除异常！', { icon: 5 });
-                                    }
-                                }
-                            );
-                        }, function (index) {
-                            //算了
-                        });
-
+                        layer.msg("点击了删除,ID=" + SelectData.ID);
                     } else {
                         layer.msg("请选择要删除的数据");
                     }
-                },
-                test: function () {
-                    layer.alert(JSON.stringify(formSelects.value('select')));
                 }
             };
-
             //监听按钮点击事件
             $('.tbTools .layui-btn').on('click', function () {
                 var type = $(this).data('type');
@@ -313,50 +170,19 @@
             });
 
             //监听提交事件
-            form.on('submit(comSave)', function (data) {
-                var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
-                layer.alert(JSON.stringify(model));
-                $.post(
-                    SelectTreeNode.postUrl,
-                    { model: model, name: activeName },
-                    function (r) {
+            form.on('submit(save)', function (data) {
+                //layer.msg(JSON.stringify(data.field));
+                $.post("/DataDictionary/ExceResult",
+                    { model: data.field },
+                    function (r) {  
                         if (!r.IsError) {
                             layer.closeAll();
                             layer.msg("保存成功");
-                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                        } else {
-                            layer.closeAll();
-                            layer.msg('保存异常！', { icon: 5 });
+                            getTabelByUrl(SelectTreeNode.url);
                         }
-                    }
-                );
+                    });
                 return false;
             });
-
-            //[特殊]监听提交事件
-            form.on('submit(saveSupplier)', function (data) {
-                var model = activeName == "Insert" 
-                ? $.extend(data.field, { detailModel: formSelects.value('select') })
-                : $.extend(data.field, { ID: SelectData.ID, detailModel: formSelects.value('select') })
-
-                layer.alert(JSON.stringify(model));
-                //$.post(
-                //    SelectTreeNode.postUrl,
-                //    { model: model, name: activeName },
-                //    function (r) {
-                //        if (!r.IsError) {
-                //            layer.closeAll();
-                //            layer.msg("保存成功");
-                //            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                //        } else {
-                //            layer.closeAll();
-                //            layer.msg('保存异常！', { icon: 5 });
-                //        }
-                //    }
-                //);
-                return false;
-            });
-
 
             upload.render({
                 elem: '#id'
