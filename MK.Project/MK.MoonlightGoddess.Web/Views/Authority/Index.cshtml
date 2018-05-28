@@ -13,26 +13,32 @@
 </head>
 <body>
     <div id="Content"></div>
-    @*<form class="layui-form" action="">
-        <div class="layui-inline">
-            <label class="layui-form-label">搜索选择框</label>
-            <div class="layui-input-inline">
-                <select id="wuliaoType" name="modules" lay-verify="required" lay-search="" lay-filter="wuliaoType"></select>
+
+    <div class="layui-row">
+        <div class="layui-col-md3" style="width:15%">
+            <div class="grid-demo">
+                <ul id="treeTest"></ul>
             </div>
         </div>
-    </form>*@
-    <table class="layui-hide" id="tbWuliaoType" lay-filter="tbWuliaoType"></table>
+        <div class="layui-col-md9"style="width:85%">
+            <div class="grid-demo grid-demo-bg1">
+                <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
+            </div>
+        </div>
+    </div>
 
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script>
         var table,  //表格
-            form;  //表单
-        layui.use(['table', 'form'], function () {
+            form,  //表单
+            tree //树形对象
+        layui.use(['table', 'form', 'tree'], function () {
             var table = layui.table
-                , form = layui.form;
+                , form = layui.form
+                , tree = layui.tree;
             table.render({
-                elem: '#tbWuliaoType'
+                elem: '#tbPowerType'
                 , height: 332
                 , url: '/Authority/Select' //数据接口
                 , method: 'post'
@@ -41,11 +47,46 @@
                     { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
                     , { field: 'PowerName', title: '菜单名称', width: 150 }
                     , { field: 'MenuAddress', title: '地址', width: 150 }
-                    , { field: 'ShowMark', title: '显示标识', width: 80, sort: true }
+                    , { field: 'ShowMark', title: '显示标识', width: 80, }
                     , { field: 'CreateUser', title: '创建人', width: 120 }
-                    , { field: 'CreateDate', title: '创建时间', width: 140 }
+                    , { field: 'CreateDate', title: '创建时间', width: 140, sort: true }
                     , { field: 'Notes', title: '备注', width: 140 }
+                    , { field: 'ck', title: '全选', width: 100, checkbox: true }
                 ]]
+            });
+     
+            var createTree = function (node, start) {
+                node = node || function () {
+                    var arr = [];
+                      arr.push({
+                           id: '000111',
+                           name: '权限组'
+                      });
+                    return arr;
+                }();
+                start = start || 1;
+                layui.each(node, function (index, item) {
+                    if (start < 2 && index < 3) {
+                        var child = [
+                            {
+                                id: index,
+                                name: (1 + index + start).toString().replace(/(\d)/, '$1$1$1$1$1$1$1$1$1')
+                            }
+                        ];
+                        node[index].children = child;
+                        createTree(child, index + start + 1);
+                    }
+                });
+                return node;
+            };
+
+            layui.tree({
+                elem: '#treeTest' //指定元素
+                , click: function (item) { //点击节点回调
+                    layer.msg('当前节名称：' + item.name + ' id = ' + item.id + '<br>全部参数：' + JSON.stringify(item));
+                    console.log(item);
+                }
+                , nodes: createTree()
             });
         });
     </script>
