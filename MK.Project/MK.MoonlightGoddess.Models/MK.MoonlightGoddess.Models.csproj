@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="EntityModels\MK_Info_Supplier.cs" />
+    <Compile Include="EntityModels\MK_Info_Supplier_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Info_User.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Type_Power.cs" />
@@ -50,6 +52,5 @@
     <Compile Include="ResultModels\AjaxResultModel.cs" />
     <Compile Include="ResultModels\SelectOptionsResultModel.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
