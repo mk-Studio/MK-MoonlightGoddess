@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_PowerAllot>
+
+  <sql name="SelectPowerAllot">
+    SELECT pt.ID AS ID,pr.PowerName AS PowerName,pr.Notes AS Notes,pr.MenuAddress AS MenuAddress,pt.CreateUser AS CreateUser,pt.CreateDate AS CreateDate,pt.ShowMark AS ShowMark,pt.Status AS Status
+    FROM MK_Info_PowerAllot AS pt
+    JOIN dbo.MK_Info_PowerGroup AS pp ON pt.PowerGroupID=pp.ID AND pp.ShowMark='Y'
+    JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
+    WHERE pt.PowerGroupID=@PowerGroupID
+    AND pt.ShowMark='Y'
+  </sql>
+
+</MK_Info_PowerAllot>
