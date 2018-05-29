@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <MK_Info_PowerGroup>
-  
-  <sql name="SelectPowerGroup">
-    select ID as id ,PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'
+
+  <!--权限组-->
+  <sql name="SelectPowerGroupTree">
+    select ID as id ,OnID as onid, PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'
   </sql>
   -
 </MK_Info_PowerGroup>
