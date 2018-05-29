@@ -29,14 +29,23 @@
   
   <sql name="QueryInfoSupplier">
     SELECT TOP (@limit)
-    ID,SupplierName,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate
+    ID,SupplierName,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate,t.WuLiaoDetail
     FROM (
-    SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,* FROM MK_Info_Supplier
+        SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,a.*,(
+            SELECT '['+twl.WuLiaoTypeName+']'
+            FROM dbo.MK_Info_Supplier_WuLiao swl
+            JOIN dbo.MK_Type_WuLiao twl ON twl.ID = swl.ShangPinID
+            WHERE swl.SupplierID = a.ID
+            FOR XML PATH('')
+        ) AS WuLiaoDetail
+        FROM dbo.MK_Info_Supplier a
+        LEFT JOIN dbo.MK_Info_Supplier_WuLiao b ON b.SupplierID = a.ID
+        GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     order by t.RowID
 
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Type_WuLiao'
+    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_Supplier'
   </sql>
 
   <sql name="CheckInfoWuLiaoEXISTS">
@@ -56,7 +65,7 @@
   
   <sql name="InsertInfoSupplier">
     INSERT MK_Info_Supplier 
-    (ID,SupplierName,LianXiRen,LianXiFangShi,Address,CreateUser,CreateDate) VALUES
+    (ID,SupplierName,LianXiRen,LianXiFangShi,Address,CreateUser,CreateDate) 
     VALUES
     (@ID,@SupplierName,@LianXiRen,@LianXiFangShi,@Address,@CreateUser,@CreateDate)
   </sql>
@@ -74,10 +83,10 @@
   
   <sql name="UpdateInfoSupplier">
     UPDATE MK_Info_Supplier
-    SET WuLiaoTypeID = @WuLiaoTypeID,ShangPinName = @ShangPinName,GuiGe = @GuiGe,HaiGuanNo = @HaiGuanNo
+    SET SupplierName = @SupplierName,LianXiRen = @LianXiRen,LianXiFangShi = @LianXiFangShi,Address = @Address
     WHERE ID = @ID
-  
-    DELETE FROM MK_Info_Supplier_WuLiao WHERE ID=@ID
+
+    DELETE FROM MK_Info_Supplier_WuLiao WHERE SupplierID=@ID
   </sql>
 
   <sql name="DeleteInfoWuLiao">
@@ -95,5 +104,9 @@
 
   <sql name="GetWuLiaoTypeID">
     SELECT WuLiaoTypeID FROM MK_Info_WuLiao WHERE ID = @ID
+  </sql>
+
+  <sql name="GetShangPinBySupplier">
+    SELECT ShangPinID FROM MK_Info_Supplier_WuLiao WHERE SupplierID = @SupplierID
   </sql>
 </DataDictionary>

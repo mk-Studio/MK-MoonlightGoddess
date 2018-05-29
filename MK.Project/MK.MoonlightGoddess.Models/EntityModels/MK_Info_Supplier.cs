@@ -12,5 +12,12 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         public string LianXiRen { get; set; }
         public string LianXiFangShi { get; set; }
         public string Address { get; set; }
+        public string WuLiaoDetail { get; set; }
+    }
+
+    public class SupelierWuLiaoDetail
+    {
+        public string val { get; set; }
+        public string name { get; set; }
     }
 }

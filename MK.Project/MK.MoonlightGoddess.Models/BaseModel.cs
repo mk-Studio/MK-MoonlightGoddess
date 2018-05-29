@@ -33,14 +33,17 @@ namespace MK.MoonlightGoddess.Models
         }
 
         private DateTime FormatDate { get; set; }
+
         /// <summary>
         /// layui 分页数
         /// </summary>
+        [DataTableToDBColumns]
         public int page { get; set; } = 1;
-
+        
         /// <summary>
         /// layui 显示行数
         /// </summary>
+        [DataTableToDBColumns]
         public int limit { get; set; } = 10;
     }
 }

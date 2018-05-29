@@ -1,4 +1,7 @@
-﻿using MK.MoonlightGoddess.Models.EntityModels;
+﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models;
+using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Models.ResultModels;
 using MK.MoonlightGoddess.Service;
 using System;
 using System.Collections.Generic;
@@ -66,21 +69,53 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
         }
 
         [HttpPost]
-        public JsonResult ExceInfoSupplier(MK_Info_Supplier model, MK_Info_Supplier_WuLiao detailModel, string name)
+        public JsonResult ExceInfoSupplier(MK_Info_Supplier model, List<SupelierWuLiaoDetail> detailModel, string name)
         {
-            var _ID = Guid.NewGuid().ToString().ToUpper();
+            var _ID = name != "Insert" ? model.ID : Guid.NewGuid().ToString().ToUpper();
             model.ID = _ID;
             model.CreateUser = CurrAccount.UserName;
             model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var jsonResult = ServiceContent<MK_Info_Supplier>.AjaxSIDU(model, "DataDictionary", name + "TypeWuLiao");
-
-            return Json(jsonResult);
+            bool _result = false;
+            if (name == "Insert" || name == "Update")
+            {
+                List<MK_Info_Supplier_WuLiao> listSp = new List<MK_Info_Supplier_WuLiao>();
+                foreach (SupelierWuLiaoDetail sp in detailModel)
+                {
+                    MK_Info_Supplier_WuLiao newObj = new MK_Info_Supplier_WuLiao()
+                    {
+                        ID = Guid.NewGuid().ToString().ToUpper(),
+                        SupplierID = _ID,
+                        ShangPinID = sp.val,
+                        ShowMark = "Y",
+                        CreateUser = CurrAccount.UserName,
+                        CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    };
+                    listSp.Add(newObj);
+                }
+                var spWuLiaoTable = ConvertHelper.ListToTable(listSp, true, true);
+                _result = ServiceContent<MK_Info_Supplier>.SelectSIDU(model, "DataDictionary", name + "InfoSupplier");
+                if (_result) _result = ServiceContent<dynamic>.DataTableToSQLServer(spWuLiaoTable, "MK_Info_Supplier_WuLiao");
+            }
+            else { 
+               _result = ServiceContent<MK_Info_Supplier>.SelectSIDU(model, "DataDictionary", name + "InfoSupplier");
+            }
+            return _result ? Json(AjaxResultModel.CreateMessage((!_result), "ssuccess", 1, _result))
+                    : Json(AjaxResultModel.CreateMessage((!_result), "error", -1, _result));
         }
 
         public ContentResult GetWuLiaoTypeID(string id)
         {
             var stringResult = ServiceContent<dynamic>.SelectSingle(new {ID = id }, "DataDictionary", "GetWuLiaoTypeID");
             return Content(stringResult);
+        }
+
+        public JsonResult GetShangPinBySupplier(string id)
+        {
+            var _dataSoruce = ServiceContent<dynamic>.SelectData(new { SupplierID = id }, "DataDictionary", "GetShangPinBySupplier");
+            List<String> result = new List<String>();
+            foreach (System.Data.DataRow row in _dataSoruce.Rows)
+                result.Add(row["ShangPinID"].ToString());
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
     }
 }
