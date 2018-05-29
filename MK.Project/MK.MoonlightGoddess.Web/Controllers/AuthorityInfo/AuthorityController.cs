@@ -39,5 +39,20 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = ServiceContent<MK_Info_PowerAllot>.Select(model, "MK_Info_PowerAllot", "SelectPowerAllot");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult UpdateStatus(MK_Info_PowerAllot model)
+        {
+            var BoolResult = ServiceContent<MK_Info_PowerAllot>.SelectSIDU(model, "MK_Info_PowerAllot", "UpdateStatus");
+            if (BoolResult == true)
+            {
+                return Json(new { result = "Y" });
+            }
+            else
+            {
+                return Json(new { result = "N" });
+            }
+
+        }
     }
 }
