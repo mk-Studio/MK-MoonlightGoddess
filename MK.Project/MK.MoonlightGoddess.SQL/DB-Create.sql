@@ -191,10 +191,14 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_WuLiuYeWu', 'COLUMN', N'CreateDate'
 GO
+--创建MK_Info_WuLiao的索引
+CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiuYeWu_CreateDate ON dbo.MK_Type_WuLiuYeWu(CreateDate DESC)
+CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiuYeWu_ShowMark ON dbo.MK_Type_WuLiuYeWu(ShowMark)
+CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiuYeWu_YeWuType ON dbo.MK_Type_WuLiuYeWu(YeWuType)
 
 
 --物流公司维护
-CREATE TABLE MK_Info_WuLiu(
+CREATE TABLE MK_Info_WuLiuCompany(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	YeWuID NVARCHAR(36),
 	Name NVARCHAR(50),
@@ -205,52 +209,29 @@ CREATE TABLE MK_Info_WuLiu(
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
 )
-EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 物流公司维护', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_WuLiu', NULL, NULL
+EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 物流公司维护', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_WuLiuCompany', NULL, NULL
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'物流公司ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'ID'
+EXEC sp_addextendedproperty N'MS_Description', N'物流公司ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'ID'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'业务ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'YeWuID'
+EXEC sp_addextendedproperty N'MS_Description', N'业务ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'YeWuID'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'联系人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'LianXiRen'
+EXEC sp_addextendedproperty N'MS_Description', N'联系人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'LianXiRen'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'联系时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'LianXiFangShi'
+EXEC sp_addextendedproperty N'MS_Description', N'联系方式', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'LianXiFangShi'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'地址', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'Address'
+EXEC sp_addextendedproperty N'MS_Description', N'地址', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'Address'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'ShowMark'
+EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'ShowMark'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'CreateUser'
+EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'CreateUser'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiu', 'COLUMN', N'CreateDate'
+EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_WuLiuCompany', 'COLUMN', N'CreateDate'
 GO
+--创建MK_Info_WuLiao的索引
+CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_CreateDate ON dbo.MK_Info_WuLiuCompany(CreateDate DESC)
+CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_ShowMark ON dbo.MK_Info_WuLiuCompany(ShowMark)
+CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_Name ON dbo.MK_Info_WuLiuCompany(Name)
 
-
---币别
-CREATE TABLE MK_Info_Currency(
-	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	CurrencyName NVARCHAR(30),
-	CurrencyCode NVARCHAR(30),
-	Remark NVARCHAR(255),
-	ShowMark CHAR(1) DEFAULT 'Y',
-	CreateUser NVARCHAR(30),
-	CreateDate DATETIME
-)
-EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 币别', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Currency', NULL, NULL
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'币别ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'ID'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'币制', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CurrencyName'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'币种代号', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CurrencyCode'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'说明', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'Remark'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'ShowMark'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CreateUser'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CreateDate'
-GO
 
 
 --用户信息

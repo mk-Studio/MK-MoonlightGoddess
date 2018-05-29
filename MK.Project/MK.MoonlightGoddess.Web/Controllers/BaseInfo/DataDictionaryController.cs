@@ -44,6 +44,27 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
         }
 
         [HttpPost]
+        public JsonResult GetQueryTypeWuLiuYeWu(MK_Type_WuLiuYeWu model)
+        {
+            var jsonResult = ServiceContent<MK_Type_WuLiuYeWu>.Query(model, "DataDictionary", "QueryTypeWuLiuYeWu");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult GetQueryInfoCurrency(MK_Info_Currency model)
+        {
+            var jsonResult = ServiceContent<MK_Info_Currency>.Query(model, "DataDictionary", "QueryInfoCurrency");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult GetQueryInfoWuLiuCompany(MK_Info_WuLiuCompany model)
+        {
+            var jsonResult = ServiceContent<MK_Info_WuLiuCompany>.Query(model, "DataDictionary", "QueryInfoWuLiuCompany");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
         public JsonResult GetInfoWuLiaoExists(MK_Info_WuLiao model)
         {
             var jsonResult = ServiceContent<MK_Info_WuLiao>.AjaxSingle(model, "DataDictionary", "CheckInfoWuLiaoEXISTS");
@@ -101,6 +122,33 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             }
             return _result ? Json(AjaxResultModel.CreateMessage((!_result), "ssuccess", 1, _result))
                     : Json(AjaxResultModel.CreateMessage((!_result), "error", -1, _result));
+        }
+
+        [HttpPost]
+        public JsonResult ExceTypeWuLiuYeWu(MK_Type_WuLiuYeWu model, string name)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var jsonResult = ServiceContent<MK_Type_WuLiuYeWu>.AjaxSIDU(model, "DataDictionary", name + "TypeWuLiuYeWu");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult ExceInfoWuLiuCompany(MK_Info_WuLiuCompany model, string name)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var jsonResult = ServiceContent<MK_Info_WuLiuCompany>.AjaxSIDU(model, "DataDictionary", name + "InfoWuLiuCompany");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult ExceInfoCurrency(MK_Info_Currency model, string name)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var jsonResult = ServiceContent<MK_Info_Currency>.AjaxSIDU(model, "DataDictionary", name + "InfoCurrency");
+            return Json(jsonResult);
         }
 
         public ContentResult GetWuLiaoTypeID(string id)
