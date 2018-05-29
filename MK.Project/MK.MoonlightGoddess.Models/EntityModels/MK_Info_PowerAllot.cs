@@ -21,7 +21,7 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// <summary>
         /// 权限标识
         /// </summary>
-        public string Status { get; set; }
+        public string Status_xx { get; set; }
 
         /// <summary>
         /// 菜单名称
