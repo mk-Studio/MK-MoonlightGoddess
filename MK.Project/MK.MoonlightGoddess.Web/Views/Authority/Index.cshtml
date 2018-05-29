@@ -1,4 +1,4 @@
-﻿
+﻿    
 @{
     Layout = null;
 }
@@ -8,21 +8,29 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>authority management</title>
+    <title>AuthorityManagement</title>
     <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
 </head>
 <body>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>权限管理</legend>
+    </fieldset>
     <div id="Content"></div>
-
     <div class="layui-row">
-        <div class="layui-col-md3" style="width:15%">
+        <div class="layui-col-md3" style="width:15%; height:600px; margin-right:10px; margin-top:10px; border: 1px solid #ddd;">
             <div class="grid-demo">
                 <ul id="treeTest"></ul>
             </div>
         </div>
-        <div class="layui-col-md9"style="width:85%">
+        <div class="layui-col-md9" style="width:84%">
             <div class="grid-demo grid-demo-bg1">
                 <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
+                <script type="text/html" id="switchNO">
+                    <input type="checkbox" name="close" lay-skin="switch" lay-text="开启|关闭">
+                </script>
+                <script type="text/html" id="barDemo">
+                    <a class="layui-btn layui-btn-xs" lay-event="edit">功能设置</a>
+                </script>
             </div>
         </div>
     </div>
@@ -30,63 +38,61 @@
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script>
-        var table,  //表格
-            form,  //表单
-            tree //树形对象
-        layui.use(['table', 'form', 'tree'], function () {
+        layui.use(['table', 'form', 'tree', 'upload'], function () {
+            var table,  //表格
+                form,  //表单
+                tree, //树形对象
+                SelectData, //表格选中的行对象
+                SelectTreeNode, //选中的树节点对象
+                upload;//上传
+
             var table = layui.table
                 , form = layui.form
-                , tree = layui.tree;
-            table.render({
-                elem: '#tbPowerType'
-                , height: 332
-                , url: '/Authority/Select' //数据接口
-                , method: 'post'
-                , page: true //开启分页
-                , cols: [[ //表头
-                    { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
-                    , { field: 'PowerName', title: '菜单名称', width: 150 }
-                    , { field: 'MenuAddress', title: '地址', width: 150 }
-                    , { field: 'ShowMark', title: '显示标识', width: 80, }
-                    , { field: 'CreateUser', title: '创建人', width: 120 }
-                    , { field: 'CreateDate', title: '创建时间', width: 140, sort: true }
-                    , { field: 'Notes', title: '备注', width: 140 }
-                    , { field: 'ck', title: '全选', width: 100, checkbox: true }
-                ]]
-            });
-     
-            var createTree = function (node, start) {
-                node = node || function () {
-                    var arr = [];
-                      arr.push({
-                           id: '000111',
-                           name: '权限组'
-                      });
-                    return arr;
-                }();
-                start = start || 1;
-                layui.each(node, function (index, item) {
-                    if (start < 2 && index < 3) {
-                        var child = [
-                            {
-                                id: index,
-                                name: (1 + index + start).toString().replace(/(\d)/, '$1$1$1$1$1$1$1$1$1')
-                            }
-                        ];
-                        node[index].children = child;
-                        createTree(child, index + start + 1);
-                    }
+                , tree = layui.tree
+                , upload = layui.upload;
+
+            var getTableByTable = function (id) {
+                table.render({
+                    elem: '#tbPowerType'
+                    , height: 332
+                    , url: '/Authority/SelectPowerAllot' //数据接口
+                    , where: { model: { PowerGroupID: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
+                        , { field: 'PowerName', title: '菜单名称', width: 150 }
+                        , { field: 'MenuAddress', title: '地址', width: 150 }
+                        , { field: 'ShowMark', title: '显示标识', width: 80, }
+                        , { field: 'CreateUser', title: '创建人', width: 120 }
+                        , { field: 'CreateDate', title: '创建时间', width: 140, sort: true }
+                        , { field: 'Notes', title: '备注', width: 140 }
+                        , { field: 'ck', title: '开关', width: 100, align: 'center', toolbar: '#switchNO' }
+                        , { field: 'edit', title: '操作', width: 165, align: 'center', toolbar: '#barDemo' }
+                    ]]
                 });
-                return node;
             };
 
+            function initTree() {
+                var result;
+                $.ajax({
+                    url: "/Authority/SelectPowerGroup",
+                    type: "post",
+                    async: false,
+                    dataType: "json",
+                    success: function (r) {
+                        result = r;
+                    }
+                });
+                return result
+            }
             layui.tree({
                 elem: '#treeTest' //指定元素
                 , click: function (item) { //点击节点回调
-                    layer.msg('当前节名称：' + item.name + ' id = ' + item.id + '<br>全部参数：' + JSON.stringify(item));
-                    console.log(item);
+                    var id = item.id;
+                    getTableByTable(id);
                 }
-                , nodes: createTree()
+                , nodes: initTree()
             });
         });
     </script>
