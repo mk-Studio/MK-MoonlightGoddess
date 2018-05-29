@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="EntityModels\MK_Info_PowerAllot.cs" />
     <Compile Include="EntityModels\MK_Info_PowerGroup.cs" />
     <Compile Include="EntityModels\MK_Info_Supplier.cs" />
     <Compile Include="EntityModels\MK_Info_Supplier_WuLiao.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="ResultModels\LayuiTableResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModels\AjaxResultModel.cs" />
+    <Compile Include="ResultModels\LayuiTreeResultModel.cs" />
     <Compile Include="ResultModels\SelectOptionsResultModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
