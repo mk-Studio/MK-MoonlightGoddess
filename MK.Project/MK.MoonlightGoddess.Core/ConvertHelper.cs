@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MK.MoonlightGoddess.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -58,13 +59,18 @@ namespace MK.MoonlightGoddess.Core
         /// <param name="list">传入集合</param>  
         /// <param name="isStoreDB">是否存入数据库DateTime字段，date时间范围没事，取出展示不用设置TRUE</param>  
         /// <returns>返回datatable结果</returns>  
-        public static DataTable ListToTable<T>(List<T> list, bool isStoreDB = true)
+        public static DataTable ListToTable<T>(List<T> list, bool isStoreDB = true,bool ignoreAttribute = false)
         {
             Type tp = typeof(T);
             PropertyInfo[] proInfos = tp.GetProperties();
             DataTable dt = new DataTable();
             foreach (var item in proInfos)
             {
+                if (ignoreAttribute)
+                {
+                    if (item.GetCustomAttribute(typeof(DataTableToDBColumnsAttribute)) is DataTableToDBColumnsAttribute)
+                        continue;
+                }
                 dt.Columns.Add(item.Name, item.PropertyType); //添加列明及对应类型  
             }
             foreach (var item in list)
@@ -74,18 +80,15 @@ namespace MK.MoonlightGoddess.Core
                 {
                     object obj = proInfo.GetValue(item);
                     if (obj == null)
-                    {
                         continue;
+                    if (ignoreAttribute)
+                    {
+                        if (proInfo.GetCustomAttribute(typeof(DataTableToDBColumnsAttribute)) is DataTableToDBColumnsAttribute)
+                            continue;
                     }
-                    //if (obj != null)  
-                    // {  
                     if (isStoreDB && proInfo.PropertyType == typeof(DateTime) && Convert.ToDateTime(obj) < Convert.ToDateTime("1753-01-01"))
-                    {
                         continue;
-                    }
-                    // dr[proInfo.Name] = proInfo.GetValue(item);  
                     dr[proInfo.Name] = obj;
-                    // }  
                 }
                 dt.Rows.Add(dr);
             }

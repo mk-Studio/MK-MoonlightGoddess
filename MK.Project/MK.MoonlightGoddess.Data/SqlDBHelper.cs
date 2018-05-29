@@ -116,7 +116,7 @@ namespace MK.MoonlightGoddess.Data
                 number = comm.ExecuteNonQuery();
                 return number;
             }
-            catch
+            catch(Exception e)
             {
                 return number;
             }

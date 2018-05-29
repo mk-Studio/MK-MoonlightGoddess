@@ -15,5 +15,20 @@ namespace MK.MoonlightGoddess.Models
         public string Msg { get; set; }
         public int Code { get; set; }
         public object Data { get; set; }
+
+        public AjaxResultModel() { }
+        private AjaxResultModel(bool IsError, string Msg, int Code, object Data)
+        {
+            this.IsError = IsError;
+            this.Msg = Msg;
+            this.Code = Code;
+            this.Data = Data;
+        }
+
+        public static Object CreateMessage(bool isError, string msg, int code, object data)
+        {
+            AjaxResultModel result = new AjaxResultModel(isError, msg, code, data);
+            return result;
+        }
     }
 }

@@ -100,7 +100,17 @@
                     , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
-                ]]
+                ]],
+                InfoSupplier: [[ //表头
+                    { field: 'SupplierName', title: '供应商名称', width: 150, sort: true, event: 'select' }
+                    , { field: 'WuLiaoDetail', title: '供应物料名称', width: 180, sort: true, event: 'select' }
+                    , { field: 'LianXiRen', title: '联系人', width: 150, sort: true, event: 'select' }
+                    , { field: 'LianXiFangShi', title: '联系方式', width: 120, event: 'select' }
+                    , { field: 'Address', title: '地址', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]],
             }
 
             //InitNewCombobox("#testSelect", "WuLiaoType", form, false); //绑定下拉框
@@ -152,14 +162,23 @@
                     {
                         name: '供应商信息',
                         tbUrl: '/DataDictionary/GetQueryInfoSupplier',
-                        tbCols: tbCols.InfoWuLiao,
+                        tbCols: tbCols.InfoSupplier,
                         formUrl: '/FormDataDictionary/FormInfoSupplier',
-                        postUrl: '/DataDictionary/ExceInfoWuLiao',
+                        postUrl: '/DataDictionary/ExceInfoSupplier',
                         formVal: function (isVal) {
                             InitNewCombobox("#detailModel", "WuLiaoType", form, false); //绑定下拉框
                             //赋值修改的数据
                             if (isVal) {
-
+                                form.val('formInfoSupplier', {
+                                    "SupplierName": SelectData.SupplierName
+                                    , "LianXiRen": SelectData.LianXiRen
+                                    , "LianXiFangShi": SelectData.LianXiFangShi
+                                    , "Address": SelectData.Address
+                                })
+                                formSelects.render({
+                                    name: 'select'
+                                });
+                                formSelects.value('select', getShangPinBySupplier())
                             }
                         }
                     },
@@ -218,6 +237,21 @@
                     type: "get",
                     data: { id: SelectData.ID },
                     dataType: "html",
+                    async: false,
+                    success: function (r) {
+                        result = r
+                    }
+                })
+                return result;
+            }
+
+            function getShangPinBySupplier() {
+                var result = "";
+                $.ajax({
+                    url: "/DataDictionary/GetShangPinBySupplier",
+                    type: "get",
+                    data: { id: SelectData.ID },
+                    dataType: "json",
                     async: false,
                     success: function (r) {
                         result = r
@@ -333,27 +367,24 @@
                 return false;
             });
 
-            //[特殊]监听提交事件
+            //[供应商]监听提交事件
             form.on('submit(saveSupplier)', function (data) {
-                var model = activeName == "Insert" 
-                ? $.extend(data.field, { detailModel: formSelects.value('select') })
-                : $.extend(data.field, { ID: SelectData.ID, detailModel: formSelects.value('select') })
-
+                var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
                 layer.alert(JSON.stringify(model));
-                //$.post(
-                //    SelectTreeNode.postUrl,
-                //    { model: model, name: activeName },
-                //    function (r) {
-                //        if (!r.IsError) {
-                //            layer.closeAll();
-                //            layer.msg("保存成功");
-                //            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                //        } else {
-                //            layer.closeAll();
-                //            layer.msg('保存异常！', { icon: 5 });
-                //        }
-                //    }
-                //);
+                $.post(
+                    SelectTreeNode.postUrl,
+                    { model: model, detailModel: formSelects.value('select'),name: activeName },
+                    function (r) {
+                        if (!r.IsError) {
+                            layer.closeAll();
+                            layer.msg("保存成功");
+                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                        } else {
+                            layer.closeAll();
+                            layer.msg('保存异常！', { icon: 5 });
+                        }
+                    }
+                );
                 return false;
             });
 

@@ -205,6 +205,12 @@ namespace MK.MoonlightGoddess.Service
             return ajaxResult;
         }
 
+        public static bool DataTableToSQLServer(DataTable dt, string dbMappingTableName)
+        {
+            bool result = DBContent<dynamic>.DataTableToSQLServer(dt, dbMappingTableName);
+            return result;
+        }
+
         /// <summary>
         /// 释放请求资源
         /// </summary>

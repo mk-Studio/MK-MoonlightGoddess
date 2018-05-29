@@ -23,7 +23,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             HttpContext context = HttpContext.Current;
             context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            var jsonResult = ServiceContent<BaseModel>.GetSelectOptionsBySqlName(new BaseModel(), name);
+            var jsonResult = ServiceContent<dynamic>.GetSelectOptionsBySqlName(new { }, name);
             return Json(jsonResult);
         }
 
