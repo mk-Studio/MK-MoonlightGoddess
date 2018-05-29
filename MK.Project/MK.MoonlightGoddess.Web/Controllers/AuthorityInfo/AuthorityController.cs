@@ -1,5 +1,6 @@
 ﻿using MK.MoonlightGoddess.Core;
 using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Models.ResultModels;
 using MK.MoonlightGoddess.Service;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,16 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         [HttpPost]
         public JsonResult SelectPowerGroup(MK_Type_Power model)
         {
-            var jsonResult = ServiceContent<MK_Type_Power>.Select(model, "MK_Info_PowerGroup", "SelectPowerGroup");
+            var jsonTable = ServiceContent<MK_Type_Power>.SelectData(model, "MK_Info_PowerGroup", "SelectPowerGroupTree");
+            TextTree textTree = new TextTree();
+            var jsonResult = textTree.PowerGroup(jsonTable);
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult SelectPowerAllot(MK_Info_PowerAllot model)
+        {
+            var jsonResult = ServiceContent<MK_Info_PowerAllot>.Select(model, "MK_Info_PowerAllot", "SelectPowerAllot");
             return Json(jsonResult);
         }
     }
