@@ -48,6 +48,47 @@
     SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_Supplier'
   </sql>
 
+  <sql name="QueryTypeWuLiuYeWu">
+    SELECT TOP (@limit)
+    ID,YeWuType,ShowMark,CreateUser,CreateDate
+    FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
+        ID,YeWuType,ShowMark,CreateUser,CreateDate
+        FROM MK_Type_WuLiuYeWu
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    order by t.RowID
+
+    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Type_WuLiuYeWu'
+  </sql>
+
+  <sql name="QueryInfoWuLiuCompany">
+    SELECT TOP (@limit)
+    ID,YeWuID,YeWuName,Name,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY wlc.CreateDate DESC ) AS RowID,
+    wlc.ID,YeWuID,wlt.YeWuType AS YeWuName,Name,LianXiRen,LianXiFangShi,Address,wlc.ShowMark,wlc.CreateUser,wlc.CreateDate
+    FROM dbo.MK_Info_WuLiuCompany wlc JOIN dbo.MK_Type_WuLiuYeWu wlt ON wlt.ID = wlc.YeWuID
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    order by t.RowID
+
+    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_WuLiuCompany'
+  </sql>
+
+  <sql name="QueryInfoCurrency">
+    SELECT TOP (@limit)
+    ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
+	  ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate FROM MK_Info_Currency
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    order by t.RowID
+
+    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_Currency'
+  </sql>
+
   <sql name="CheckInfoWuLiaoEXISTS">
     SELECT COUNT(ID) FROM dbo.MK_Info_WuLiao WHERE ShangPinName = @ShangPinName AND GuiGe = @GuiGe
   </sql>
@@ -69,6 +110,21 @@
     VALUES
     (@ID,@SupplierName,@LianXiRen,@LianXiFangShi,@Address,@CreateUser,@CreateDate)
   </sql>
+  
+  <sql name="InsertTypeWuLiuYeWu">
+    INSERT MK_Type_WuLiuYeWu(YeWuType,CreateUser,CreateDate)
+    VALUES(@YeWuType,@CreateUser,@CreateDate)
+  </sql>
+  
+  <sql name="InsertInfoWuLiuCompany">
+    INSERT MK_Info_WuLiuCompany(YeWuID,Name,LianXiRen,LianXiFangShi,Address,CreateUser,CreateDate)
+    VALUES(@YeWuID,@Name,@LianXiRen,@LianXiFangShi,@Address,@CreateUser,@CreateDate)
+  </sql>
+  
+  <sql name="InsertInfoCurrency">
+    INSERT MK_Info_Currency(CurrencyName,CurrencyCode,Remark,CreateUser,CreateDate)
+    VALUES(@CurrencyName,@CurrencyCode,@Remark,@CreateUser,@CreateDate)
+  </sql>
 
   <sql name="UpdateInfoWuLiao">
     UPDATE MK_Info_WuLiao
@@ -89,6 +145,24 @@
     DELETE FROM MK_Info_Supplier_WuLiao WHERE SupplierID=@ID
   </sql>
 
+  <sql name="UpdateTypeWuLiuYeWu">
+    UPDATE MK_Type_WuLiuYeWu SET YeWuType = @YeWuType,CreateUser= @CreateUser,CreateDate= @CreateDate
+    WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoWuLiuCompany">
+    UPDATE MK_Info_WuLiuCompany SET YeWuID = @YeWuID,Name= @Name,
+    LianXiRen = @LianXiRen,LianXiFangShi= @LianXiFangShi,Address= @Address,
+    CreateUser= @CreateUser,CreateDate= @CreateDate
+    WHERE ID = @ID
+  </sql>
+  
+  <sql name="UpdateInfoCurrency">
+    UPDATE dbo.MK_Info_Currency SET 
+    CurrencyName=@CurrencyName,CurrencyCode=@CurrencyCode,Remark=@Remark,CreateUser=@CreateUser,CreateDate=@CreateDate
+    WHERE ID = @ID
+  </sql>
+
   <sql name="DeleteInfoWuLiao">
     DELETE FROM MK_Info_WuLiao WHERE ID = @ID
   </sql>
@@ -100,6 +174,18 @@
   <sql name="DeleteInfoSupplier">
     DELETE FROM MK_Info_Supplier WHERE ID=@ID
     DELETE FROM MK_Info_Supplier_WuLiao WHERE SupplierID=@ID
+  </sql>
+
+  <sql name="DeleteTypeWuLiuYeWu">
+    DELETE FROM MK_Type_WuLiuYeWu WHERE ID = @ID
+  </sql>
+
+  <sql name="DeleteInfoWuLiuCompany">
+    DELETE FROM MK_Info_WuLiuCompany WHERE ID = @ID
+  </sql>
+  
+  <sql name="DeleteInfoCurrency">
+    DELETE FROM MK_Info_Currency WHERE ID = @ID
   </sql>
 
   <sql name="GetWuLiaoTypeID">

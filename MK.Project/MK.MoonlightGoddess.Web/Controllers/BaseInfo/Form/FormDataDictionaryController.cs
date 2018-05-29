@@ -23,5 +23,20 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo.Form
         {
             return View("../BaseInfoViews/Form/FormInfoSupplier");
         }
+
+        public ActionResult FormTypeWuLiuYeWu()
+        {
+            return View("../BaseInfoViews/Form/FormTypeWuLiuYeWu");
+        }
+
+        public ActionResult FormInfoWuLiuCompany()
+        {
+            return View("../BaseInfoViews/Form/FormInfoWuLiuCompany");
+        }
+
+        public ActionResult FormInfoCurrency()
+        {
+            return View("../BaseInfoViews/Form/FormInfoCurrency");
+        }
     }
 }

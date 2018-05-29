@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>DataDictionary</title>
-    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         .layui-table-hover {
             background-color: #a7e698 !important;
@@ -40,8 +40,8 @@
             <div class="layui-col-lg10">
                 <div id="dataContent">
                     <div class="layui-btn-group tbTools">
-                        <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1">&#xe654;</i>添加</button>
-                        <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit">&#xe642;</i>修改</button>
+                        <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+                        <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
                         <button class="layui-btn layui-btn-sm" data-type="delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
                         <button class="layui-btn layui-btn-sm" data-type="test"><i class="layui-icon">&#xe609;</i>测试</button>
                     </div>
@@ -111,6 +111,30 @@
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
+                TypeWuLiuYeWu: [[
+                    { field: 'YeWuType', title: '业务类型名称', width: 150, sort: true, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]],
+                InfoWuLiuCompany: [[
+                    { field: 'YeWuName', title: '业务类型', width: 150, sort: true, event: 'select' }
+                    , { field: 'Name', title: '公司名称', width: 180, sort: true, event: 'select' }
+                    , { field: 'LianXiRen', title: '联系人', width: 150, sort: true, event: 'select' }
+                    , { field: 'LianXiFangShi', title: '联系方式', width: 120, event: 'select' }
+                    , { field: 'Address', title: '地址', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]],
+                InfoCurrency: [[
+                    { field: 'CurrencyName', title: '币别名称', width: 150, sort: true, event: 'select' }
+                    , { field: 'CurrencyCode', title: '币别代码', width: 120, sort: true, event: 'select' }
+                    , { field: 'Remark', title: '说明', width: 170, sort: true, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
             }
 
             //InitNewCombobox("#testSelect", "WuLiaoType", form, false); //绑定下拉框
@@ -183,20 +207,53 @@
                         }
                     },
                     {
-                        name: '供应商物料信息',
-                        tbUrl: '/DataDictionary/GetQueryInfoWuLiao',
-                        tbCols: tbCols.InfoWuLiao,
-                        formUrl: '/FormDataDictionary/FormInfoWuLiao',
-                        postUrl: '/DataDictionary/ExceInfoWuLiao',
+                        name: '物流公司业务',
+                        tbUrl: '/DataDictionary/GetQueryTypeWuLiuYeWu',
+                        tbCols: tbCols.TypeWuLiuYeWu,
+                        formUrl: '/FormDataDictionary/FormTypeWuLiuYeWu',
+                        postUrl: '/DataDictionary/ExceTypeWuLiuYeWu',
                         formVal: function (isVal) {
-                            InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, false); //绑定下拉框
                             //赋值修改的数据
                             if (isVal) {
-                                form.val('formInfoWuLiao', {
-                                    "WuLiaoTypeID": getWuLiaoTypeID()
-                                    , "ShangPinName": SelectData.ShangPinName
-                                    , "GuiGe": SelectData.GuiGe
-                                    , "HaiGuanNo": SelectData.HaiGuanNo
+                                form.val('formTypeWuLiuYeWu', {
+                                    "YeWuType": SelectData.YeWuType
+                                })
+                            }
+                        }
+                    },
+                    {
+                        name: '物流公司',
+                        tbUrl: '/DataDictionary/GetQueryInfoWuLiuCompany',
+                        tbCols: tbCols.InfoWuLiuCompany,
+                        formUrl: '/FormDataDictionary/FormInfoWuLiuCompany',
+                        postUrl: '/DataDictionary/ExceInfoWuLiuCompany',
+                        formVal: function (isVal) {
+                            InitNewCombobox("#YeWuID", "YeWuType", form, false); //绑定下拉框
+                            //赋值修改的数据
+                            if (isVal) {
+                                form.val('formInfoWuLiuCompany', {
+                                    "YeWuID": SelectData.YeWuID
+                                    , "Name": SelectData.Name
+                                    , "LianXiRen": SelectData.LianXiRen
+                                    , "LianXiFangShi": SelectData.LianXiFangShi
+                                    , "Address": SelectData.Address
+                                })
+                            }
+                        }
+                    }, 
+                    {
+                        name: '币别信息',
+                        tbUrl: '/DataDictionary/GetQueryInfoCurrency',
+                        tbCols: tbCols.InfoCurrency,
+                        formUrl: '/FormDataDictionary/FormInfoCurrency',
+                        postUrl: '/DataDictionary/ExceInfoCurrency',
+                        formVal: function (isVal) {
+                            //赋值修改的数据
+                            if (isVal) {
+                                form.val('formInfoCurrency', {
+                                    "CurrencyName": SelectData.CurrencyName
+                                    , "CurrencyCode": SelectData.CurrencyCode
+                                    , "Remark": SelectData.Remark
                                 })
                             }
                         }
@@ -370,7 +427,6 @@
             //[供应商]监听提交事件
             form.on('submit(saveSupplier)', function (data) {
                 var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
-                layer.alert(JSON.stringify(model));
                 $.post(
                     SelectTreeNode.postUrl,
                     { model: model, detailModel: formSelects.value('select'),name: activeName },
