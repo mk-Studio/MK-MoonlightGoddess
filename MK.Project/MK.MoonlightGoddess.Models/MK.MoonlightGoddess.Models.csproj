@@ -41,6 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="EntityModels\MK_Info_PowerGroup.cs" />
+    <Compile Include="EntityModels\MK_Info_Supplier.cs" />
+    <Compile Include="EntityModels\MK_Info_Supplier_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Info_User.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Type_Power.cs" />
