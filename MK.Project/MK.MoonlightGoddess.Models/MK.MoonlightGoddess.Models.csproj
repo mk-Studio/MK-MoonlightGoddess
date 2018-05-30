@@ -53,6 +53,7 @@
     <Compile Include="EntityModels\MK_Type_Power.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiuYeWu.cs" />
+    <Compile Include="ResultModels\LayuiPhotosResultModel.cs" />
     <Compile Include="ResultModels\LayuiTableResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultModels\AjaxResultModel.cs" />
