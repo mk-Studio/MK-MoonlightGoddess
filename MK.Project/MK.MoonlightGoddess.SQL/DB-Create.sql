@@ -238,7 +238,7 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_Name ON dbo.MK_Info_WuLiuCompa
 CREATE TABLE MK_Info_User(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	UserName NVARCHAR(30) NOT NULL,
-	Passwor NVARCHAR(30) NOT NULL,
+	Password NVARCHAR(30) NOT NULL,
 	WuLiuYeWuID NVARCHAR(36),
 	PowerGroupID NVARCHAR(36),
 	DefaultLanguage NVARCHAR(30) DEFAULT 'ChineseSimplified',
@@ -252,7 +252,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'用户ID【GUID】', 'SCHEMA', N'db
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'用户名', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_User', 'COLUMN', N'UserName'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'密码', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_User', 'COLUMN', N'Passwor'
+EXEC sp_addextendedproperty N'MS_Description', N'密码', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_User', 'COLUMN', N'Password'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'物流公司业务维护', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_User', 'COLUMN', N'WuLiuYeWuID'
 GO
@@ -368,7 +368,7 @@ CREATE TABLE MK_Info_PowerAllot(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	PowerGroupID NVARCHAR(36),
 	PowerID NVARCHAR(36),
-	Status_xx NVARCHAR(2) DEFAULT '0',
+	Status NVARCHAR(2) DEFAULT '0',
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
