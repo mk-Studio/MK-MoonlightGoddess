@@ -2,7 +2,7 @@
 <MK_Info_User>
 
   <sql name="ValidateLogin">
-    select count(UserName) from MK_Info_User where UserName = @UserName and Passwor = @Passwor and ShowMark = 'Y'
+    select count(UserName) from MK_Info_User where UserName = @UserName and Password = @Password and ShowMark = 'Y'
   </sql>
 
   <sql name="QueryTest">

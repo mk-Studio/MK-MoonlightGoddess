@@ -42,16 +42,16 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
-        public JsonResult UpdateStatus(MK_Info_PowerAllot model,string Status_xx)
+        public JsonResult UpdateStatus(MK_Info_PowerAllot model,string Status)
         {
-            model.Status_xx = Status_xx;
+            model.Status = Status;
             model.CreateUser = CurrAccount.UserName;
             model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             List<MK_Info_PowerAllot> listSp = new List<MK_Info_PowerAllot>();
             MK_Info_PowerAllot newObj = new MK_Info_PowerAllot()
             {
                 ID= Guid.NewGuid().ToString().ToUpper(),
-                Status_xx = Status_xx,
+                Status = Status,
                 CreateUser= CurrAccount.UserName,
                 CreateDate= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };

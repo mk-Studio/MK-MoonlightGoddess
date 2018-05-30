@@ -58,7 +58,7 @@
                 $.ajax({
                     url: "/Login/OnLogin",
                     type: "post",
-                    data: { UserName: data.field.title, passwor: data.field.password },
+                    data: { UserName: data.field.title, password: data.field.password },
                     dataType: "json",
                     success: function (r) {
                         if (r.result === "Y") {

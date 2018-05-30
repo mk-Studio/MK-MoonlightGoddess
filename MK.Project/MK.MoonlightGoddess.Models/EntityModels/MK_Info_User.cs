@@ -16,7 +16,7 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// <summary>
         /// 密码
         /// </summary>
-        public string Passwor { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// 物流公司业务维护ID

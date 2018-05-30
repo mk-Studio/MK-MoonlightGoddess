@@ -2,7 +2,7 @@
 <MK_Info_PowerAllot>
 
   <sql name="SelectPowerAllot">
-    SELECT pt.ID AS ID,pt.PowerGroupID AS PowerGroupID,pr.PowerName AS PowerName,pr.Notes,pr.MenuAddress AS MenuAddress,pt.CreateUser AS CreateUser,pt.CreateDate AS CreateDate,pt.ShowMark,CASE pt.Status_xx WHEN '0' THEN '未授权' WHEN '1' THEN '授权'ELSE '未知' END AS Status_xx
+    SELECT pt.ID AS ID,pt.PowerGroupID AS PowerGroupID,pr.PowerName AS PowerName,pr.Notes,pr.MenuAddress AS MenuAddress,pt.CreateUser AS CreateUser,pt.CreateDate AS CreateDate,pt.ShowMark,CASE pt.Status WHEN '0' THEN '未授权' WHEN '1' THEN '授权'ELSE '未知' END AS Status
     FROM MK_Info_PowerAllot AS pt
     JOIN dbo.MK_Info_PowerGroup AS pp ON pt.PowerGroupID=pp.ID AND pp.ShowMark='Y'
     JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
@@ -11,11 +11,11 @@
   </sql>
 
   <sql name="UpdateStatus">
-    UPDATE MK_Info_PowerAllot SET Status_xx =@Status_xx,CreateUser=@CreateUser,CreateDate=@CreateDate WHERE ID=@ID AND ShowMark='Y'
+    UPDATE MK_Info_PowerAllot SET Status =@Status,CreateUser=@CreateUser,CreateDate=@CreateDate WHERE ID=@ID AND ShowMark='Y'
   </sql>
 
   <sql name="UpdateAllStatus">
-    UPDATE MK_Info_PowerAllot SET Status_xx ='1',CreateUser=@CreateUser,CreateDate=@CreateDate WHERE PowerGroupID=@PowerGroupID AND ShowMark='Y'
+    UPDATE MK_Info_PowerAllot SET Status ='1',CreateUser=@CreateUser,CreateDate=@CreateDate WHERE PowerGroupID=@PowerGroupID AND ShowMark='Y'
   </sql>
 
 </MK_Info_PowerAllot>
