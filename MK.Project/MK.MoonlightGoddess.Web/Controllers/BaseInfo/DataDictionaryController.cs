@@ -165,5 +165,17 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
                 result.Add(row["ShangPinID"].ToString());
             return Json(result,JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult SaveWuLiaoImagePath(MK_Info_WuLiao model)
+        {
+            var jsonResult = ServiceContent<MK_Info_WuLiao>.AjaxSIDU(model, "DataDictionary", "SaveWuLiaoImagePath");
+            return Json(jsonResult);
+        }
+
+        public JsonResult UpdateShowMark(string ID, string ShowMark, string name)
+        {
+            var jsonResult = ServiceContent<dynamic>.AjaxSIDU(new { ID = ID, ShowMark = ShowMark, name = name}, "DataDictionary", name);
+            return Json(jsonResult);
+        }
     }
 }

@@ -195,4 +195,33 @@
   <sql name="GetShangPinBySupplier">
     SELECT ShangPinID FROM MK_Info_Supplier_WuLiao WHERE SupplierID = @SupplierID
   </sql>
+
+  <sql name="SaveWuLiaoImagePath">
+    UPDATE MK_Info_WuLiao SET WuLiaoImagePath = @WuLiaoImagePath WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateTypeWuLiaoShowMark">
+    UPDATE MK_Type_WuLiao SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoWuLiaoShowMark">
+    UPDATE MK_Info_WuLiao SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoSupplierShowMark">
+    UPDATE MK_Info_Supplier SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateTypeWuLiuYeWuShowMark">
+    UPDATE MK_Type_WuLiuYeWu SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoWuLiuCompanyShowMark">
+    UPDATE MK_Info_WuLiuCompany SET SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoCurrencyShowMark">
+    UPDATE MK_Info_Currency SET SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
 </DataDictionary>

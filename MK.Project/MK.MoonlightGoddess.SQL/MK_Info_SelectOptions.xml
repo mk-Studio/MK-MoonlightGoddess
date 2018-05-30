@@ -2,15 +2,15 @@
 <MK_Info_SelectOptions>
   
   <sql name="WuLiaoType">
-    SELECT  ID AS Value,WuLiaoTypeName AS Text FROM MK_Type_WuLiao
+    SELECT  ID AS Value,WuLiaoTypeName AS Text FROM MK_Type_WuLiao  WHERE ShowMark = 'Y'
   </sql>
 
   <sql name="YeWuType">
-    SELECT  ID AS Value,YeWuType AS Text FROM MK_Type_WuLiuYeWu
+    SELECT  ID AS Value,YeWuType AS Text FROM MK_Type_WuLiuYeWu WHERE ShowMark = 'Y'
   </sql>
 
   <sql name="CurrencyType">
-    SELECT ID AS Value,CurrencyName AS Text FROM MK_Info_Currency
+    SELECT ID AS Value,CurrencyName AS Text FROM MK_Info_Currency WHERE ShowMark = 'Y'
   </sql>
 
 </MK_Info_SelectOptions>
