@@ -443,6 +443,7 @@
     <Content Include="Views\BaseInfoViews\Form\FormTypeWuLiuYeWu.cshtml" />
     <Content Include="Views\BaseInfoViews\Form\FormInfoWuLiuCompany.cshtml" />
     <Content Include="Views\BaseInfoViews\Form\FormInfoCurrency.cshtml" />
+    <Content Include="Views\Authority\Grouping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
