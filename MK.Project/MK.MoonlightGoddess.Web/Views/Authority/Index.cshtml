@@ -17,13 +17,17 @@
     </fieldset>
     <div id="Content"></div>
     <div class="layui-row">
-        <div class="layui-col-md3" style="width:15%; height:600px; margin-right:10px; margin-top:10px; border: 1px solid #ddd;">
-            <div class="grid-demo">
+        <div class="layui-col-lg2">
+            <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
                 <ul id="treeTest"></ul>
             </div>
         </div>
-        <div class="layui-col-md9" style="width:84%">
-            <div class="grid-demo grid-demo-bg1">
+        <div class="layui-col-lg10">
+            <div id="dataContent">
+                <div class="layui-btn-group">
+                    <button class="layui-btn" data-type="edit">一键授权</button>
+                </div>
+                <a id="title" style="float:right;font-size:18px"></a>
                 <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
                 <script type="text/html" id="switchNO">
                     <a class="layui-btn layui-btn-xs" lay-event="qxedit">权限设置</a>
@@ -44,12 +48,15 @@
                 tree, //树形对象
                 SelectData, //表格选中的行对象
                 SelectTreeNode, //选中的树节点对象
-                upload;//上传
+                upload,//上传
+                active;//表上面的按钮事件管理对象
 
             var table = layui.table
                 , form = layui.form
                 , tree = layui.tree
                 , upload = layui.upload;
+
+            form.render('select'); 
 
             var getTableByTable = function (id) {
                 table.render({
@@ -61,15 +68,15 @@
                     , page: true //开启分页
                     , cols: [[ //表头
                         //{ field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
-                        { field: 'PowerName', title: '菜单名称', width: 150, sort: true, fixed: 'left'}
+                        { field: 'PowerName', title: '菜单名称', width: 150, sort: true, fixed: 'left' }
                         //, { field: 'MenuAddress', title: '地址', width: 150 }
                         //, { field: 'ShowMark', title: '显示标识', width: 80, }
                         //, { field: 'CreateUser', title: '创建人', width: 120 }
                         //, { field: 'CreateDate', title: '创建时间', width: 140, sort: true }
                         , { field: 'Notes', title: '备注', width: 140 }
-                        , { field: 'Status_xx', title: '权限', width: 100, align: 'center'}
+                        , { field: 'Status_xx', title: '权限', width: 100, align: 'center' }
                         , { field: 'ck', title: '权限操作', width: 100, align: 'center', toolbar: '#switchNO' }
-                        , { field: 'edit', title: '功能操作', width: 165, align: 'center', toolbar: '#barDemo'}
+                        , { field: 'edit', title: '功能操作', width: 165, align: 'center', toolbar: '#barDemo' }
                     ]]
                 });
             };
@@ -91,13 +98,15 @@
                 elem: '#treeTest' //指定元素
                 , click: function (item) { //点击节点回调
                     var id = item.id;
+                    SelectTreeNode = item;
                     getTableByTable(id);
+                    $('#title').html(item.name);
                 }
                 , nodes: initTree()
             });
 
             //操作监听工具条
-            table.on('tool(tbPowerType)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(tbPowerType)', function (obj) {
                 var TakeData = obj.data //获得当前行数据
                     , layEvent = obj.event //获得 lay-event 对应的值
                     , status_xxText = TakeData.Status_xx; //获取权限状态
@@ -125,10 +134,40 @@
                             );
                         });
                     }
-                } else if (layEvent === 'gnedit')
-                {
+                } else if (layEvent === 'gnedit') {
                     layer.msg('开放中，，，');
                 }
+            });
+
+            active = {
+                //一键授权
+                edit: function () {
+                    activeName = "Update";
+                    if (SelectTreeNode) {
+                        if (SelectTreeNode.id === null || SelectTreeNode.id === '00000000-0000-0000-0000-000000000000') {
+                            layer.msg('请先选择组', { icon: 2 });
+                        } else {
+                            layer.confirm('确认一键授权', { icon: 3, title: '提示' }, function (index, layero) {
+                                $.post('/Authority/UpdateAllStatus',
+                                    { model: { PowerGroupID: SelectTreeNode.id } },
+                                    function (r) {
+                                        if (!r.IsError) {
+                                            layer.msg('一键授权成功！', { icon: 1 });
+                                            getTableByTable(SelectTreeNode.id);
+                                        } else {
+                                            layer.msg('一键授权失败！', { icon: 5 });
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                    }
+                }
+            }
+            //监听按钮点击事件
+            $('.layui-btn-group .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
             });
         });
     </script>
