@@ -60,5 +60,23 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             return BoolResult? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
                     : Json(AjaxResultModel.CreateMessage((!BoolResult), "error", -1, BoolResult));
         }
+
+        [HttpPost]
+        public JsonResult UpdateAllStatus(MK_Info_PowerAllot model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            List<MK_Info_PowerAllot> listSp = new List<MK_Info_PowerAllot>();
+            MK_Info_PowerAllot newObj = new MK_Info_PowerAllot()
+            {
+                PowerGroupID = Guid.NewGuid().ToString().ToUpper(),
+                CreateUser = CurrAccount.UserName,
+                CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+            listSp.Add(newObj);
+            var BoolResult = ServiceContent<MK_Info_PowerAllot>.SelectSIDU(model, "MK_Info_PowerAllot", "UpdateAllStatus");
+            return BoolResult ? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
+                    : Json(AjaxResultModel.CreateMessage((!BoolResult), "error", -1, BoolResult));
+        }
     }
 }
