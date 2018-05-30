@@ -156,6 +156,7 @@
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\Form\FormDataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SeletcOptionsController.cs" />
@@ -170,6 +171,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="CSS\logintext.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Files\2018-05\20180530192331mingsnx-git.jpeg" />
+    <Content Include="Files\2018-05\20180530192659mingsnx-git.jpg" />
+    <Content Include="Files\2018-05\20180530193218mingsnx-git.jpeg" />
+    <Content Include="Files\2018-05\20180530195236mingsnx-git.jpeg" />
+    <Content Include="Files\2018-05\20180530195312mingsnx-git.jpeg" />
+    <Content Include="Files\2018-05\20180530204709mingsnx-git.jpeg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

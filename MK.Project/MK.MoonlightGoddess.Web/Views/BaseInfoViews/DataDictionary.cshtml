@@ -12,11 +12,11 @@
     <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         .layui-table-hover {
-            background-color: #a7e698 !important;
+            background-color: #facc56 !important;
         }
 
         .layui-table-click {
-            background-color: #5FB878 !important;
+            background-color: #FFB800 !important;
             color: white;
         }
     </style>
@@ -46,6 +46,13 @@
                         <button class="layui-btn layui-btn-sm" data-type="test"><i class="layui-icon">&#xe609;</i>测试</button>
                     </div>
                     <table class="layui-hide" id="tbDataDictionary" lay-filter="tbDataDictionary"></table>
+                    <script type="text/html" id="switchShow">
+                        <!-- 这里的 checked 的状态只是演示 -->
+                        <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="No|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+                    </script>
+                    <script type="text/html" id="tbDataDictionarybar">
+                        <a class="layui-btn layui-btn-xs uploadImage" lay-event="uploadimg">上传图片</a>
+                    </script>
                 </div>
             </div>
         </div>
@@ -87,7 +94,7 @@
             tbCols = {
                 TypeWuLiao: [[ //表头
                     { field: 'WuLiaoTypeName', title: '物料类型名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
@@ -97,9 +104,10 @@
                     , { field: 'GuiGe', title: '规格', width: 120, event: 'select' }
                     , { field: 'HaiGuanNo', title: '海关编号', width: 140, event: 'select' }
                     , { field: 'WuLiaoImagePath', title: '物料图片路径', width: 140, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                    , { fixed: 'right', width: 165, align: 'center', toolbar: '#tbDataDictionarybar' }
                 ]],
                 InfoSupplier: [[ //表头
                     { field: 'SupplierName', title: '供应商名称', width: 150, sort: true, event: 'select' }
@@ -107,13 +115,13 @@
                     , { field: 'LianXiRen', title: '联系人', width: 150, sort: true, event: 'select' }
                     , { field: 'LianXiFangShi', title: '联系方式', width: 120, event: 'select' }
                     , { field: 'Address', title: '地址', width: 140, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
                 TypeWuLiuYeWu: [[
                     { field: 'YeWuType', title: '业务类型名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow'  }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
@@ -123,7 +131,7 @@
                     , { field: 'LianXiRen', title: '联系人', width: 150, sort: true, event: 'select' }
                     , { field: 'LianXiFangShi', title: '联系方式', width: 120, event: 'select' }
                     , { field: 'Address', title: '地址', width: 140, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow'  }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
@@ -131,7 +139,7 @@
                     { field: 'CurrencyName', title: '币别名称', width: 150, sort: true, event: 'select' }
                     , { field: 'CurrencyCode', title: '币别代码', width: 120, sort: true, event: 'select' }
                     , { field: 'Remark', title: '说明', width: 170, sort: true, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 140, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]]
@@ -155,6 +163,7 @@
                         tbCols: tbCols.TypeWuLiao,
                         formUrl: '/FormDataDictionary/FormTypeWuLiao',
                         postUrl: '/DataDictionary/ExceTypeWuLiao',
+                        showActionName:"UpdateTypeWuLiaoShowMark",
                         formVal: function (isVal) {
                             //赋值修改的数据
                             if (isVal) {
@@ -170,6 +179,7 @@
                         tbCols: tbCols.InfoWuLiao,
                         formUrl: '/FormDataDictionary/FormInfoWuLiao',
                         postUrl: '/DataDictionary/ExceInfoWuLiao',
+                        showActionName: "UpdateInfoWuLiaoShowMark",
                         formVal: function (isVal) {
                             InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, false); //绑定下拉框
                             //赋值修改的数据
@@ -189,6 +199,7 @@
                         tbCols: tbCols.InfoSupplier,
                         formUrl: '/FormDataDictionary/FormInfoSupplier',
                         postUrl: '/DataDictionary/ExceInfoSupplier',
+                        showActionName: "UpdateInfoSupplierShowMark",
                         formVal: function (isVal) {
                             InitNewCombobox("#detailModel", "WuLiaoType", form, false); //绑定下拉框
                             //赋值修改的数据
@@ -212,6 +223,7 @@
                         tbCols: tbCols.TypeWuLiuYeWu,
                         formUrl: '/FormDataDictionary/FormTypeWuLiuYeWu',
                         postUrl: '/DataDictionary/ExceTypeWuLiuYeWu',
+                        showActionName: "UpdateTypeWuLiuYeWuShowMark",
                         formVal: function (isVal) {
                             //赋值修改的数据
                             if (isVal) {
@@ -227,6 +239,7 @@
                         tbCols: tbCols.InfoWuLiuCompany,
                         formUrl: '/FormDataDictionary/FormInfoWuLiuCompany',
                         postUrl: '/DataDictionary/ExceInfoWuLiuCompany',
+                        showActionName: "UpdateInfoWuLiuCompanyShowMark",
                         formVal: function (isVal) {
                             InitNewCombobox("#YeWuID", "YeWuType", form, false); //绑定下拉框
                             //赋值修改的数据
@@ -247,6 +260,7 @@
                         tbCols: tbCols.InfoCurrency,
                         formUrl: '/FormDataDictionary/FormInfoCurrency',
                         postUrl: '/DataDictionary/ExceInfoCurrency',
+                        showActionName: "UpdateInfoCurrencyShowMark",
                         formVal: function (isVal) {
                             //赋值修改的数据
                             if (isVal) {
@@ -273,17 +287,36 @@
                         none: '暂无相关数据'
                     }
                     , cols: cols
+                    , done: function (res, curr, count) {
+                        upload.render({
+                            elem: '.uploadImage', 
+                            url: '/api/Upload/Upload', 
+                            done: function (res) {
+                                //上传完毕回调
+                                var model = { ID: SelectData.ID, WuLiaoImagePath: res.data.src }
+                                saveUploadPath(model)
+                           },
+                           error: function (index) {
+                               //请求异常回调
+                               console.info(index)
+                               layer.msg('文件上传异常！请稍后再试', { icon: 5 });
+                            }
+                        });
+                    }
                 });
             }
 
             //监听选择事件
             table.on('tool(tbDataDictionary)', function (obj) {
-                var data = obj.data;
+                var data = obj.data, layEvent = obj.event;
                 if (obj.event === 'select') {
                     //提示：只要sql查出来的数据里面有ID，列无需显示也可以获取
                     SelectData = data;
                     //layer.msg('ID<br/><span style="color:red;">' + data.ID + '</span><br/><span style="color:yellow;">' + JSON.stringify(data) + '</span>');
                 }
+                if (layEvent === 'uploadimg') {
+                    SelectData = data;
+                } 
             });
 
             //根据物料信息获取物料类型的ID
@@ -302,6 +335,7 @@
                 return result;
             }
 
+            //根据供应商获取所有供应的商品
             function getShangPinBySupplier() {
                 var result = "";
                 $.ajax({
@@ -317,7 +351,46 @@
                 return result;
             }
 
+            //保存上传路径
+            function saveUploadPath(data)
+            {
+                $.ajax({
+                    url: "/DataDictionary/SaveWuLiaoImagePath",
+                    data: data,
+                    type: "post",
+                    dataType: "json",
+                    success: function (r) {
+                        if (!r.IsError) {
+                            layer.msg('上传成功', { icon: 6 });
+                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                        } else {
+                            layer.msg('上传失败！请稍后再试', { icon: 5 });
+                        }
+                    }
+                });
+            }
+
+            //更新显示标记
+            function updateShowMark(url,data) {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: "post",
+                    dataType: "json",
+                    success: function (r) {
+                        if (!r.IsError) {
+                            layer.msg('更新成功', { icon: 6 });
+                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                        } else {
+                            layer.msg('更新失败！请稍后再试', { icon: 5 });
+                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                        }
+                    }
+                });
+            }
+
             active = {
+                //添加
                 add: function () { //添加
                     activeName = "Insert";
                     if (SelectTreeNode) {
@@ -392,6 +465,7 @@
                         layer.msg("请选择要删除的数据");
                     }
                 },
+                //测试
                 test: function () {
                     layer.alert(JSON.stringify(formSelects.value('select')));
                 }
@@ -401,6 +475,13 @@
             $('.tbTools .layui-btn').on('click', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
+            });
+
+            //监听显示标记操作
+            form.on('switch(ShowMark)', function (obj) {
+                var url = "/DataDictionary/UpdateShowMark",
+                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N") , name: SelectTreeNode.showActionName }
+                updateShowMark(url, data);
             });
 
             //监听提交事件
@@ -443,30 +524,7 @@
                 );
                 return false;
             });
-
-
-            upload.render({
-                elem: '#id'
-                , url: '/api/upload/'
-                , auto: false //选择文件后不自动上传
-                , bindAction: '#testListAction' //指向一个按钮触发上传
-                , choose: function (obj) {
-                    //将每次选择的文件追加到文件队列
-                    var files = obj.pushFile();
-
-                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                    obj.preview(function (index, file, result) {
-                        console.log(index); //得到文件索引
-                        console.log(file); //得到文件对象
-                        console.log(result); //得到文件base64编码，比如图片
-
-                        //这里还可以做一些 append 文件列表 DOM 的操作
-
-                        //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
-                        //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
-                    });
-                }
-            });
+            
         })
     </script>
 </body>
