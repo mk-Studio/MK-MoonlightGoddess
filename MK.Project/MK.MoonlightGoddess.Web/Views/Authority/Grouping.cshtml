@@ -1,0 +1,98 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Grouping</title>
+</head>
+<body>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>分组管理</legend>
+            <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-lg2">
+                <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+                    <ul id="treeTest"></ul>
+                </div>
+            </div>
+            <div class="layui-col-lg10">
+                <div class="layui-btn-group">
+                    <button class="layui-btn">新增</button>
+                    <button class="layui-btn">编辑</button>
+                    <button class="layui-btn">删除</button>
+                </div>
+                <hr />
+                <div class="layui-row">
+                    <div class="layui-col-md5">
+                        <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
+                    </div>
+                    <div class="layui-col-md6"style="margin-left:10px;">
+                        <h1>谢谢惠顾</h1> 
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        layui.use(['table', 'form', 'tree', 'jquery'], function () {
+            
+            var table = layui.table,
+                form = layui.form,
+                tree = layui.tree,
+                $ = layui.$;
+
+            var getTreeNodesData;
+            
+            layui.tree({
+                elem: '#treeTest',
+                nodes: getByTree(),
+                click: function (node) {//node即为当前点击的节点数据
+                    getTreeNodesData = node;
+                    displayTable(getTreeNodesData.id);
+                }
+            });
+
+            function getByTree() {
+                var result;
+                $.ajax({
+                    url: "/Authority/SelectPowerGroup",
+                    type: "post",
+                    async: false,//ajax请求方式，默认为true异步
+                    dataType:"json",
+                    success: function (data) {
+                        result = data;
+                    }
+                });
+                return result;
+            };
+
+            function displayTable(id)
+            {
+                table.render({
+                    elem: '#tbPowerType',
+                    height: 432,
+                    width:410,
+                    url: '/Authority/SelectAccredit',
+                    where: {model:{ PowerGroupID: id }},
+                    method: 'post',
+                    page: true,
+                    cols:[[
+                        { field: 'PowerName', title: '菜单名称', width: 410, align: 'center',sort: true, }
+                    ]]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
