@@ -2,7 +2,7 @@
 <MK_Info_PowerAllot>
 
   <sql name="SelectPowerAllot">
-    SELECT pt.ID AS ID,pt.PowerGroupID AS PowerGroupID,pr.PowerName AS PowerName,pr.Notes,pr.MenuAddress AS MenuAddress,pt.CreateUser AS CreateUser,pt.CreateDate AS CreateDate,pt.ShowMark,CASE pt.Status WHEN '0' THEN '未授权' WHEN '1' THEN '授权'ELSE '未知' END AS Status
+    SELECT pt.ID AS ID,pt.PowerGroupID AS PowerGroupID,pr.PowerName AS PowerName,pr.Notes,pr.MenuAddress AS MenuAddress,pt.CreateUser AS CreateUser,pt.CreateDate AS CreateDate,pt.ShowMark,CASE pt.Status WHEN '0' THEN N'未授权' WHEN '1' THEN N'授权'ELSE N'未知' END AS Status
     FROM MK_Info_PowerAllot AS pt
     JOIN dbo.MK_Info_PowerGroup AS pp ON pt.PowerGroupID=pp.ID AND pp.ShowMark='Y'
     JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
