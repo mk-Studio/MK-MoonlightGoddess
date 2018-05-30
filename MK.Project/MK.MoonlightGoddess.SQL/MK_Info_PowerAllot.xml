@@ -18,4 +18,13 @@
     UPDATE MK_Info_PowerAllot SET Status ='1',CreateUser=@CreateUser,CreateDate=@CreateDate WHERE PowerGroupID=@PowerGroupID AND ShowMark='Y'
   </sql>
 
+  <sql name="SelectAccredit">
+    SELECT pt.ID AS ID,pr.PowerName AS PowerName
+    FROM dbo.MK_Info_PowerAllot AS pt
+    JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
+    JOIN dbo.MK_Info_PowerGroup AS pp ON pt.PowerGroupID=pp.ID AND pp.ShowMark='Y'
+    WHERE pt.PowerGroupID=@PowerGroupID
+    AND pt.ShowMark='Y' ORDER BY pt.CreateDate DESC
+  </sql>
+
 </MK_Info_PowerAllot>
