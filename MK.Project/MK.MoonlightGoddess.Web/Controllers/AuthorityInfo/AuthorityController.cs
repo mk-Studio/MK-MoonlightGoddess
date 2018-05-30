@@ -18,6 +18,10 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         {
             return View();
         }
+        public ActionResult Grouping()
+        {
+            return View();
+        }
         [HttpPost]
         public JsonResult Select(MK_Type_Power model)
         {
@@ -77,6 +81,12 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var BoolResult = ServiceContent<MK_Info_PowerAllot>.SelectSIDU(model, "MK_Info_PowerAllot", "UpdateAllStatus");
             return BoolResult ? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
                     : Json(AjaxResultModel.CreateMessage((!BoolResult), "error", -1, BoolResult));
+        }
+
+        [HttpPost]
+        public JsonResult SelectAccredit(MK_Info_PowerAllot model) {
+            var jsonResult = ServiceContent<MK_Info_PowerAllot>.Select(model, "MK_Info_PowerAllot", "SelectAccredit");
+            return Json(jsonResult);
         }
     }
 }
