@@ -14,4 +14,8 @@
     UPDATE MK_Info_PowerAllot SET Status_xx =@Status_xx,CreateUser=@CreateUser,CreateDate=@CreateDate WHERE ID=@ID AND ShowMark='Y'
   </sql>
 
+  <sql name="UpdateAllStatus">
+    UPDATE MK_Info_PowerAllot SET Status_xx ='1',CreateUser=@CreateUser,CreateDate=@CreateDate WHERE PowerGroupID=@PowerGroupID AND ShowMark='Y'
+  </sql>
+
 </MK_Info_PowerAllot>
