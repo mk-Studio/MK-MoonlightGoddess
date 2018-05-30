@@ -319,6 +319,7 @@ VALUES
 (  '00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000001', N'权限组','Y', N'mk',GETDATE()),
 (  NEWID(),'00000000-0000-0000-0000-000000000001', N'营业部','Y', N'mk',GETDATE()) ,
 (  NEWID(),'00000000-0000-0000-0000-000000000001', N'销售部','Y', N'mk',GETDATE()) 
+CREATE NONCLUSTERED INDEX IX_MK_Info_PowerGroup_CreateDate ON dbo.MK_Info_PowerGroup(CreateDate)
 
 
 --权限表(菜单)
@@ -381,7 +382,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'权限组ID', 'SCHEMA', N'dbo', 'T
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'权限ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerAllot', 'COLUMN', N'PowerID'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'权限标识:0-无权限，1-有权限', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerAllot', 'COLUMN', N'Status_xx'
+EXEC sp_addextendedproperty N'MS_Description', N'权限标识:0-无权限，1-有权限', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerAllot', 'COLUMN', N'Status'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerAllot', 'COLUMN', N'ShowMark'
 GO
