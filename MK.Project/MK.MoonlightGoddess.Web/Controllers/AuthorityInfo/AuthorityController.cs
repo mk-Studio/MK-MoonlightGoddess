@@ -1,4 +1,5 @@
 ﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models;
 using MK.MoonlightGoddess.Models.EntityModels;
 using MK.MoonlightGoddess.Models.ResultModels;
 using MK.MoonlightGoddess.Service;
@@ -10,7 +11,7 @@ using System.Web.Mvc;
 
 namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
 {
-    public class AuthorityController : Controller
+    public class AuthorityController : VerifyLoginController
     {
         // GET: Authority
         public ActionResult Index()
@@ -41,18 +42,23 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
-        public JsonResult UpdateStatus(MK_Info_PowerAllot model)
+        public JsonResult UpdateStatus(MK_Info_PowerAllot model,string Status_xx)
         {
+            model.Status_xx = Status_xx;
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            List<MK_Info_PowerAllot> listSp = new List<MK_Info_PowerAllot>();
+            MK_Info_PowerAllot newObj = new MK_Info_PowerAllot()
+            {
+                ID= Guid.NewGuid().ToString().ToUpper(),
+                Status_xx = Status_xx,
+                CreateUser= CurrAccount.UserName,
+                CreateDate= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+            listSp.Add(newObj);
             var BoolResult = ServiceContent<MK_Info_PowerAllot>.SelectSIDU(model, "MK_Info_PowerAllot", "UpdateStatus");
-            if (BoolResult == true)
-            {
-                return Json(new { result = "Y" });
-            }
-            else
-            {
-                return Json(new { result = "N" });
-            }
-
+            return BoolResult? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
+                    : Json(AjaxResultModel.CreateMessage((!BoolResult), "error", -1, BoolResult));
         }
     }
 }
