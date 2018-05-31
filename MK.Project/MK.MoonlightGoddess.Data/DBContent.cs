@@ -1,4 +1,5 @@
 ﻿using MK.MoonlightGoddess.Models;
+using MK.MoonlightGoddess.Models.EntityModels;
 using MK.MoonlightGoddess.SQL;
 using System;
 using System.Collections.Generic;
@@ -20,25 +21,39 @@ namespace MK.MoonlightGoddess.Data
         /// <param name="parms">实体model</param>
         /// <param name="cmdType">执行方式</param>
         /// <returns></returns>
-        public static DataSet GetDataSet(TModel parms, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static DataSet GetDataSet(TModel parms, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
             string cmdText = GetCommandText(xmlName,sqlName);
-            SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parms, allowNull);
             return SqlDBHelper.GetDataSetBySql(cmdText, sqlParameter, cmdType);
         }
 
         /// <summary>
-        /// 获取单表数据
+        /// 获取表数据
         /// </summary>
         /// <param name="cmdText">命令语句[sql语句、存储过程名称]</param>
         /// <param name="parms">实体model</param>
         /// <param name="cmdType">执行方式</param>
         /// <returns></returns>
-        public static DataTable GetDataTable(TModel parms, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static DataTable GetDataTable(TModel parms, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
             string cmdText = GetCommandText(xmlName, sqlName);
-            SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parms, allowNull);
             return SqlDBHelper.GetDataTableBySql(cmdText, sqlParameter, cmdType);
+        }
+
+        /// <summary>
+        /// 获取多表数据
+        /// </summary>
+        /// <param name="cmdText">命令语句[sql语句、存储过程名称]</param>
+        /// <param name="parms">实体model</param>
+        /// <param name="cmdType">执行方式</param>
+        /// <returns></returns> 
+        public static DataSet GetDataSet(TModel parms, string xmlName, string sqlName, string spliceSql, bool allowNull = false)
+        {
+            string cmdText = GetCommandText(xmlName, sqlName).Replace("#SQL#",spliceSql);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parms, allowNull);
+            return SqlDBHelper.GetDataSetBySql(cmdText, sqlParameter);
         }
 
         /// <summary>
@@ -48,10 +63,10 @@ namespace MK.MoonlightGoddess.Data
         /// <param name="parms">实体model</param>
         /// <param name="cmdType">执行方式</param>
         /// <returns></returns>
-        public static string GetSingleValue(TModel parms, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static string GetSingleValue(TModel parms, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
             string cmdText = GetCommandText(xmlName, sqlName);
-            SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parms, allowNull);
             return SqlDBHelper.GetSingleBySql(cmdText, sqlParameter, cmdType);
         }
 
@@ -62,10 +77,10 @@ namespace MK.MoonlightGoddess.Data
         /// <param name="parms">实体model</param>
         /// <param name="cmdType">执行方式</param>
         /// <returns></returns>
-        public static bool GetExecResult(TModel parms, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static bool GetExecResult(TModel parms, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
             string cmdText = GetCommandText(xmlName, sqlName);
-            SqlParameter[] sqlParameter = ToSqlParameterArray(parms);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parms, allowNull);
             return SqlDBHelper.GetNumberBySql(cmdText, sqlParameter,cmdType) > 0 ? true : false;
         }
 
@@ -76,10 +91,10 @@ namespace MK.MoonlightGoddess.Data
         /// <param name="commandType">执行方式</param>
         /// <param name="parma">实体model</param>
         /// <returns></returns>
-        public static TModel GetSingleRowModel(TModel parma, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static TModel GetSingleRowModel(TModel parma, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
             string cmdText = GetCommandText(xmlName, sqlName);
-            SqlParameter[] sqlParameter = ToSqlParameterArray(parma);
+            SqlParameter[] sqlParameter = ToSqlParameterArray(parma,allowNull);
             TModel data = SqlDBHelper.GetSingleRowModel<TModel>(cmdText, sqlParameter, cmdType);
             return data;
         }
@@ -103,7 +118,7 @@ namespace MK.MoonlightGoddess.Data
         /// </summary>
         /// <param name="obj">实体类/匿名对象</param>
         /// <returns>SqlParameter参数数组</returns>
-        private static SqlParameter[] ToSqlParameterArray(TModel model)
+        private static SqlParameter[] ToSqlParameterArray(TModel model,bool allowNull = false)
         {
             List<SqlParameter> parms = new List<SqlParameter>();
             PropertyInfo[] propertys = model.GetType().GetProperties();
@@ -112,7 +127,15 @@ namespace MK.MoonlightGoddess.Data
                 object value = pi.GetValue(model);
                 // 判断此属性是否有get
                 if (!pi.CanRead) continue;
-                if (value != null) parms.Add(new SqlParameter("@" + pi.Name, value));
+                if (allowNull)
+                {
+                    var _value = value == null ? DBNull.Value : (string.IsNullOrEmpty(value.ToString()) ? DBNull.Value : (value.ToString().ToUpper() == "ALL" ? DBNull.Value : value));
+                    parms.Add(new SqlParameter("@" + pi.Name, _value));
+                }
+                else
+                {
+                    if (value != null) parms.Add(new SqlParameter("@" + pi.Name, value));
+                }
             }
             return parms.ToArray();
         }

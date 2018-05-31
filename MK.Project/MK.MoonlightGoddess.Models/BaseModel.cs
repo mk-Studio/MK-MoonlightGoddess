@@ -45,5 +45,17 @@ namespace MK.MoonlightGoddess.Models
         /// </summary>
         [DataTableToDBColumns]
         public int limit { get; set; } = 10;
+
+        /// <summary>
+        /// 查询起始时间
+        /// </summary>
+        [DataTableToDBColumns]
+        public string StartDate { get; set; } = null;
+
+        /// <summary>
+        /// 查询结束时间
+        /// </summary>
+        [DataTableToDBColumns]
+        public string EndDate { get; set; } = null;
     }
 }

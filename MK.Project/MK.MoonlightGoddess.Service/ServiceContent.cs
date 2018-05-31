@@ -1,6 +1,7 @@
 ﻿using MK.MoonlightGoddess.Core;
 using MK.MoonlightGoddess.Data;
 using MK.MoonlightGoddess.Models;
+using MK.MoonlightGoddess.Models.EntityModels;
 using MK.MoonlightGoddess.Models.ResultModels;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static DataTable SelectData(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static DataTable SelectData(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName, allowNull, cmdType);
             return _Data;
         }
 
@@ -49,9 +50,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static Object Select(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static Object Select(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetDataTable(model, xmlName, sqlName, allowNull, cmdType);
             if (_Data != null ? true : false)
             {
                 layuiTableResult = new LayuiTableResultModel(){
@@ -72,9 +73,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static Object Query(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static Object Query(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<dynamic>.GetDataSet(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<dynamic>.GetDataSet(model, xmlName, sqlName, allowNull, cmdType);
             if (_Data != null ? true : false)
             {
                 layuiTableResult = new LayuiTableResultModel()
@@ -88,6 +89,29 @@ namespace MK.MoonlightGoddess.Service
             return layuiTableResult;
         }
 
+        /// <summary>
+        /// 获取绑定到Layui Table的数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="xmlName"></param>
+        /// <param name="sqlName"></param>
+        /// <param name="cmdType"></param>
+        /// <returns></returns>
+        public static Object Query(TModel model,  string xmlName, string sqlName,string spliceSql, bool allowNull = false)
+        {
+            var _Data = DBContent<dynamic>.GetDataSet(model, xmlName, sqlName, spliceSql, allowNull);
+            if (_Data != null ? true : false)
+            {
+                layuiTableResult = new LayuiTableResultModel()
+                {
+                    code = _Data != null ? 0 : -1,
+                    count = Convert.ToInt32(_Data.Tables[1].Rows[0]["rows"]),
+                    data = ConvertHelper.TableToList<TModel>(_Data.Tables[0]),
+                    msg = "success"
+                };
+            }
+            return layuiTableResult;
+        }
 
         /// <summary>
         /// 获取一个指定返回的类型 <see cref="TModel"/>
@@ -97,9 +121,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static TModel SelectSingleModel(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static TModel SelectSingleModel(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            return DBContent<TModel>.GetSingleRowModel(model, xmlName, sqlName, cmdType);
+            return DBContent<TModel>.GetSingleRowModel(model, xmlName, sqlName, allowNull, cmdType);
         }
 
         /// <summary>
@@ -111,9 +135,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static Object AjaxSingleModel(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static Object AjaxSingleModel(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetSingleRowModel(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetSingleRowModel(model, xmlName, sqlName, allowNull, cmdType);
             if (_Data != null ? true : false)
             {
                 ajaxResult = new AjaxResultModel()
@@ -135,9 +159,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static string SelectSingle(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static string SelectSingle(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName, allowNull, cmdType);
             return _Data;
         }
 
@@ -150,9 +174,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static Object AjaxSingle(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static Object AjaxSingle(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetSingleValue(model, xmlName, sqlName, allowNull, cmdType);
             if (_Data != null ? true : false)
             {
                 ajaxResult = new AjaxResultModel()
@@ -174,9 +198,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static bool SelectSIDU(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static bool SelectSIDU(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetExecResult(model, xmlName, sqlName);
+            var _Data = DBContent<TModel>.GetExecResult(model, xmlName, sqlName, allowNull, cmdType);
             return _Data;
         }
 
@@ -189,9 +213,9 @@ namespace MK.MoonlightGoddess.Service
         /// <param name="sqlName"></param>
         /// <param name="cmdType"></param>
         /// <returns></returns>
-        public static Object AjaxSIDU(TModel model, string xmlName, string sqlName, CommandType cmdType = CommandType.Text)
+        public static Object AjaxSIDU(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
         {
-            var _Data = DBContent<TModel>.GetExecResult(model, xmlName, sqlName, cmdType);
+            var _Data = DBContent<TModel>.GetExecResult(model, xmlName, sqlName, allowNull, cmdType);
             if (_Data)
             {
                 ajaxResult = new AjaxResultModel()

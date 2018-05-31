@@ -444,6 +444,12 @@
     <Content Include="Views\BaseInfoViews\Form\FormInfoWuLiuCompany.cshtml" />
     <Content Include="Views\BaseInfoViews\Form\FormInfoCurrency.cshtml" />
     <Content Include="Views\Authority\Grouping.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoWuLiao.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormTypeWuLiao.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoCurrency.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoSupplier.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormTypeWuLiuYeWu.cshtml" />
+    <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoWuLiuCompany.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

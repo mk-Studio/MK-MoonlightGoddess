@@ -6,6 +6,7 @@ using MK.MoonlightGoddess.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,42 +26,66 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
         [HttpPost]
         public JsonResult GetQueryInfoWuLiao(MK_Info_WuLiao model)
         {
-            var jsonResult = ServiceContent<MK_Info_WuLiao>.Query(model, "DataDictionary", "QueryInfoWuLiao");
+            var jsonResult = ServiceContent<MK_Info_WuLiao>.Query(model, "DataDictionary", "QueryInfoWuLiao",true);
             return Json(jsonResult);
         }
 
         [HttpPost]
         public JsonResult GetQueryTypeWuLiao(MK_Type_WuLiao model)
         {
-            var jsonResult = ServiceContent<MK_Type_WuLiao>.Query(model, "DataDictionary", "QueryTypeWuLiao");
+            var jsonResult = ServiceContent<MK_Type_WuLiao>.Query(model, "DataDictionary", "QueryTypeWuLiao",true);
             return Json(jsonResult);
         }
 
         [HttpPost]
-        public JsonResult GetQueryInfoSupplier(MK_Info_Supplier model)
+        public JsonResult GetQueryInfoSupplier(MK_Info_Supplier model, List<SupelierWuLiaoDetail> detailModel)
         {
-            var jsonResult = ServiceContent<MK_Info_Supplier>.Query(model, "DataDictionary", "QueryInfoSupplier");
+            StringBuilder spliceSql = new StringBuilder();
+            if (detailModel == null || detailModel.Count == 0)
+                spliceSql.Append(" = ISNULL(NULL,b.ShangPinID)");
+            else
+            {
+                if (detailModel.Count == 1)
+                {
+                    spliceSql.Append(" = ISNULL('" + detailModel[0].val + "',b.ShangPinID)");
+                }
+                else
+                {
+                    spliceSql.Append(" in ( ");
+                    for (int i = 0; i < detailModel.Count; i++)
+                    {
+                        if (i == (detailModel.Count - 1))
+                        {
+                            spliceSql.AppendFormat($"'{detailModel[i].val}'");
+                            break;
+                        }
+                        spliceSql.AppendFormat($"'{detailModel[i].val}',");
+                    }
+                    spliceSql.Append(" ) ");
+                }
+            }
+            var jsonResult = ServiceContent<MK_Info_Supplier>.Query(model, "DataDictionary", "QueryInfoSupplier", spliceSql.ToString(), true);
             return Json(jsonResult);
         }
 
         [HttpPost]
         public JsonResult GetQueryTypeWuLiuYeWu(MK_Type_WuLiuYeWu model)
         {
-            var jsonResult = ServiceContent<MK_Type_WuLiuYeWu>.Query(model, "DataDictionary", "QueryTypeWuLiuYeWu");
+            var jsonResult = ServiceContent<MK_Type_WuLiuYeWu>.Query(model, "DataDictionary", "QueryTypeWuLiuYeWu", true);
             return Json(jsonResult);
         }
 
         [HttpPost]
         public JsonResult GetQueryInfoCurrency(MK_Info_Currency model)
         {
-            var jsonResult = ServiceContent<MK_Info_Currency>.Query(model, "DataDictionary", "QueryInfoCurrency");
+            var jsonResult = ServiceContent<MK_Info_Currency>.Query(model, "DataDictionary", "QueryInfoCurrency", true);
             return Json(jsonResult);
         }
 
         [HttpPost]
         public JsonResult GetQueryInfoWuLiuCompany(MK_Info_WuLiuCompany model)
         {
-            var jsonResult = ServiceContent<MK_Info_WuLiuCompany>.Query(model, "DataDictionary", "QueryInfoWuLiuCompany");
+            var jsonResult = ServiceContent<MK_Info_WuLiuCompany>.Query(model, "DataDictionary", "QueryInfoWuLiuCompany", true);
             return Json(jsonResult);
         }
 

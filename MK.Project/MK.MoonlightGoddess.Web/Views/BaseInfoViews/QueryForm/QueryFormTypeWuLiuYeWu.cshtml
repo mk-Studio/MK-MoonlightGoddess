@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = null;
+}
+<!--QueryFormTypeWuLiuYeWu-->
+<div class="layui-form-item">
+    <label class="layui-form-label">业务类型</label>
+    <div class="layui-input-inline">
+        <input type="text" name="YeWuType" lay-verify="" autocomplete="off" class="layui-input">
+    </div>
+
+    <label class="layui-form-label">显示标识</label>
+    <div class="layui-input-inline">
+        <select id="ShowMark" name="ShowMark" lay-verify="required" lay-search="" lay-filter="ShowMark">
+            <option value="All">全部</option>
+            <option value="Y">显示</option>
+            <option value="N">不显示</option>
+        </select>
+    </div>
+
+    <label class="layui-form-label">创建时间</label>
+    <div class="layui-input-inline">
+        <input type="text" name="StartDate" class="layui-input queryDate" placeholder="起始日期">
+    </div>
+
+    <div class="layui-input-inline">
+        <input type="text" name="EndDate" class="layui-input queryDate2" placeholder="结束日期">
+    </div>
+
+    <div class="layui-input-inline">
+        <button class="layui-btn" lay-submit lay-filter="comQuery"><i class="layui-icon layui-icon-search" style="font-size: 15px;"></i> 查询</button>
+    </div>
+</div>

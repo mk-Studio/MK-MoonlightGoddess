@@ -38,5 +38,37 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo.Form
         {
             return View("../BaseInfoViews/Form/FormInfoCurrency");
         }
+
+        //以下为查询区域
+
+        public ActionResult QueryFormInfoWuLiao()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormInfoWuLiao");
+        }
+
+        public ActionResult QueryFormTypeWuLiao()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormTypeWuLiao");
+        }
+
+        public ActionResult QueryFormInfoSupplier()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormInfoSupplier");
+        }
+
+        public ActionResult QueryFormTypeWuLiuYeWu()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormTypeWuLiuYeWu");
+        }
+
+        public ActionResult QueryFormInfoWuLiuCompany()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormInfoWuLiuCompany");
+        }
+
+        public ActionResult QueryFormInfoCurrency()
+        {
+            return View("../BaseInfoViews/QueryForm/QueryFormInfoCurrency");
+        }
     }
 }

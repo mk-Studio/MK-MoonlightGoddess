@@ -33,7 +33,7 @@ namespace MK.MoonlightGoddess.Data
                 sdr.Fill(ds);
                 return ds;
             }
-            catch
+            catch(Exception e)
             {
                 return null;
             }

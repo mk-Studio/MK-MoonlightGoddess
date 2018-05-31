@@ -3,90 +3,134 @@
 
   <sql name="QueryInfoWuLiao">
     SELECT TOP (@limit)
-    ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate
+    ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
     SELECT ROW_NUMBER() OVER (ORDER BY wlinfo.CreateDate DESC ) AS RowID,
     wlinfo.ID,wltype.WuLiaoTypeName AS WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,wlinfo.ShowMark,wlinfo.CreateUser,wlinfo.CreateDate
     FROM MK_Info_WuLiao wlinfo JOIN dbo.MK_Type_WuLiao wltype ON wltype.ID = wlinfo.WuLiaoTypeID
+    WHERE WuLiaoTypeID = ISNULL(@WuLiaoTypeID,WuLiaoTypeID)
+    AND ShangPinName = ISNULL(@ShangPinName,ShangPinName)
+    AND GuiGe = ISNULL(@GuiGe,GuiGe)
+    AND HaiGuanNo = ISNULL(@HaiGuanNo,HaiGuanNo)
+    AND wlinfo.ShowMark = ISNULL(@ShowMark,wlinfo.ShowMark)
+    AND wlinfo.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
+    ORDER BY t.RowID
 
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_WuLiao'
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
   
   <sql name="QueryTypeWuLiao">
     SELECT TOP (@limit)
     ID,WuLiaoTypeName,ShowMark,CreateUser,CreateDate
+    INTO #TableResult
     FROM (
     SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,* FROM MK_Type_WuLiao
+    WHERE WuLiaoTypeName = ISNULL(@WuLiaoTypeName,WuLiaoTypeName)
+    AND ShowMark = ISNULL(@ShowMark,ShowMark)
+    AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     order by t.RowID
 
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Type_WuLiao'
+    SELECT ID,WuLiaoTypeName,ShowMark,CreateUser, CreateDate FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
   
   <sql name="QueryInfoSupplier">
     SELECT TOP (@limit)
     ID,SupplierName,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate,t.WuLiaoDetail
+    INTO #TableResult
     FROM (
-        SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,a.*,(
-            SELECT '['+twl.WuLiaoTypeName+']'
-            FROM dbo.MK_Info_Supplier_WuLiao swl
-            JOIN dbo.MK_Type_WuLiao twl ON twl.ID = swl.ShangPinID
-            WHERE swl.SupplierID = a.ID
-            FOR XML PATH('')
-        ) AS WuLiaoDetail
-        FROM dbo.MK_Info_Supplier a
-        LEFT JOIN dbo.MK_Info_Supplier_WuLiao b ON b.SupplierID = a.ID
-        GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
+          SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,a.*,(
+              SELECT '['+twl.WuLiaoTypeName+']'
+              FROM dbo.MK_Info_Supplier_WuLiao swl
+              JOIN dbo.MK_Type_WuLiao twl ON twl.ID = swl.ShangPinID
+              WHERE swl.SupplierID = a.ID
+              FOR XML PATH('')
+      ) AS WuLiaoDetail
+      FROM dbo.MK_Info_Supplier a
+      JOIN dbo.MK_Info_Supplier_WuLiao b ON b.SupplierID = a.ID
+      WHERE SupplierName = ISNULL(@SupplierName,SupplierName)
+      AND LianXiRen = ISNULL(@LianXiRen,LianXiRen)
+      AND LianXiFangShi = ISNULL(@LianXiFangShi,LianXiFangShi)
+      AND Address = ISNULL(@Address,Address)
+      AND a.ShowMark = ISNULL(@ShowMark,a.ShowMark)
+      AND b.ShangPinID #SQL#
+      AND a.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+      GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
+    ORDER BY t.RowID
 
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_Supplier'
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryTypeWuLiuYeWu">
     SELECT TOP (@limit)
-    ID,YeWuType,ShowMark,CreateUser,CreateDate
+    ID,YeWuType,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
         SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
         ID,YeWuType,ShowMark,CreateUser,CreateDate
         FROM MK_Type_WuLiuYeWu
+        WHERE YeWuType = ISNULL(@YeWuType,YeWuType)
+        AND ShowMark = ISNULL(@ShowMark,ShowMark)
+        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
+    ORDER BY t.RowID
 
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Type_WuLiuYeWu'
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryInfoWuLiuCompany">
     SELECT TOP (@limit)
-    ID,YeWuID,YeWuName,Name,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate
+    ID,YeWuID,YeWuName,Name,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
-    SELECT ROW_NUMBER() OVER (ORDER BY wlc.CreateDate DESC ) AS RowID,
-    wlc.ID,YeWuID,wlt.YeWuType AS YeWuName,Name,LianXiRen,LianXiFangShi,Address,wlc.ShowMark,wlc.CreateUser,wlc.CreateDate
-    FROM dbo.MK_Info_WuLiuCompany wlc JOIN dbo.MK_Type_WuLiuYeWu wlt ON wlt.ID = wlc.YeWuID
+        SELECT ROW_NUMBER() OVER (ORDER BY wlc.CreateDate DESC ) AS RowID,
+        wlc.ID,YeWuID,wlt.YeWuType AS YeWuName,Name,LianXiRen,LianXiFangShi,Address,wlc.ShowMark,wlc.CreateUser,wlc.CreateDate
+        FROM dbo.MK_Info_WuLiuCompany wlc JOIN dbo.MK_Type_WuLiuYeWu wlt ON wlt.ID = wlc.YeWuID
+        WHERE wlc.YeWuID = ISNULL(@YeWuID,wlc.YeWuID)
+        AND wlc.Name = ISNULL(@Name,wlc.Name)
+        AND wlc.LianXiRen = ISNULL(@LianXiRen,wlc.LianXiRen)
+        AND wlc.LianXiFangShi = ISNULL(@LianXiFangShi,wlc.LianXiFangShi)
+        AND wlc.Address = ISNULL(@Address,wlc.Address)
+        AND wlc.ShowMark = ISNULL(@ShowMark,wlc.ShowMark)
+        AND wlc.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
-
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_WuLiuCompany'
+    ORDER BY t.RowID
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryInfoCurrency">
     SELECT TOP (@limit)
-    ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate
+    ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
-    SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
-	  ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate FROM MK_Info_Currency
+        SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
+        ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate
+        FROM MK_Info_Currency
+        WHERE CurrencyName = ISNULL(@CurrencyName,CurrencyName)
+        AND CurrencyCode = ISNULL(@CurrencyCode,CurrencyCode)
+        AND Remark = ISNULL(@Remark,Remark)
+        AND ShowMark = ISNULL(@ShowMark,ShowMark)
+        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
-
-    SELECT TOP 1 rows FROM sys.partitions WHERE Object_name(object_id) = 'MK_Info_Currency'
+    ORDER BY t.RowID
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
   </sql>
 
   <sql name="CheckInfoWuLiaoEXISTS">
