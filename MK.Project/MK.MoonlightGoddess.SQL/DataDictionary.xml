@@ -13,7 +13,7 @@
     AND GuiGe = ISNULL(@GuiGe,GuiGe)
     AND HaiGuanNo = ISNULL(@HaiGuanNo,HaiGuanNo)
     AND wlinfo.ShowMark = ISNULL(@ShowMark,wlinfo.ShowMark)
-    AND wlinfo.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+    AND wlinfo.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
@@ -31,7 +31,7 @@
     SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,* FROM MK_Type_WuLiao
     WHERE WuLiaoTypeName = ISNULL(@WuLiaoTypeName,WuLiaoTypeName)
     AND ShowMark = ISNULL(@ShowMark,ShowMark)
-    AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+    AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     order by t.RowID
@@ -61,7 +61,7 @@
       AND Address = ISNULL(@Address,Address)
       AND a.ShowMark = ISNULL(@ShowMark,a.ShowMark)
       AND b.ShangPinID #SQL#
-      AND a.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+      AND a.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
       GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
@@ -81,7 +81,7 @@
         FROM MK_Type_WuLiuYeWu
         WHERE YeWuType = ISNULL(@YeWuType,YeWuType)
         AND ShowMark = ISNULL(@ShowMark,ShowMark)
-        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
@@ -104,7 +104,7 @@
         AND wlc.LianXiFangShi = ISNULL(@LianXiFangShi,wlc.LianXiFangShi)
         AND wlc.Address = ISNULL(@Address,wlc.Address)
         AND wlc.ShowMark = ISNULL(@ShowMark,wlc.ShowMark)
-        AND wlc.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+        AND wlc.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
@@ -124,7 +124,7 @@
         AND CurrencyCode = ISNULL(@CurrencyCode,CurrencyCode)
         AND Remark = ISNULL(@Remark,Remark)
         AND ShowMark = ISNULL(@ShowMark,ShowMark)
-        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,GETDATE())
+        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
     WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
