@@ -171,9 +171,7 @@
   </sql>
 
   <sql name="UpdateInfoWuLiao">
-    UPDATE MK_Info_WuLiao
-    SET SupplierName = @SupplierName,LianXiRen=@LianXiRen,LianXiFangShi=@LianXiFangShi,Address=@Address,
-    CreateUser=@CreateUser,CreateDate=@CreateDate
+    UPDATE MK_Info_WuLiao SET WuLiaoTypeID = @WuLiaoTypeID,ShangPinName = @ShangPinName,GuiGe=@GuiGe,HaiGuanNo =@HaiGuanNo
     WHERE ID = @ID
   </sql>
 
