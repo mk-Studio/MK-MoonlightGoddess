@@ -19,11 +19,13 @@
   </sql>
 
   <sql name="SelectAccredit">
-    SELECT pt.ID AS ID,pr.PowerName AS PowerName
+    SELECT pt.ID AS ID, CASE pt.Status WHEN '1' THEN N'授权' WHEN '0' THEN N'未授权' ELSE N'未知' END AS  Status,
+    pt.CreateUser AS CreateUser, pt.CreateDate AS CreateDate, pr.PowerName AS PowerName
     FROM dbo.MK_Info_PowerAllot AS pt
     JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
     JOIN dbo.MK_Info_PowerGroup AS pp ON pt.PowerGroupID=pp.ID AND pp.ShowMark='Y'
     WHERE pt.PowerGroupID=@PowerGroupID
+    AND pt.Status='1'
     AND pt.ShowMark='Y' ORDER BY pt.CreateDate DESC
   </sql>
 

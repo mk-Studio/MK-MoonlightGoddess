@@ -1,0 +1,20 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formEditGroupInfo" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">分组名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="EditGroupName" required lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="comSave">保存</button>
+        </div>
+    </div>
+</form>

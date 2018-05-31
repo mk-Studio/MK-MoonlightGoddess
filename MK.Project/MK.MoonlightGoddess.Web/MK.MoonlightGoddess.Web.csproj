@@ -153,6 +153,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthorityInfo\AuthorityController.cs" />
+    <Compile Include="Controllers\AuthorityInfo\From\GroupInfoManageController.cs" />
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\Form\FormDataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
@@ -450,12 +451,15 @@
     <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoSupplier.cshtml" />
     <Content Include="Views\BaseInfoViews\QueryForm\QueryFormTypeWuLiuYeWu.cshtml" />
     <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoWuLiuCompany.cshtml" />
+    <Content Include="Views\Authority\Form\FormEditGroupInfo.cshtml" />
+    <Content Include="Views\Authority\Form\FromAddGroupInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Attribute\" />
     <Folder Include="Models\" />
     <Folder Include="Views\DataDictionary\" />
+    <Folder Include="Views\GroupInfoManage\" />
     <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>
