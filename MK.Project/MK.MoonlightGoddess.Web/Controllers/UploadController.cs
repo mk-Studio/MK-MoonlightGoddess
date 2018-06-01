@@ -34,7 +34,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
                         file.SaveAs(_filePath + _filename);
                         code = 0;
                         msg = "success";
-                        src = string.Format(@"~\Files\{0}\{1}",_pathImgFile,_filename);
+                        src = string.Format(@"/Files/{0}/{1}",_pathImgFile,_filename);
                     }
                     catch (Exception ex)
                     {

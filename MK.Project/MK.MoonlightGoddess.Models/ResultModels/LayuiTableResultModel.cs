@@ -9,6 +9,7 @@ namespace MK.MoonlightGoddess.Models
     /// <summary>
     /// layui table 填充数据格式（默认带分页）
     /// </summary>
+    [Serializable]
     public class LayuiTableResultModel
     {
         /// <summary>

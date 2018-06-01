@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MK.MoonlightGoddess.Models.ResultModels
 {
+    [Serializable]
     public class LayuiUploadResultModel
     {
         public int code { get; set; }

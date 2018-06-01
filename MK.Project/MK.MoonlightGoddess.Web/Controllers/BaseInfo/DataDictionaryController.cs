@@ -202,5 +202,14 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo
             var jsonResult = ServiceContent<dynamic>.AjaxSIDU(new { ID = ID, ShowMark = ShowMark, name = name}, "DataDictionary", name);
             return Json(jsonResult);
         }
+
+        public JsonResult GetImageResult(string imgVirtualPath)
+        {
+            string src = ConfigHelper.AppSetting("WebSitePath") + imgVirtualPath.Replace("~","").Replace(@"\","/");
+            string imgName = src.Substring(src.LastIndexOf('/')+1, src.Length - src.LastIndexOf('/') -1);
+            List<data> data = new List<data>();
+            data.Add(new data { alt = imgName, pid = 0, src = src, thumb = "" });
+            return Json(LayuiPhotosResultModel.CreateResult("物料图片查看", 0, 0, data),JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -259,11 +259,11 @@
   </sql>
 
   <sql name="UpdateInfoWuLiuCompanyShowMark">
-    UPDATE MK_Info_WuLiuCompany SET SET ShowMark = @ShowMark WHERE ID = @ID
+    UPDATE MK_Info_WuLiuCompany SET ShowMark = @ShowMark WHERE ID = @ID
   </sql>
 
   <sql name="UpdateInfoCurrencyShowMark">
-    UPDATE MK_Info_Currency SET SET ShowMark = @ShowMark WHERE ID = @ID
+    UPDATE MK_Info_Currency SET ShowMark = @ShowMark WHERE ID = @ID
   </sql>
 
 </DataDictionary>

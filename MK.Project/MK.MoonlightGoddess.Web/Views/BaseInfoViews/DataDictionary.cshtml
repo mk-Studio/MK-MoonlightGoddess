@@ -11,14 +11,39 @@
     <title>DataDictionary</title>
     <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
+        /*table 样式修改 begin*/
         .layui-table-hover {
             background-color: #c2c2c2 !important;
         }
-
         .layui-table-click {
             background-color: #393D49 !important;
             color: white;
         }
+        /*table 样式修改 end*/
+
+        /*tree 样式修改 begin*/
+        #treeDataDictionary li a {
+            display: block;
+            width: 100%;
+            height: 25px;
+            text-align: left;
+            line-height: 25px;
+            margin-bottom: 6px;
+            border-left: 2px solid #009688;
+            border-radius: 12.5px 
+        }
+        #treeDataDictionary li a :hover {
+            color: #009688;
+            font-weight: bold;
+        }
+        .treeDataDictionary-on {
+            color: #FFB800;
+            font-weight: bold;
+        }
+        .layui-tree-skin-basegreen .layui-icon {
+            color: #009688;
+        }
+        /*tree 样式修改 end*/
     </style>
 </head>
 <body>
@@ -28,7 +53,7 @@
     </fieldset>*@
     <div>
         @*<select id="testSelect" xm-select="select" xm-select-type="3" xm-select-icon="&#xe605;" xm-select-placeholder="请选择" xm-select-skin="primary" xm-select-search style="width:230px">
-            
+
         </select>*@
 
         <div class="layui-row">
@@ -42,9 +67,7 @@
                     <fieldset class="layui-elem-field">
                         <legend>查询</legend>
                         <div class="layui-field-box">
-                            <form id="QueryForms" class="layui-form layui-form-pane" action="" lay-filter="queryForm">
-
-                            </form>
+                            <form id="QueryForms" class="layui-form layui-form-pane" action="" lay-filter="queryForm"></form>
                         </div>
                     </fieldset>
                     <div class="layui-btn-group tbTools">
@@ -98,7 +121,7 @@
             upload = layui.upload;
             formSelects = layui.formSelects;
             laydate = layui.laydate;
-            
+
 
             //var s = formSelects.value('select');			//获取选中的值
             //formSelects.value('select', 'val');		//获取选中的val数组
@@ -162,6 +185,7 @@
            
             layui.tree({
                 elem: '#treeDataDictionary',  //指定元素
+                skin:"basegreen",
                 click: function (item) { //点击节点回调
                     item.queryForm();
                     getTabelByUrl(item.tbUrl, item.tbCols);
@@ -282,7 +306,7 @@
                             form.render('select');
                         },
                         formVal: function (isVal) {
-                            InitNewCombobox("#YeWuID", "YeWuType", form, false); //绑定下拉框
+                            InitNewCombobox("#YeWuID-F", "YeWuType", form, false); //绑定下拉框
                             //赋值修改的数据
                             if (isVal) {
                                 form.val('formInfoWuLiuCompany', {
@@ -318,6 +342,11 @@
                         }
                     }
                 ]
+            });
+
+            $('#treeDataDictionary li a').on('click', function () {
+                $(this).addClass('treeDataDictionary-on');
+                $('#treeDataDictionary li a').not($(this)).removeClass('treeDataDictionary-on');
             });
 
             function getTabelByUrl(url, cols) {
@@ -454,6 +483,24 @@
                 })
             }
 
+            function getLayuiPhotosJson(path) {
+                var json;
+                $.ajax({
+                    url: "/DataDictionary/GetImageResult",
+                    type: "get",
+                    data: { imgVirtualPath: path},
+                    dataType:"json",
+                    async: false,
+                    success: function (result) {
+                        json = result;
+                    },
+                    error: function () {
+                        layer.msg('网络请求异常！请稍后再查看。', { icon: 5 });
+                    }
+                });
+                return json;
+            }
+
             active = {
                 //添加
                 add: function () { //添加
@@ -533,8 +580,23 @@
                 //测试
                 test: function () {
                     //layer.alert(JSON.stringify(formSelects.value('select')));
-                    layer.alert($(".queryDate").val() + '-' + $(".queryDate2").val() );
-                    
+                    var json = {
+                        "title": "mingsn", //相册标题
+                        "id": 831, //相册id
+                        "start": 0, //初始显示的图片序号，默认0
+                        "data": [   //相册包含的图片，数组格式
+                            {
+                                "alt": "mingsnx-git",
+                                "pid": 666, //图片id
+                                "src": "http://localhost:14588/Files/2018-05/20180530195236mingsnx-git.jpeg", //原图地址
+                                "thumb": "" //缩略图地址
+                            }
+                        ]
+                    }
+                    layer.photos({
+                        photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
+                        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    });
                 }
             };
 

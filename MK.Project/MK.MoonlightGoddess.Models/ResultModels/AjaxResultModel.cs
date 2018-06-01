@@ -9,6 +9,7 @@ namespace MK.MoonlightGoddess.Models
     /// <summary>
     /// 返回结果
     /// </summary>
+    [Serializable]
     public class AjaxResultModel
     {
         public bool IsError { get; set; }

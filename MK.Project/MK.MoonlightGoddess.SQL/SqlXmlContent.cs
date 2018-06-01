@@ -29,7 +29,7 @@ namespace MK.MoonlightGoddess.SQL
             CommandText = GetSqlByXML(xmlName, sqlName);
         }
 
-        public string GetSqlByXML(string xmlName,string sqlName)
+        private string GetSqlByXML(string xmlName,string sqlName)
         {
             string xmlPath = SQL_XML_PATH + xmlName + ".xml";
             CommandText = ConfigHelper.GetXmlText(xmlPath, sqlName);
