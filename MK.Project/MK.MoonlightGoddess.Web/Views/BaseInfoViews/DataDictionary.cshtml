@@ -513,6 +513,7 @@
                 //添加
                 add: function () { //添加
                     activeName = "Insert";
+                    var index = layer.load(0, { shade: false });
                     if (SelectTreeNode) {
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
@@ -526,6 +527,7 @@
                                     //return false 开启该代码可禁止点击该按钮关闭
                                 }
                             });
+                            layer.close(index);
                             //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
                             form.render();
                             SelectTreeNode.formVal(false); //绑定下拉框
@@ -538,6 +540,7 @@
                 //修改
                 edit: function () {
                     activeName = "Update";
+                    var index = layer.load(0, { shade: false });
                     if (SelectData) {
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
@@ -550,6 +553,7 @@
                                     //return false 开启该代码可禁止点击该按钮关闭
                                 }
                             });
+                            layer.close(index);
                             //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
                             form.render();
                             SelectTreeNode.formVal(true);
@@ -566,10 +570,12 @@
                             title: "删除信息",
                             btn: ['确定', '算了']
                         }, function (index, layero) {
+                            var index = layer.load(0, { shade: false });
                             $.post(SelectTreeNode.postUrl,
                                 { model: { ID: SelectData.ID }, name: activeName },
                                 function (r) {
                                     if (!r.IsError) {
+                                        layer.close(index);
                                         layer.msg("删除成功", { icon: 1 });
                                         getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                                     } else {
@@ -609,6 +615,7 @@
 
             //监听提交事件
             form.on('submit(comSave)', function (data) {
+                var index = layer.load(0, { shade: false });
                 var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
                 //layer.alert(JSON.stringify(model));
                 $.post(
@@ -630,6 +637,7 @@
 
             //[供应商]监听提交事件
             form.on('submit(saveSupplier)', function (data) {
+                var index = layer.load(0, { shade: false });
                 var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
                 $.post(
                     SelectTreeNode.postUrl,
