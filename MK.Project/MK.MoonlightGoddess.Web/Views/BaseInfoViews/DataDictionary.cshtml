@@ -83,6 +83,7 @@
                     </script>
                     <script type="text/html" id="tbDataDictionarybar">
                         <a class="layui-btn layui-btn-xs uploadImage" lay-event="uploadimg">上传图片</a>
+                        <a class="layui-btn layui-btn-xs layui-btn layui-btn-danger queryImage" lay-event="queryImage">查看图片</a>
                     </script>
                 </div>
             </div>
@@ -390,6 +391,13 @@
                 if (layEvent === 'uploadimg') {
                     SelectData = data;
                 } 
+                if (layEvent === 'queryImage') {
+                    SelectData = data;
+                    layer.photos({
+                        photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
+                        , anim: 4 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    });
+                } 
             });
 
             //根据物料信息获取物料类型的ID
@@ -434,7 +442,7 @@
                     dataType: "json",
                     success: function (r) {
                         if (!r.IsError) {
-                            layer.msg('上传成功', { icon: 6 });
+                            layer.msg('上传成功', { icon: 1 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         } else {
                             layer.msg('上传失败！请稍后再试', { icon: 5 });
@@ -452,7 +460,7 @@
                     dataType: "json",
                     success: function (r) {
                         if (!r.IsError) {
-                            layer.msg('更新成功', { icon: 6 });
+                            layer.msg('更新成功', { icon: 1 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         } else {
                             layer.msg('更新失败！请稍后再试', { icon: 5 });
@@ -562,7 +570,7 @@
                                 { model: { ID: SelectData.ID }, name: activeName },
                                 function (r) {
                                     if (!r.IsError) {
-                                        layer.msg("删除成功");
+                                        layer.msg("删除成功", { icon: 1 });
                                         getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                                     } else {
                                         layer.msg('删除异常！', { icon: 5 });
@@ -579,20 +587,6 @@
                 },
                 //测试
                 test: function () {
-                    //layer.alert(JSON.stringify(formSelects.value('select')));
-                    var json = {
-                        "title": "mingsn", //相册标题
-                        "id": 831, //相册id
-                        "start": 0, //初始显示的图片序号，默认0
-                        "data": [   //相册包含的图片，数组格式
-                            {
-                                "alt": "mingsnx-git",
-                                "pid": 666, //图片id
-                                "src": "http://localhost:14588/Files/2018-05/20180530195236mingsnx-git.jpeg", //原图地址
-                                "thumb": "" //缩略图地址
-                            }
-                        ]
-                    }
                     layer.photos({
                         photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
                         , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
@@ -623,7 +617,7 @@
                     function (r) {
                         if (!r.IsError) {
                             layer.closeAll();
-                            layer.msg("保存成功");
+                            layer.msg("保存成功", { icon: 1 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         } else {
                             layer.closeAll();
@@ -643,7 +637,7 @@
                     function (r) {
                         if (!r.IsError) {
                             layer.closeAll();
-                            layer.msg("保存成功");
+                            layer.msg("保存成功", { icon: 1 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         } else {
                             layer.closeAll();
