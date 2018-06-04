@@ -6,5 +6,22 @@
   <sql name="SelectPowerGroupTree">
     select ID as id ,OnID as onid, PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'
   </sql>
-  -
+
+  <sql name="UpdateGroupInfo">
+    UPDATE dbo.MK_Info_PowerGroup
+    SET PowerGroupName=@PowerGroupName,CreateUser=@CreateUser,CreateDate=GETDATE()
+    WHERE ID=@ID AND ShowMark='Y'
+  </sql>
+
+  <sql name="InsertGroupInfo">
+    declare @Prompt NVARCHAR(30)
+    EXEC PR_InsertGroupPowerAllot @GroupName,@CreateUser, @Prompt output
+    select @Prompt AS Result
+  </sql>
+  
+  <sql name="PR_DeleInfo_PowerAllot_Uers">
+    declare @Prompt NVARCHAR(30)
+    EXEC PR_DelGroupPowerAllot @ID,@CreateUser, @Prompt output
+    select @Prompt AS Result
+  </sql>
 </MK_Info_PowerGroup>
