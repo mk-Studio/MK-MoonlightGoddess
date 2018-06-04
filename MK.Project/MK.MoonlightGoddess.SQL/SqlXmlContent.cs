@@ -12,7 +12,7 @@ namespace MK.MoonlightGoddess.SQL
         /// <summary>
         /// xml文件根路径
         /// </summary>
-        private readonly string SQL_XML_PATH = AppDomain.CurrentDomain.BaseDirectory.Replace("Web","SQL");
+        private readonly string SQL_XML_PATH = ConfigHelper.AppSetting("SQL_XML_PATH");
 
         private string commandText;
         /// <summary>

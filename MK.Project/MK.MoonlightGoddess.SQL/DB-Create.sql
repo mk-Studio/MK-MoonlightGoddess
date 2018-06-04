@@ -271,7 +271,7 @@ INSERT INTO dbo.MK_Info_User
 (
     ID,
     UserName,
-    Passwor,
+    Password,
     WuLiuYeWuID,
     PowerGroupID,
     ShowMark,

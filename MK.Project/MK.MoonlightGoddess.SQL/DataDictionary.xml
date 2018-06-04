@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
+例如：QueryInfoWuLiao = [Query => 查询]  + [InfoWuLiao => MK_Info_WuLiao表] + [无特殊则不加尾缀]
+-->
 <DataDictionary>
-
+  
+  <!--查询到layui-table的数据 begin-->
   <sql name="QueryInfoWuLiao">
     SELECT TOP (@limit)
     ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate INTO #TableResult
@@ -132,11 +137,33 @@
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
+  <!--查询到layui-table的数据 end-->
+  
 
+  <!--检查是否存在 begin-->
   <sql name="CheckInfoWuLiaoEXISTS">
     SELECT COUNT(ID) FROM dbo.MK_Info_WuLiao WHERE ShangPinName = @ShangPinName AND GuiGe = @GuiGe
   </sql>
+  
+  <sql name="CheckTypeWuLiaoEXISTS">
+    SELECT COUNT(ID) FROM MK_Type_WuLiao WHERE WuLiaoTypeName = @WuLiaoTypeName
+  </sql>
+  
+  <sql name="CheckInfoSupplierEXISTS">
+    SELECT COUNT(ID) FROM MK_Info_Supplier WHERE SupplierName = @SupplierName
+  </sql>
+  
+  <sql name="CheckTypeWuLiuYeWuEXISTS">
+    SELECT COUNT(ID) FROM MK_Type_WuLiuYeWu WHERE YeWuType = @YeWuType
+  </sql>
+  
+  <sql name="CheckInfoWuLiuCompanyEXISTS">
+    SELECT COUNT(ID) FROM MK_Info_WuLiuCompany WHERE Name = @Name
+  </sql>
+  <!--检查是否存在 end-->
+  
 
+  <!--添加数据 begin-->
   <sql name="InsertInfoWuLiao">
     INSERT MK_Info_WuLiao
     (WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,CreateUser,CreateDate)
@@ -169,7 +196,10 @@
     INSERT MK_Info_Currency(CurrencyName,CurrencyCode,Remark,CreateUser,CreateDate)
     VALUES(@CurrencyName,@CurrencyCode,@Remark,@CreateUser,@CreateDate)
   </sql>
+  <!--添加数据 end-->
 
+  
+  <!--更新数据 begin-->
   <sql name="UpdateInfoWuLiao">
     UPDATE MK_Info_WuLiao SET WuLiaoTypeID = @WuLiaoTypeID,ShangPinName = @ShangPinName,GuiGe=@GuiGe,HaiGuanNo =@HaiGuanNo
     WHERE ID = @ID
@@ -204,7 +234,10 @@
     CurrencyName=@CurrencyName,CurrencyCode=@CurrencyCode,Remark=@Remark,CreateUser=@CreateUser,CreateDate=@CreateDate
     WHERE ID = @ID
   </sql>
+  <!--更新数据 end-->
+  
 
+  <!--删除数据 begin-->
   <sql name="DeleteInfoWuLiao">
     DELETE FROM MK_Info_WuLiao WHERE ID = @ID
   </sql>
@@ -229,7 +262,10 @@
   <sql name="DeleteInfoCurrency">
     DELETE FROM MK_Info_Currency WHERE ID = @ID
   </sql>
+  <!--删除数据 end-->
 
+  
+  <!--获取根据参数获取指定信息 begin-->
   <sql name="GetWuLiaoTypeID">
     SELECT WuLiaoTypeID FROM MK_Info_WuLiao WHERE ID = @ID
   </sql>
@@ -237,11 +273,17 @@
   <sql name="GetShangPinBySupplier">
     SELECT ShangPinID FROM MK_Info_Supplier_WuLiao WHERE SupplierID = @SupplierID
   </sql>
+  <!--获取根据参数获取指定信息ID end-->
 
+
+  <!--保存指定图片路径 begin-->
   <sql name="SaveWuLiaoImagePath">
     UPDATE MK_Info_WuLiao SET WuLiaoImagePath = @WuLiaoImagePath WHERE ID = @ID
   </sql>
+  <!--保存指定图片路径 end-->
 
+
+  <!--更新“ShowMark”显示标记 begin-->
   <sql name="UpdateTypeWuLiaoShowMark">
     UPDATE MK_Type_WuLiao SET ShowMark = @ShowMark WHERE ID = @ID
   </sql>
@@ -265,5 +307,7 @@
   <sql name="UpdateInfoCurrencyShowMark">
     UPDATE MK_Info_Currency SET ShowMark = @ShowMark WHERE ID = @ID
   </sql>
+  <!--更新“ShowMark”显示标记 end-->
+  
 
 </DataDictionary>
