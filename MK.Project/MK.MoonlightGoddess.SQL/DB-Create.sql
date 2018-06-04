@@ -232,6 +232,36 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_CreateDate ON dbo.MK_Info_WuLi
 CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_ShowMark ON dbo.MK_Info_WuLiuCompany(ShowMark)
 CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_Name ON dbo.MK_Info_WuLiuCompany(Name)
 
+--币别
+CREATE TABLE MK_Info_Currency(
+	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	CurrencyName NVARCHAR(30),
+	CurrencyCode NVARCHAR(30),
+	Remark NVARCHAR(255),
+	ShowMark CHAR(1) DEFAULT 'Y',
+	CreateUser NVARCHAR(30),
+	CreateDate DATETIME
+)
+EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 币别', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Currency', NULL, NULL
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'币别ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'币制', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CurrencyName'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'币种代号', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CurrencyCode'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'说明', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'Remark'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'ShowMark'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CreateUser'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Currency', 'COLUMN', N'CreateDate'
+GO
+--创建MK_Info_WuLiao的索引
+CREATE NONCLUSTERED INDEX IX_MK_Info_Currency_CreateDate ON dbo.MK_Info_Currency(CreateDate DESC)
+CREATE NONCLUSTERED INDEX IX_MK_Info_Currency_ShowMark ON dbo.MK_Info_Currency(ShowMark)
+CREATE NONCLUSTERED INDEX IX_MK_Info_Currency_CurrencyName ON dbo.MK_Info_Currency(CurrencyName)
 
 
 --用户信息
