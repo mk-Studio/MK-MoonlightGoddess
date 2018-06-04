@@ -88,5 +88,21 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = ServiceContent<MK_Info_PowerAllot>.Select(model, "MK_Info_PowerAllot", "SelectAccredit");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult OperationGroupInfo(MK_Info_PowerGroup model, string that)
+        {
+            bool jsonResult = false;
+            if (that == "Insert" || that == "Update")
+            {
+                jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectSIDU(model, "MK_Info_PowerGroup", that+ "GroupInfo");
+            }
+            else
+            {
+                jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectSIDU(model, "MK_Info_PowerGroup", "DeleInfo_PowerAllot_Uers");
+            }
+            return jsonResult ? Json(AjaxResultModel.CreateMessage((!jsonResult), "ssuccess", 1, jsonResult))
+               : Json(AjaxResultModel.CreateMessage((!jsonResult), "error", -1, jsonResult));
+        }
     }
 }
