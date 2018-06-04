@@ -11,11 +11,11 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo.From
         // GET: GroupInfoManage
         public ActionResult AddGroupInfo()
         {
-            return View("../Authority/Form/FromAddGroupInfo.cshtml");
+            return View("../Authority/Form/FromAddGroupInfo");
         }
         public ActionResult EditGroupInfo()
         {
-            return View("../Authority/Form/FromEditGroupInfo.cshtml");
+            return View("../Authority/Form/FormEditGroupInfo");
         }
     }
 }
