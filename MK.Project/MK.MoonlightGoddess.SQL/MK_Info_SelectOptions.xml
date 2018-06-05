@@ -10,7 +10,19 @@
   </sql>
 
   <sql name="CurrencyType">
-    SELECT ID AS Value,CurrencyName AS Text FROM MK_Info_Currency WHERE ShowMark = 'Y'
+    SELECT CurrencyCode AS Value,CurrencyName AS Text FROM MK_Info_Currency WHERE ShowMark = 'Y'
+  </sql>
+  
+  <sql name="SupplierType">
+    SELECT ID AS Value,SupplierName AS Text FROM dbo.MK_Info_Supplier WHERE ShowMark = 'Y'
   </sql>
 
+  <sql name="WuLiuCompanyType">
+    SELECT ID AS Value,Name AS Text FROM dbo.MK_Info_WuLiuCompany WHERE ShowMark = 'Y'
+  </sql>
+  
+  <sql name="UserType">
+    SELECT UserName AS Value,UserName AS Text FROM dbo.MK_Info_User WHERE ShowMark = 'Y'
+  </sql>
+  
 </MK_Info_SelectOptions>

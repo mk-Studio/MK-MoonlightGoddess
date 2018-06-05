@@ -161,6 +161,7 @@
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SeletcOptionsController.cs" />
+    <Compile Include="Controllers\VerifyDbDataController.cs" />
     <Compile Include="Controllers\VerifyLoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

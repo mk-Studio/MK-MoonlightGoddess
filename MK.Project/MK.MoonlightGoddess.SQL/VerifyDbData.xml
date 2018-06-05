@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VerifyDbData>
+
+  <sql name="VerifyExistsWuLiaoTypeName">
+    IF EXISTS(SELECT (ID) FROM MK_Type_WuLiao WHERE WuLiaoTypeName =@WuLiaoTypeName AND ID=@ID)
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该物料类型已存在' ELSE 'OK' END
+    FROM MK_Type_WuLiao WHERE WuLiaoTypeName = @WuLiaoTypeName
+    END
+  </sql>
+
+  <sql name="VerifyExistsSupplierName">
+    IF EXISTS(SELECT (ID) FROM MK_Info_Supplier WHERE SupplierName = @SupplierName AND ID=@ID)
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该供应商已存在' ELSE 'OK' END
+    FROM MK_Info_Supplier WHERE SupplierName = @SupplierName
+    END
+  </sql>
+
+  <sql name="VerifyExistsWuLiaoAndGuiGe">
+    IF EXISTS(SELECT (ID) FROM MK_Info_WuLiao WHERE ShangPinName = @ShangPinName AND GuiGe=@GuiGe AND ID=@ID) 
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该商品已存在' ELSE 'OK' END
+    FROM MK_Info_WuLiao WHERE ShangPinName = @ShangPinName AND GuiGe=@GuiGe
+    END
+  </sql>
+
+  <sql name="VerifyExistsWuLiuType">
+    IF EXISTS(SELECT ID FROM MK_Type_WuLiuYeWu WHERE YeWuType = @YeWuType AND ID=@ID)
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该物流业务已存在' ELSE 'OK' END
+    FROM MK_Type_WuLiuYeWu WHERE YeWuType = @YeWuType
+    END
+  </sql>
+
+  <sql name="VerifyExistsWuLiuCompany">
+    IF EXISTS(SELECT ID FROM MK_Info_WuLiuCompany WHERE Name = @Name AND ID=@ID) 
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该物流公司已存在' ELSE 'OK' END
+    FROM MK_Info_WuLiuCompany WHERE Name = @Name
+    END
+  </sql>
+
+  <sql name="VerifyExistsCurrency">
+    IF EXISTS(SELECT ID FROM MK_Info_Currency WHERE ID = @ID AND CurrencyCode = @CurrencyCode)
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该币别代码已存在' ELSE 'OK' END
+    FROM MK_Info_Currency WHERE CurrencyCode = @CurrencyCode
+    END
+  </sql>
+</VerifyDbData>

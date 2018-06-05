@@ -204,6 +204,7 @@
                         formUrl: '/FormDataDictionary/FormTypeWuLiao',
                         postUrl: '/DataDictionary/ExceTypeWuLiao',
                         showActionName: "UpdateTypeWuLiaoShowMark",
+                        verifyName:"VerifyExistsWuLiaoTypeName",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormTypeWuLiao");
                             form.render('select');
@@ -224,6 +225,7 @@
                         formUrl: '/FormDataDictionary/FormInfoWuLiao',
                         postUrl: '/DataDictionary/ExceInfoWuLiao',
                         showActionName: "UpdateInfoWuLiaoShowMark",
+                        verifyName: "VerifyExistsWuLiaoAndGuiGe",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormInfoWuLiao");
                             InitNewCombobox("#WuLiaoTypeID", "WuLiaoType", form, true); //绑定下拉框
@@ -249,6 +251,7 @@
                         formUrl: '/FormDataDictionary/FormInfoSupplier',
                         postUrl: '/DataDictionary/ExceInfoSupplier',
                         showActionName: "UpdateInfoSupplierShowMark",
+                        verifyName: "VerifyExistsSupplierName",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormInfoSupplier");
                             InitNewCombobox("#WuLiaoDetail", "WuLiaoType", form, false); //绑定下拉框
@@ -281,6 +284,7 @@
                         formUrl: '/FormDataDictionary/FormTypeWuLiuYeWu',
                         postUrl: '/DataDictionary/ExceTypeWuLiuYeWu',
                         showActionName: "UpdateTypeWuLiuYeWuShowMark",
+                        verifyName: "VerifyExistsWuLiuType",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormTypeWuLiuYeWu");
                             form.render('select');
@@ -301,6 +305,7 @@
                         formUrl: '/FormDataDictionary/FormInfoWuLiuCompany',
                         postUrl: '/DataDictionary/ExceInfoWuLiuCompany',
                         showActionName: "UpdateInfoWuLiuCompanyShowMark",
+                        verifyName: "VerifyExistsWuLiuCompany",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormInfoWuLiuCompany");
                             InitNewCombobox("#YeWuID", "YeWuType", form, true); //绑定下拉框
@@ -327,6 +332,7 @@
                         formUrl: '/FormDataDictionary/FormInfoCurrency',
                         postUrl: '/DataDictionary/ExceInfoCurrency',
                         showActionName: "UpdateInfoCurrencyShowMark",
+                        verifyName: "VerifyExistsCurrency",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormInfoCurrency");
                             form.render('select');
@@ -593,10 +599,19 @@
                 },
                 //测试
                 test: function () {
-                    layer.photos({
-                        photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
-                        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                    });
+                    //layer.photos({
+                    //    photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
+                    //    , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    //});
+                    ajaxVerify(
+                        { WuLiaoTypeName: "生活产品", SqlName: "VerifyExistsWuLiaoTypeName" },
+                        (r) => {
+                            layer.msg(r.Data, { icon: 5 });
+                        },
+                        (r) => {
+                            layer.msg(r.Data, { icon: 6 });
+                        }
+                    );
                 }
             };
 
@@ -605,6 +620,13 @@
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
+            //{ WuLiaoTypeName: "生活产品", SqlName: "VerifyExistsWuLiaoTypeName" }
+            var verify = {
+                verifyTypeWuLiao: (data) => {
+                    return ajaxVerify(data);
+                }
+                
+            };
 
             //监听显示标记操作
             form.on('switch(ShowMark)', function (obj) {
@@ -613,23 +635,34 @@
                 updateShowMark(url, data);
             });
 
+            
             //监听提交事件
             form.on('submit(comSave)', function (data) {
                 var index = layer.load(0, { shade: false });
-                var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
+                var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
                 //layer.alert(JSON.stringify(model));
-                $.post(
-                    SelectTreeNode.postUrl,
-                    { model: model, name: activeName },
-                    function (r) {
-                        if (!r.IsError) {
-                            layer.closeAll();
-                            layer.msg("保存成功", { icon: 1 });
-                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                        } else {
-                            layer.closeAll();
-                            layer.msg('保存异常！', { icon: 5 });
-                        }
+                ajaxVerify(
+                    $.extend(model, { SqlName: SelectTreeNode.verifyName }),
+                    (r) => {
+                        layer.msg(r.Data, { icon: 5 });
+                        layer.close(index);
+                        return false;
+                    },
+                    (r) => {
+                        $.post(
+                            SelectTreeNode.postUrl,
+                            { model: model, name: activeName },
+                            function (r) {
+                                if (!r.IsError) {
+                                    layer.closeAll();
+                                    layer.msg("保存成功", { icon: 1 });
+                                    getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                                } else {
+                                    layer.closeAll();
+                                    layer.msg('保存异常！', { icon: 5 });
+                                }
+                            }
+                        );
                     }
                 );
                 return false;
@@ -638,21 +671,32 @@
             //[供应商]监听提交事件
             form.on('submit(saveSupplier)', function (data) {
                 var index = layer.load(0, { shade: false });
-                var model = activeName == "Insert" ? data.field : $.extend(data.field, { ID: SelectData.ID })
-                $.post(
-                    SelectTreeNode.postUrl,
-                    { model: model, detailModel: formSelects.value('select'),name: activeName },
-                    function (r) {
-                        if (!r.IsError) {
-                            layer.closeAll();
-                            layer.msg("保存成功", { icon: 1 });
-                            getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
-                        } else {
-                            layer.closeAll();
-                            layer.msg('保存异常！', { icon: 5 });
-                        }
+                var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
+                 ajaxVerify(
+                    $.extend(model, { SqlName: SelectTreeNode.verifyName }),
+                    (r) => {
+                        layer.msg(r.Data, { icon: 5 });
+                        layer.close(index);
+                        return false;
+                    },
+                    (r) => {
+                        $.post(
+                            SelectTreeNode.postUrl,
+                            { model: model, detailModel: formSelects.value('select'), name: activeName },
+                            function (r) {
+                                if (!r.IsError) {
+                                    layer.closeAll();
+                                    layer.msg("保存成功", { icon: 1 });
+                                    getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
+                                } else {
+                                    layer.closeAll();
+                                    layer.msg('保存异常！', { icon: 5 });
+                                }
+                            }
+                        );
                     }
                 );
+                
                 return false;
             });
 
