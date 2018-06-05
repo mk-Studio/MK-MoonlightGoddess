@@ -90,19 +90,34 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
-        public JsonResult OperationGroupInfo(MK_Info_PowerGroup model, string that)
+        public JsonResult InsertGroupInfo(MK_Info_PowerGroup model)
         {
-            bool jsonResult = false;
-            if (that == "Insert" || that == "Update")
+            model.CreateUser = CurrAccount.UserName;
+            var  jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectData(model, "MK_Info_PowerGroup","InsertGroupInfo");
+            return Json(new
             {
-                jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectSIDU(model, "MK_Info_PowerGroup", that+ "GroupInfo");
-            }
-            else
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+
+        [HttpPost]
+        public JsonResult DelGroupInfo(MK_Info_PowerGroup model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectData(model, "MK_Info_PowerGroup", "PR_DeleInfo_PowerAllot_Uers");
+            return Json(new
             {
-                jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectSIDU(model, "MK_Info_PowerGroup", "DeleInfo_PowerAllot_Uers");
-            }
-            return jsonResult ? Json(AjaxResultModel.CreateMessage((!jsonResult), "ssuccess", 1, jsonResult))
-               : Json(AjaxResultModel.CreateMessage((!jsonResult), "error", -1, jsonResult));
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+        [HttpPost]
+        public JsonResult EditGroupInfo(MK_Info_PowerGroup model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_PowerGroup>.AjaxSIDU(model, "MK_Info_PowerGroup", "UpdateGroupInfo");
+            return Json(jsonResult);
         }
     }
 }
