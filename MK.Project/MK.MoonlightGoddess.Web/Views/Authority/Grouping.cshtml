@@ -131,6 +131,9 @@
                                 cancel: function () {
                                     //右上角关闭回调
                                     //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    $('.layui-input').val(getTreeNodesData.name);
                                 }
                             });
                             layer.close(index);
@@ -147,14 +150,16 @@
                     var index = layer.load(1, { shade: false });
                     if (getTreeNodesData && getTreeNodesData.id != '00000000-0000-0000-0000-000000000000') {
                         layer.confirm('确认删除：' + getTreeNodesData.name, { icon: 3, title: '提示' }, function (index, layero) {
-                            $.post('/Authority/OperationGroupInfo',
-                                { model: { ID: getTreeNodesData.id }, name: that },
+                            $.post('/Authority/DelGroupInfo',
+                                {ID: getTreeNodesData.id },
                                 function (r) {
-                                    if (!r.IsError) {
-                                        layer.msg('删除成功！', { icon: 1 });
-                                        getTableByTable(TakeData.PowerGroupID);
-                                    } else {
-                                        layer.msg('删除失败！', { icon: 5 });
+                                    if (r.number === '0') {
+                                        layer.msg(r.result, { icon: 1 });
+                                        getTreeNodesData.id = '00000000-0000-0000-0000-000000000000';
+                                        getTreeNodesData.name = '权限组';
+                                        displayTable(getTreeNodesData.id);
+                                    } else if (r.number = '1') {
+                                        layer.msg(r.result, { icon: 5 });
                                     }
                                 }
                             );
@@ -171,6 +176,41 @@
             $('.layui-btn-group .layui-btn').on('click', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
+            });
+
+            //监听新增提交
+            form.on('submit(groupAdd)', function (data) {
+                $.post('/Authority/InsertGroupInfo',
+                    { PowerGroupName: data.field.AddGroupName },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon:  5});
+                        } else if (r.number === '0') {
+                            layer.msg(r.result, { icon: 1 });
+                            layer.closeAll();
+                        }
+                    }
+                );
+                return false;
+            });
+
+            form.on('switch(groupEdit)', function (data) {
+                layer.confirm('确认修改', { icon: 3, title: '提示' }, function () {
+                    $.ajax({
+                        url: '/Authority/EditGroupInfo',
+                        data: { ID: getTreeNodesData.id, PowerGroupName: data.field.EditGroupName },
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (r) {
+                            if (!r.IsError) {
+                                layer.msg('修改成功', { icon: 1 });
+                            }
+                            else {
+                                layer.msg('修改失败', { icon: 5 });
+                            }
+                        }
+                    });
+                });
             });
         });
     </script>
