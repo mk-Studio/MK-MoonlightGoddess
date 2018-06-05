@@ -14,14 +14,16 @@
   </sql>
 
   <sql name="InsertGroupInfo">
-    declare @Prompt NVARCHAR(30)
-    EXEC PR_InsertGroupPowerAllot @GroupName,@CreateUser, @Prompt output
-    select @Prompt AS Result
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_InsertGroupPowerAllot @PowerGroupName,@CreateUser, @Prompt output
+    select @Prompt AS Result,@Number AS Number
   </sql>
   
   <sql name="PR_DeleInfo_PowerAllot_Uers">
-    declare @Prompt NVARCHAR(30)
-    EXEC PR_DelGroupPowerAllot @ID,@CreateUser, @Prompt output
-    select @Prompt AS Result
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_DelGroupPowerAllot @ID,@CreateUser, @Prompt output
+    select @Prompt AS Result,@Number AS Number
   </sql>
 </MK_Info_PowerGroup>
