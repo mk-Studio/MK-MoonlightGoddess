@@ -105,7 +105,7 @@
         <div class="layui-body">
             <!-- 内容主体区域 -->
             @*<div style="padding: 15px;">内容主体区域</div>*@
-            <div class="layui-tab" lay-filter="demo" lay-allowClose="true">
+            <div class="layui-tab" lay-filter="homeContentTabs" lay-allowClose="true">
                 <ul id="tabTitle" class="layui-tab-title"></ul>
                 <div id="tabContainers" class="layui-tab-content">
                 </div>
@@ -130,36 +130,59 @@
                     iframes[i].height = window.screen.height - 320;
             } catch (ex) { }
         }
+        
+        var $, element;
+        //添加tab
+        var addTab = (id, title, url) => {
+            //新增一个Tab项
+            element.tabAdd('homeContentTabs', {
+                title: title,
+                content: '<iframe name="iframe" src="' + url + '" frameborder="0" style="width: 100%;"></iframe>',
+                id: id
+            });
+            //增加点击关闭事件
+            var r = $("#tabTitle").find("li");
+            //每次新打开tab都是最后一个，所以只对最后一个tab添加点击关闭事件
+            r.eq(r.length - 1).children("i.layui-tab-close").on("click", function () {
+                element.tabDelete("homeContentTabs", $(this).parent("li").index());
+            }), element.tabChange("homeContentTabs", r.length - 1);
+            element.init();
+        },
+        //激活并添加tab，供于除本页面以外的所有子页面调用
+        //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+        activeTab = (id, title, url) => {
+            var title = title;
+            var tabs = $(".layui-tab-title").children();
+            for (var i = 0; i < tabs.length; i++) {
+                if ($(tabs[i]).html().substr(0, $(tabs[i]).html().indexOf("<")) === title) {
+                    element.tabChange('homeContentTabs', id);
+                    return;
+                }
+            }
+            addTab(id, title, url);
+            element.tabChange('homeContentTabs', id);
+        }
+
+
         window.setInterval("reinitIframe()", 200);
         //JavaScript代码区域
         layui.use('element', function () {
-            var $ = layui.jquery,
+                $ = layui.jquery,
                 element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
             //触发事件
             var active = {
                 tabAdd: function () {
-                    //新增一个Tab项
-                    element.tabAdd('demo', {
-                        title: $(this).text(),
-                        content: '<iframe name="iframe" src="' + this.title + '" frameborder="0" style="width: 100%;"></iframe>',
-                        id: $(this).text()
-                    });
-                    //增加点击关闭事件
-                    var r = $("#tabTitle").find("li");
-                    //每次新打开tab都是最后一个，所以只对最后一个tab添加点击关闭事件
-                    r.eq(r.length - 1).children("i.layui-tab-close").on("click", function () {
-                        element.tabDelete("demo", $(this).parent("li").index());
-                    }), element.tabChange("demo", r.length - 1);
-                    element.init();
+                    addTab($(this).text(), $(this).text(), this.title);
+                   
                 },
                 tabDelete: function (index) {
                     //删除指定Tab项
-                    element.tabDelete('demo', index); //删除（注意序号是从0开始计算）
+                    element.tabDelete('homeContentTabs', index); //删除（注意序号是从0开始计算）
                 },
                 tabChange: function (index) {
                     //切换到指定Tab项
-                    element.tabChange('demo', index); //切换（注意序号是从0开始计算）
+                    element.tabChange('homeContentTabs', index); //切换（注意序号是从0开始计算）
                 }
             };
 
@@ -168,7 +191,7 @@
                 var tabs = $(".layui-tab-title").children();
                 for (var i = 0; i < tabs.length; i++) {
                     if ($(tabs[i]).html().substr(0, $(tabs[i]).html().indexOf("i") - 1) === title) {
-                        element.tabChange('demo', $(this).text());
+                        element.tabChange('homeContentTabs', $(this).text());
                         return;
                     }
                 }

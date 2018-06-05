@@ -115,7 +115,8 @@
                 laydate,
                 layuiTableWhere = {
                     model: {}
-                }
+                },
+                homeContent = window.parent;
 
             table = layui.table;
             form = layui.form;
@@ -603,15 +604,7 @@
                     //    photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
                     //    , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                     //});
-                    ajaxVerify(
-                        { WuLiaoTypeName: "生活产品", SqlName: "VerifyExistsWuLiaoTypeName" },
-                        (r) => {
-                            layer.msg(r.Data, { icon: 5 });
-                        },
-                        (r) => {
-                            layer.msg(r.Data, { icon: 6 });
-                        }
-                    );
+                    homeContent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
                 }
             };
 
