@@ -458,13 +458,14 @@
     <Content Include="Views\BaseInfoViews\QueryForm\QueryFormInfoWuLiuCompany.cshtml" />
     <Content Include="Views\Authority\Form\FormEditGroupInfo.cshtml" />
     <Content Include="Views\Authority\Form\FromAddGroupInfo.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\SecuritySettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\DataDictionary\" />
     <Folder Include="Views\GroupInfoManage\" />
-    <Folder Include="Views\User\" />
     <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>
