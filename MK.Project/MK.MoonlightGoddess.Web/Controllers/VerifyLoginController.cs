@@ -1,5 +1,6 @@
 ﻿using MK.MoonlightGoddess.Core;
 using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Web.Attribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace MK.MoonlightGoddess.Web.Controllers
 {
+    [MKExceptionFilter]
     public class VerifyLoginController : Controller
     {
         // GET: VerifyLogin

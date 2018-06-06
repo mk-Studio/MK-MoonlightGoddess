@@ -152,6 +152,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attribute\MKExceptionFilterAttribute.cs" />
     <Compile Include="Controllers\AuthorityInfo\AuthorityController.cs" />
     <Compile Include="Controllers\AuthorityInfo\From\GroupInfoManageController.cs" />
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
@@ -406,6 +407,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\HttpErorr\404.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -458,7 +460,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Attribute\" />
     <Folder Include="Models\" />
     <Folder Include="Views\DataDictionary\" />
     <Folder Include="Views\GroupInfoManage\" />
