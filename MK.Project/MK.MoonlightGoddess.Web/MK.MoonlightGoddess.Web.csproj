@@ -162,6 +162,7 @@
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SeletcOptionsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VerifyDbDataController.cs" />
     <Compile Include="Controllers\VerifyLoginController.cs" />
     <Compile Include="Global.asax.cs">
@@ -463,6 +464,7 @@
     <Folder Include="Models\" />
     <Folder Include="Views\DataDictionary\" />
     <Folder Include="Views\GroupInfoManage\" />
+    <Folder Include="Views\User\" />
     <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,12 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View("../Index/Home");
         }
 
+        public ActionResult Exit()
+        {
+            CookieHelper.ClearCookie("MoonlightGoddess");
+            return View("../Index/Home");
+        }
+
         public ActionResult Admin()
         {
             return View("../Index/Admin");

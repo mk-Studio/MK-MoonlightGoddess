@@ -9,7 +9,16 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Home</title>
-    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .layui-tab-title .layui-this:after {
+            border-bottom: 3px solid #009688;
+            border-left-color: #e6e6e6;
+            border-top-color: #e6e6e6;
+            border-right-color: #e6e6e6;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
@@ -36,11 +45,11 @@
                         @ViewBag.UserName
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">安全设置</a></dd>
+                        <dd><a name='a' url="/User/GetBaseInfo">基本资料</a></dd>
+                        <dd><a name='a' url="/User/SecuritySettings">安全设置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">退了</a></li>
+                <li class="layui-nav-item"><a id="exit" style="cursor:pointer" >退出系统</a></li>
             </ul>
         </div>
 
@@ -54,40 +63,40 @@
                             <cite>模板</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' title="http://www.baidu.com/">百度一下</a></dd>
-                            <dd><a name='a' title="/MKTypeWuLiao/Index">物料类型</a></dd>
+                            <dd><a name='a' url="http://www.baidu.com/">百度一下</a></dd>
+                            <dd><a name='a' url="/MKTypeWuLiao/Index">物料类型</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="解决方案" lay-direction="2">
+                        <a url="javascript:;" lay-tips="解决方案" lay-direction="2">
                             <i class="layui-icon layui-icon-template"></i>
                             <cite>解决方案</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' title="https://passport.bilibili.com/">bilibili</a></dd>
-                            <dd><a name='a' title="https://v.qq.com/">腾讯视频</a></dd>
-                            <dd><a name='a' title="https://www.huya.com/">YY</a></dd>
+                            <dd><a name='a' url="https://passport.bilibili.com/">bilibili</a></dd>
+                            <dd><a name='a' url="https://v.qq.com/">腾讯视频</a></dd>
+                            <dd><a name='a' url="https://www.huya.com/">YY</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="云市场" lay-direction="2">
+                        <a url="javascript:;" lay-tips="云市场" lay-direction="2">
                             <i class="layui-icon layui-icon-component"></i>
                             <cite>系统</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' title="/Authority/Index">权限管理</a></dd>
-                            <dd><a name='a' title="/Authority/Grouping">分组管理</a></dd>
+                            <dd><a name='a' url="/Authority/Index">权限管理</a></dd>
+                            <dd><a name='a' url="/Authority/Grouping">分组管理</a></dd>
                         </dl>
 
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="基础数据" lay-direction="2">
+                        <a url="javascript:;" lay-tips="基础数据" lay-direction="2">
                             <i class="layui-icon layui-icon-senior"></i>
                             <cite>基础数据</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a name='a' title="/DataDictionary/Index">数据字典</a>
+                                <a name='a' url="/DataDictionary/Index">数据字典</a>
                             </dd>
                         </dl>
                     </li>
@@ -118,7 +127,7 @@
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
     <script>
 
         //调整iframe高度
@@ -154,7 +163,7 @@
             var title = title;
             var tabs = $(".layui-tab-title").children();
             for (var i = 0; i < tabs.length; i++) {
-                if ($(tabs[i]).html().substr(0, $(tabs[i]).html().indexOf("<")) === title) {
+                if ($(tabs[i]).html().substring(0, $(tabs[i]).html().indexOf("<")) === title) {
                     element.tabChange('homeContentTabs', id);
                     return;
                 }
@@ -166,14 +175,14 @@
 
         window.setInterval("reinitIframe()", 200);
         //JavaScript代码区域
-        layui.use('element', function () {
+        layui.use(['element','layer'], function () {
                 $ = layui.jquery,
                 element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
             //触发事件
             var active = {
                 tabAdd: function () {
-                    addTab($(this).text(), $(this).text(), this.title);
+                    addTab($(this).text(), $(this).text(), $(this).attr("url"));
                    
                 },
                 tabDelete: function (index) {
@@ -190,13 +199,31 @@
                 var title = $(this).text();
                 var tabs = $(".layui-tab-title").children();
                 for (var i = 0; i < tabs.length; i++) {
-                    if ($(tabs[i]).html().substr(0, $(tabs[i]).html().indexOf("i") - 1) === title) {
+                    if ($(tabs[i]).html().substring(0, $(tabs[i]).html().indexOf("i") - 1) === title) {
                         element.tabChange('homeContentTabs', $(this).text());
                         return;
                     }
                 }
                 active["tabAdd"].call(this);
                 active.tabChange($(this).text());
+            });
+
+            $("#exit").on("click", function () {
+                layer.confirm('确认是否退出系统？', {
+                    title:"退出系统",
+                    skin: 'layui-layer-molv',
+                    btn: ['确定', '取消'], //按钮
+                    icon:3
+                },
+                    function () {
+                        //确定...
+                        $.get("/Index/Exit", {}, function () {
+                            window.location.href = "/Login";
+                        }, "html");
+                    },
+                    function () {
+                        //取消...
+                    });
             });
         });
     </script>
