@@ -27,5 +27,30 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// 权限组ID
         /// </summary>
         public string PowerGroupID { get; set; }
+
+        /// <summary>
+        /// 权限组名称
+        /// </summary>
+        public string PowerGroupName { get; set; }
+
+        /// <summary>
+        /// 业务类型名称
+        /// </summary>
+        public string YeWuType { get; set; }
+
+        /// <summary>
+        /// 默认语言
+        /// </summary>
+        public string DefaultLanguage { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public string NickName { get; set; }
+
+        /// <summary>
+        /// 性别 [0 => 男；1 => 女]
+        /// </summary>
+        public int Sex { get; set; }
     }
 }

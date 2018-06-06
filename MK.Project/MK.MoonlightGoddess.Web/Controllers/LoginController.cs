@@ -22,6 +22,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
         [HttpPost]
         public JsonResult OnLogin(MK_Info_User model)
         {
+            model.Password = EncryptHelper.GetMD5_16(model.Password);
             var user = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogin");
             if (Convert.ToInt32(user) > 0)
             {

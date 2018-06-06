@@ -24,5 +24,9 @@
   <sql name="UserType">
     SELECT UserName AS Value,UserName AS Text FROM dbo.MK_Info_User WHERE ShowMark = 'Y'
   </sql>
+
+  <sql name="PowerGroupType">
+    SELECT ID AS Value,PowerGroupName AS Text FROM dbo.MK_Info_PowerGroup WHERE ID != '00000000-0000-0000-0000-000000000000' AND ShowMark = 'Y'
+  </sql>
   
 </MK_Info_SelectOptions>

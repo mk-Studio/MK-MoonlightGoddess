@@ -4,14 +4,115 @@
 }
 
 <!DOCTYPE html>
-
+<!--账号基本信息-->
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
 </head>
 <body>
-    <div> 
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>账号基本信息</legend>
+    </fieldset>
+    <div style="width:30%;height:100%">
+        <form class="layui-form" action="" lay-filter="formUserInfo">
+            <div class="layui-form-item">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="ID" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="NickName" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="UserName" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio"  name="Sex" value="0" title="男">
+                    <input type="radio" name="Sex" value="1" title="女">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">默认语种</label>
+                <div class="layui-input-block">
+                    <input type="text" name="DefaultLanguage" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">业务类型</label>
+                <div class="layui-input-block">
+                    <select id="WuLiuYeWuID" name="WuLiuYeWuID" lay-verify="required" lay-search="" lay-filter="WuLiuYeWuID" disabled></select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限组</label>
+                <div class="layui-input-block">
+                    <select id="PowerGroupID" name="PowerGroupID" lay-verify="required" lay-search="" lay-filter="PowerGroupID" disabled></select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">创建人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="CreateUser" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">创建时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="CreateDate" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+
+        </form>
     </div>
+    <!--disabled-->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Js/MKCom.js"></script>
+    <script type="text/javascript">
+        layui.use(['table', 'form', 'upload', 'laydate'], function () {
+            var $, table, form, upload, laydate;
+            $ = layui.jquery;
+            table = layui.table;
+            form = layui.form;
+            upload = layui.upload;
+            laydate = layui.laydate;
+
+            InitNewCombobox("#WuLiuYeWuID", "YeWuType", form, false); //绑定下拉框
+            InitNewCombobox("#PowerGroupID", "PowerGroupType", form, false); //绑定下拉框
+            $.get(
+                "/User/GetUserInfo", {}, function (r) {
+                    form.val('formUserInfo', {
+                        "ID": r.Data.ID
+                        , "NickName": r.Data.NickName
+                        , "UserName": r.Data.UserName
+                        , "Sex": r.Data.Sex.toString()
+                        , "DefaultLanguage": r.Data.DefaultLanguage
+                        , "WuLiuYeWuID": r.Data.WuLiuYeWuID
+                        , "PowerGroupID": r.Data.PowerGroupID
+                        , "CreateUser": r.Data.CreateUser
+                        , "CreateDate": r.Data.CreateDate
+                    })
+                }, "json"
+            );
+        });
+    </script>
 </body>
 </html>

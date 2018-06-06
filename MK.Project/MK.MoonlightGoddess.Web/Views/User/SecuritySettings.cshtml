@@ -9,9 +9,108 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>SecuritySettings</title>
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <style type="text/css">
+        #content {
+            width:30%;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div id="content">
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>账号基本信息</legend>
+        </fieldset>
+        <div>
+            <form class="layui-form" action="" lay-filter="formUserInfo">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="UserName" lay-verify="required" value="@ViewBag.UserName" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">昵称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="NickName" value="@ViewBag.NickName"  lay-verify="required"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" id="Password" name="Password"  lay-verify="required"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" id="rPassword" lay-verify="required"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="save" >保存</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
     </div>
+
+    <!--disabled-->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Js/MKCom.js"></script>
+    <script type="text/javascript">
+        layui.use(['form', 'upload'], function () {
+            var $,  form, upload;
+            $ = layui.jquery;
+            form = layui.form;
+            upload = layui.upload;
+
+            //$("button").prop("disabled", true);
+            $("#rPassword").change(function () {
+                if ($("#rPassword").val() === "" && $("#Password").val() === "" && $("#rPassword").val() !== $("#Password").val()) {
+                    layer.tips('两次输入的密码不匹配', '#rPassword', { skin: "layui-layer-molv" });
+                    $("#rPassword").val("");
+                    $("#rPassword").focus();
+                }
+            })
+            
+            //监听查询事件
+            form.on('submit(save)', function (data) {
+                if ($("#rPassword").val() !== "" && $("#Password").val() !== "" && $("#rPassword").val() === $("#Password").val()) {
+                    var model = data.field;
+                    $.post("/User/SaveSecuritySettings", model, function (r) {
+                        if (!r.IsError) {
+                            layer.alert('保存成功，请重新登录！', {
+                                title: "系统提示",
+                                skin: 'layui-layer-molv',
+                                btn: ['好的'], //按钮
+                                icon: 6
+                            }, function () {
+                                $.get("/Index/Exit", {}, function () {
+                                    window.parent.location.href = "/Login";
+                                }, "html");
+                            })
+                        } else {
+                            layer.msg('保存异常！', { icon: 5 });
+                        }
+                    }, "json");
+                }
+                else {
+                    layer.tips('两次输入的密码不匹配', '#rPassword', { skin: "layui-layer-molv" });
+                    $("#rPassword").val("");
+                    $("#rPassword").focus();
+                }
+                return false;
+            });
+        });
+    </script>
 </body>
 </html>

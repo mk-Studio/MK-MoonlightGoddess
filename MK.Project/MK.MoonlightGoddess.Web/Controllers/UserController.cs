@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models.EntityModels;
+using MK.MoonlightGoddess.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,7 +19,34 @@ namespace MK.MoonlightGoddess.Web.Controllers
 
         public ActionResult SecuritySettings()
         {
+            var jsonResult = ServiceContent<MK_Info_User>.SelectSingleModel
+                (
+                    new MK_Info_User() { UserName = CurrAccount.UserName },
+                    "MK_Info_User",
+                    "GetUserInfoByAccount"
+                );
+            ViewBag.UserName = jsonResult.UserName;
+            ViewBag.NickName = jsonResult.NickName;
             return View();
+        }
+
+        public JsonResult GetUserInfo()
+        {
+            var jsonResult = ServiceContent<MK_Info_User>.AjaxSingleModel
+                (
+                    new MK_Info_User() { UserName = CurrAccount.UserName }, 
+                    "MK_Info_User",
+                    "GetUserInfoByAccount"
+                );
+            return Json(jsonResult,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveSecuritySettings(MK_Info_User model)
+        {
+            model.Password = EncryptHelper.GetMD5_16(model.Password);
+            var jsonResult = ServiceContent<MK_Info_User>.AjaxSIDU(model,"MK_Info_User", "SaveSecuritySettings");
+            return Json(jsonResult);
         }
     }
 }

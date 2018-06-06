@@ -9,4 +9,17 @@
     select * from MK_Info_User where ShowMark = 'Y'
   </sql>
 
+  <sql name="GetUserInfoByAccount">
+    SELECT u.ID,u.UserName,u.PowerGroupID,pg.PowerGroupName, u.WuLiuYeWuID, wlyw.YeWuType,u.DefaultLanguage,u.ShowMark,u.CreateUser,u.CreateDate,
+    u.Sex,u.NickName
+    FROM dbo.MK_Info_User u
+    JOIN dbo.MK_Info_PowerGroup pg ON pg.ID = u.PowerGroupID
+    JOIN dbo.MK_Type_WuLiuYeWu wlyw ON wlyw.ID = u.WuLiuYeWuID
+    WHERE u.UserName = @UserName
+  </sql>
+  
+  <sql name="SaveSecuritySettings">
+    UPDATE dbo.MK_Info_User SET Password = @Password ,NickName = @NickName WHERE UserName = @UserName
+  </sql>
+
 </MK_Info_User>
