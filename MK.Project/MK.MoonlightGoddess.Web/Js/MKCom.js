@@ -57,6 +57,94 @@ var ajaxVerify = (data, notexistsCallback, callback) => {
     })
 }
 
+//api异步ajax请求
+function apiAsyncAjax(url, type, data, success) {
+    $.ajax({
+        url: url,
+        type: type || "get",
+        data: data || {},
+        contentType: 'text/json',
+        dataType: dataType || "json",
+        success: success || function (r) {
+            
+        }
+    })
+}
+
+//api同步ajax请求
+function apiSyncAjax(url, type, data, success) {
+    $.ajax({
+        url: url,
+        type: type || "get",
+        data: data || {},
+        contentType: 'text/json',
+        dataType: dataType || "json",
+        async: false,
+        success: success || function (r) {
+
+        }
+    })
+}
+
+//无返回值的
+function ajax(url, type, data, dataType, async, success) {
+    $.ajax({
+        url: url,
+        type: type || "get",
+        data: data || { },
+        dataType: dataType || "json",
+        async: async || true,
+        success: success || function (r) {
+            
+        }
+    })
+}
+
+//有返回值的
+function ajaxResult(url, type, data, dataType, async) {
+    var result;
+    $.ajax({
+        url: url,
+        type: type || "get",
+        data: data || {},
+        dataType: dataType || "json",
+        async: async || true,
+        success: function (r) {
+            result = r
+        }
+    })
+    return result;
+}
+
+//同步Post
+function ajaxSyncPost(url, data, success, dataType) {
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data || {},
+        dataType: dataType || "json",
+        async: false,
+        success: success || function (r) {
+
+        }
+    })
+}
+
+//同步Get
+function ajaxSyncGet(url, data, success, dataType) {
+    $.ajax({
+        url: url,
+        type: "get",
+        data: data || {},
+        dataType: dataType || "json",
+        async: false,
+        success: success || function (r) {
+
+        }
+    })
+}
+
+
 //设置cookie
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();

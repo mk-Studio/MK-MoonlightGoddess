@@ -4,7 +4,7 @@
 }
 
 <!DOCTYPE html>
-
+<!--DataDictionary-->
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -15,6 +15,7 @@
         .layui-table-hover {
             background-color: #c2c2c2 !important;
         }
+
         .layui-table-click {
             background-color: #393D49 !important;
             color: white;
@@ -30,16 +31,19 @@
             line-height: 25px;
             margin-bottom: 6px;
             border-left: 2px solid #009688;
-            border-radius: 12.5px 
+            border-radius: 12.5px
         }
-        #treeDataDictionary li a :hover {
-            color: #009688;
-            font-weight: bold;
-        }
+
+            #treeDataDictionary li a :hover {
+                color: #009688;
+                font-weight: bold;
+            }
+
         .treeDataDictionary-on {
             color: #FFB800;
             font-weight: bold;
         }
+
         .layui-tree-skin-basegreen .layui-icon {
             color: #009688;
         }
@@ -48,14 +52,7 @@
 </head>
 <body>
 
-    @*<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>数据字典</legend>
-    </fieldset>*@
     <div>
-        @*<select id="testSelect" xm-select="select" xm-select-type="3" xm-select-icon="&#xe605;" xm-select-placeholder="请选择" xm-select-skin="primary" xm-select-search style="width:230px">
-
-        </select>*@
-
         <div class="layui-row">
             <div class="layui-col-lg2">
                 <div id="dataList" style="display: inline-block; width: 85%; height: 715px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
@@ -111,12 +108,12 @@
                 form,//form表单
                 upload, //上传
                 tbCols, //数据表列对象
-                formSelects,
-                laydate,
-                layuiTableWhere = {
+                formSelects,//多选下拉框
+                laydate,//日期组件
+                layuiTableWhere = {  //layui table 查询条件
                     model: {}
                 },
-                homeContent = window.parent;
+                homeContent = window.parent; //home页面内容
 
             table = layui.table;
             form = layui.form;
@@ -124,11 +121,7 @@
             formSelects = layui.formSelects;
             laydate = layui.laydate;
 
-
-            //var s = formSelects.value('select');			//获取选中的值
-            //formSelects.value('select', 'val');		//获取选中的val数组
-            //formSelects.value('select', 'name');		//获取选中的name数组
-            //formSelects.value('select', [1, 3]);	//动态赋值
+            //所有要加载的table列
             tbCols = {
                 TypeWuLiao: [[ //表头
                     { field: 'WuLiaoTypeName', title: '物料类型名称', width: 150, sort: true, event: 'select' }
@@ -159,7 +152,7 @@
                 ]],
                 TypeWuLiuYeWu: [[
                     { field: 'YeWuType', title: '业务类型名称', width: 150, sort: true, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 87, event: 'select', templet: '#switchShow'  }
+                    , { field: 'ShowMark', title: '显示标识', width: 87, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
@@ -169,7 +162,7 @@
                     , { field: 'LianXiRen', title: '联系人', width: 150, sort: true, event: 'select' }
                     , { field: 'LianXiFangShi', title: '联系方式', width: 120, event: 'select' }
                     , { field: 'Address', title: '地址', width: 140, event: 'select' }
-                    , { field: 'ShowMark', title: '显示标识', width: 87, event: 'select', templet: '#switchShow'  }
+                    , { field: 'ShowMark', title: '显示标识', width: 87, event: 'select', templet: '#switchShow' }
                     , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]],
@@ -183,11 +176,9 @@
                 ]]
             }
 
-            //InitNewCombobox("#testSelect", "WuLiaoType", form, false); //绑定下拉框
-           
             layui.tree({
                 elem: '#treeDataDictionary',  //指定元素
-                skin:"basegreen",
+                skin: "basegreen",
                 click: function (item) { //点击节点回调
                     item.queryForm();
                     getTabelByUrl(item.tbUrl, item.tbCols);
@@ -205,7 +196,7 @@
                         formUrl: '/FormDataDictionary/FormTypeWuLiao',
                         postUrl: '/DataDictionary/ExceTypeWuLiao',
                         showActionName: "UpdateTypeWuLiaoShowMark",
-                        verifyName:"VerifyExistsWuLiaoTypeName",
+                        verifyName: "VerifyExistsWuLiaoTypeName",
                         queryForm: function () {
                             getQueryFormElem("/FormDataDictionary/QueryFormTypeWuLiao");
                             form.render('select');
@@ -325,7 +316,7 @@
                                 })
                             }
                         }
-                    }, 
+                    },
                     {
                         name: '币别信息',
                         tbUrl: '/DataDictionary/GetQueryInfoCurrency',
@@ -370,17 +361,17 @@
                     , cols: cols
                     , done: function (res, curr, count) {
                         upload.render({
-                            elem: '.uploadImage', 
-                            url: '/api/Upload/Upload', 
+                            elem: '.uploadImage',
+                            url: '/api/Upload/Upload',
                             done: function (res) {
                                 //上传完毕回调
                                 var model = { ID: SelectData.ID, WuLiaoImagePath: res.data.src }
                                 saveUploadPath(model)
-                           },
-                           error: function (index) {
-                               //请求异常回调
-                               console.info(index)
-                               layer.msg('文件上传异常！请稍后再试', { icon: 5 });
+                            },
+                            error: function (index) {
+                                //请求异常回调
+                                console.info(index)
+                                layer.msg('文件上传异常！请稍后再试', { icon: 5 });
                             }
                         });
                     }
@@ -397,14 +388,14 @@
                 }
                 if (layEvent === 'uploadimg') {
                     SelectData = data;
-                } 
+                }
                 if (layEvent === 'queryImage') {
                     SelectData = data;
                     layer.photos({
                         photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
                         , anim: 4 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                     });
-                } 
+                }
             });
 
             //根据物料信息获取物料类型的ID
@@ -440,8 +431,7 @@
             }
 
             //保存上传路径
-            function saveUploadPath(data)
-            {
+            function saveUploadPath(data) {
                 $.ajax({
                     url: "/DataDictionary/SaveWuLiaoImagePath",
                     data: data,
@@ -459,7 +449,7 @@
             }
 
             //更新显示标记
-            function updateShowMark(url,data) {
+            function updateShowMark(url, data) {
                 $.ajax({
                     url: url,
                     data: data,
@@ -498,13 +488,14 @@
                 })
             }
 
+            //获取Layui Photos图片查看的json格式
             function getLayuiPhotosJson(path) {
                 var json;
                 $.ajax({
                     url: "/DataDictionary/GetImageResult",
                     type: "get",
-                    data: { imgVirtualPath: path},
-                    dataType:"json",
+                    data: { imgVirtualPath: path },
+                    dataType: "json",
                     async: false,
                     success: function (result) {
                         json = result;
@@ -516,6 +507,7 @@
                 return json;
             }
 
+            //按钮激活
             active = {
                 //添加
                 add: function () { //添加
@@ -524,7 +516,7 @@
                     if (SelectTreeNode) {
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
-                                title:"添加信息",
+                                title: "添加信息",
                                 area: ['731px', '386px'],
                                 type: 1,
                                 content: str, //注意，如果str是object，那么需要字符拼接。
@@ -613,27 +605,19 @@
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
-            //{ WuLiaoTypeName: "生活产品", SqlName: "VerifyExistsWuLiaoTypeName" }
-            var verify = {
-                verifyTypeWuLiao: (data) => {
-                    return ajaxVerify(data);
-                }
-                
-            };
 
             //监听显示标记操作
             form.on('switch(ShowMark)', function (obj) {
                 var url = "/DataDictionary/UpdateShowMark",
-                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N") , name: SelectTreeNode.showActionName }
+                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N"), name: SelectTreeNode.showActionName }
                 updateShowMark(url, data);
             });
 
-            
             //监听提交事件
             form.on('submit(comSave)', function (data) {
                 var index = layer.load(0, { shade: false });
                 var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
-                //layer.alert(JSON.stringify(model));
+
                 ajaxVerify(
                     $.extend(model, { SqlName: SelectTreeNode.verifyName }),
                     (r) => {
@@ -665,7 +649,7 @@
             form.on('submit(saveSupplier)', function (data) {
                 var index = layer.load(0, { shade: false });
                 var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
-                 ajaxVerify(
+                ajaxVerify(
                     $.extend(model, { SqlName: SelectTreeNode.verifyName }),
                     (r) => {
                         layer.msg(r.Data, { icon: 5 });
@@ -689,7 +673,7 @@
                         );
                     }
                 );
-                
+
                 return false;
             });
 
@@ -700,7 +684,7 @@
                 getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                 return false;
             });
-            
+
             //监听查询事件
             form.on('submit(comQuerySupplier)', function (data) {
                 var model = data.field;

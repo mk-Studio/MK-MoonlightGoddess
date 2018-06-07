@@ -22,4 +22,26 @@
     UPDATE dbo.MK_Info_User SET Password = @Password ,NickName = @NickName WHERE UserName = @UserName
   </sql>
 
+  <sql name="GetUsersInfo">
+    SELECT TOP (@limit)
+    ID,UserName,NickName,Sex,PowerGroupID,PowerGroupName,WuLiuYeWuID,YeWuType,DefaultLanguage,ShowMark,CreateUser,CreateDate INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY u.CreateDate DESC ) AS RowID,
+    u.ID,u.UserName,u.NickName,u.Sex,u.PowerGroupID,pg.PowerGroupName,u.WuLiuYeWuID,wlyw.YeWuType,u.DefaultLanguage,u.ShowMark,u.CreateUser,u.CreateDate
+    FROM dbo.MK_Info_User u
+    JOIN dbo.MK_Info_PowerGroup pg ON pg.ID = u.PowerGroupID
+    JOIN dbo.MK_Type_WuLiuYeWu wlyw ON wlyw.ID = u.WuLiuYeWuID
+    WHERE u.UserName = ISNULL(@UserName,UserName) 
+    AND u.NickName = ISNULL(@NickName,NickName)
+    AND u.PowerGroupID = ISNULL(@PowerGroupID,u.PowerGroupID )
+    AND u.WuLiuYeWuID = ISNULL(@WuLiuYeWuID,u.WuLiuYeWuID )
+    AND u.ShowMark = ISNULL(@ShowMark,u.ShowMark )
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    ORDER BY t.RowID
+
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
 </MK_Info_User>

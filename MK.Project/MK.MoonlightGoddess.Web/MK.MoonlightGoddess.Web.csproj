@@ -461,6 +461,8 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\SecuritySettings.cshtml" />
     <Content Include="Views\User\UserManage.cshtml" />
+    <Content Include="Views\User\Form\FormInfoUser.cshtml" />
+    <Content Include="Views\User\QueryForm\QueryFormInfoUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

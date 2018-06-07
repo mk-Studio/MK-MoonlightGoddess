@@ -18,6 +18,31 @@
             border-top-color: #e6e6e6;
             border-right-color: #e6e6e6;
         }
+        /*右键菜单*/
+        .rightmenu {
+            position: absolute;
+            width: 110px;
+            z-index: 9999;
+            display: none;
+            background-color: #fff;
+            padding: 2px;
+            color: #333;
+            border: 1px solid #eee;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+            .rightmenu li {
+                text-align: center;
+                display: block;
+                height: 30px;
+                line-height: 32px;
+            }
+
+                .rightmenu li:hover {
+                    background-color: #666;
+                    color: #fff;
+                }
     </style>
 </head>
 <body class="layui-layout-body">
@@ -49,7 +74,7 @@
                         <dd><a name='a' url="/User/SecuritySettings">安全设置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a id="exit" style="cursor:pointer" >退出系统</a></li>
+                <li class="layui-nav-item"><a id="exit" style="cursor:pointer">退出系统</a></li>
             </ul>
         </div>
 
@@ -63,8 +88,8 @@
                             <cite>模板</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' url="http://www.baidu.com/">百度一下</a></dd>
-                            <dd><a name='a' url="/MKTypeWuLiao/Index">物料类型</a></dd>
+                            <dd><a name='a' url="http://www.baidu.com/" url-id="百度一下">百度一下</a></dd>
+                            <dd><a name='a' url="/MKTypeWuLiao/Index" url-id="物料类型">物料类型</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
@@ -73,9 +98,9 @@
                             <cite>解决方案</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' url="https://passport.bilibili.com/">bilibili</a></dd>
-                            <dd><a name='a' url="https://v.qq.com/">腾讯视频</a></dd>
-                            <dd><a name='a' url="https://www.huya.com/">YY</a></dd>
+                            <dd><a name='a' url="https://passport.bilibili.com/" url-id="bilibili">bilibili</a></dd>
+                            <dd><a name='a' url="https://v.qq.com/" url-id="腾讯视频">腾讯视频</a></dd>
+                            <dd><a name='a' url="https://www.huya.com/" url-id="YY">YY</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
@@ -84,8 +109,9 @@
                             <cite>系统</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a name='a' url="/Authority/Index">权限管理</a></dd>
-                            <dd><a name='a' url="/Authority/Grouping">分组管理</a></dd>
+                            <dd><a name='a' url="/Authority/Index" url-id="权限管理">权限管理</a></dd>
+                            <dd><a name='a' url="/Authority/Grouping" url-id="分组管理">分组管理</a></dd>
+                            <dd><a name='a' url="/User/UserManage" url-id="用户管理">用户管理</a></dd>
                         </dl>
 
                     </li>
@@ -96,7 +122,7 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a name='a' url="/DataDictionary/Index">数据字典</a>
+                                <a name='a' url="/DataDictionary/Index" url-id="数据字典">数据字典</a>
                             </dd>
                         </dl>
                     </li>
@@ -121,6 +147,11 @@
             </div>
         </div>
 
+        <ul class="rightmenu">
+            <li data-type="closethis"><i class="layui-icon layui-icon-note" style="font-size: 15px; color:#1E9FFF;"></i> 关闭当前</li>
+            <li data-type="closeall"><i class="layui-icon layui-icon-note" style="font-size: 15px; color:#FF5722;"></i> 关闭所有</li>
+        </ul>
+
         <div class="layui-footer">
             <!-- 底部固定区域 -->
             © layui.com - 底部固定区域
@@ -139,8 +170,9 @@
                     iframes[i].height = window.screen.height - 320;
             } catch (ex) { }
         }
-        
+
         var $, element;
+
         //添加tab
         var addTab = (id, title, url) => {
             //新增一个Tab项
@@ -149,41 +181,68 @@
                 content: '<iframe name="iframe" src="' + url + '" frameborder="0" style="width: 100%;"></iframe>',
                 id: id
             });
+            CustomRightClick(id);
             //增加点击关闭事件
             var r = $("#tabTitle").find("li");
             //每次新打开tab都是最后一个，所以只对最后一个tab添加点击关闭事件
-            r.eq(r.length - 1).children("i.layui-tab-close").on("click", function () {
-                element.tabDelete("homeContentTabs", $(this).parent("li").index());
-            }), element.tabChange("homeContentTabs", r.length - 1);
+            r.eq(r.length - 1).children("i.layui-tab-close").on("click",
+                function () {
+                    element.tabDelete("homeContentTabs", $(this).parent("li").index());
+                }
+            );
+            element.tabChange("homeContentTabs", r.length - 1);
             element.init();
         },
-        //激活并添加tab，供于除本页面以外的所有子页面调用
-        //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
-        activeTab = (id, title, url) => {
-            var title = title;
-            var tabs = $(".layui-tab-title").children();
-            for (var i = 0; i < tabs.length; i++) {
-                if ($(tabs[i]).html().substring(0, $(tabs[i]).html().indexOf("<")) === title) {
-                    element.tabChange('homeContentTabs', id);
-                    return;
+
+
+            //激活并添加tab，供于除本页面以外的所有子页面调用
+            //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+            activeTab = (id, title, url) => {
+                var isHas = false;
+                $.each($(".layui-tab-title li"), function () {
+                    if ($(this).attr("lay-id") === title) {
+                        isHas = true;
+                        return;
+                    }
+                })
+                if (!isHas) {
+                    addTab(id, title, url);
                 }
+                element.tabChange('homeContentTabs', id);
             }
-            addTab(id, title, url);
-            element.tabChange('homeContentTabs', id);
+
+        //绑定右键菜单
+        function CustomRightClick(id) {
+            //取消右键  rightmenu属性开始是隐藏的 ，当右击的时候显示，左击的时候隐藏
+            $('.layui-tab-title li').on('contextmenu', function () { return false; })
+            $('.layui-tab-title,.layui-tab-title li').click(function () {
+                $('.rightmenu').hide();
+            });
+            //桌面点击右击 
+            $('.layui-tab-title li').on('contextmenu', function (e) {
+                var popupmenu = $(".rightmenu");
+                popupmenu.find("li").attr("data-id", id); //在右键菜单中的标签绑定id属性
+
+                //判断右侧菜单的位置 
+                l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+                t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+                popupmenu.css({ left: l, top: t }).show(); //进行绝对定位
+                //alert("右键菜单")
+                return false;
+            });
         }
 
 
         window.setInterval("reinitIframe()", 200);
-        //JavaScript代码区域
-        layui.use(['element','layer'], function () {
-                $ = layui.jquery,
+        //layui.use代码区域
+        layui.use(['element', 'layer'], function () {
+            $ = layui.jquery,
                 element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
             //触发事件
             var active = {
-                tabAdd: function () {
-                    addTab($(this).text(), $(this).text(), $(this).attr("url"));
-                   
+                tabAdd: function (id, title, url) {
+                    addTab(id, title, url);
                 },
                 tabDelete: function (index) {
                     //删除指定Tab项
@@ -192,28 +251,64 @@
                 tabChange: function (index) {
                     //切换到指定Tab项
                     element.tabChange('homeContentTabs', index); //切换（注意序号是从0开始计算）
+                }, 
+                tabDeleteAll : function (ids) {
+                    $.each(ids, function (i, item) {
+                        element.tabDelete("homeContentTabs", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                    })
                 }
             };
 
+            /**
+            * 注册tab右键菜单点击事件
+            */
+            $(".rightmenu li").click(function () {
+
+                //右键菜单中的选项被点击之后，判断type的类型，决定关闭所有还是关闭当前。
+                if ($(this).attr("data-type") == "closethis") {
+                    //如果关闭当前，即根据显示右键菜单时所绑定的id，执行tabDelete
+                    active.tabDelete($(this).attr("data-id"))
+                }
+                else if ($(this).attr("data-type") == "closeall") {
+                    var tabtitle = $(".layui-tab-title li");
+                    var ids = new Array();
+                    $.each(tabtitle, function (i) {
+                        ids[i] = $(this).attr("lay-id");
+                    })
+                    //如果关闭所有 ，即将所有的lay-id放进数组，执行tabDeleteAll
+                    active.tabDeleteAll(ids);
+                }
+
+                $('.rightmenu').hide(); //最后再隐藏右键菜单
+            })
+            
+            // 点击空白处关闭右键弹窗
+            $(document).click(function () {
+                $('.rightmenu').hide();
+            })
+            
             $("a[name='a']").on("click", function () {
-                var title = $(this).text();
-                var tabs = $(".layui-tab-title").children();
-                for (var i = 0; i < tabs.length; i++) {
-                    if ($(tabs[i]).html().substring(0, $(tabs[i]).html().indexOf("i") - 1) === title) {
-                        element.tabChange('homeContentTabs', $(this).text());
+                var menu = $(this);
+                var isHas = false;
+                $.each($(".layui-tab-title li"), function () {
+                    //如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
+                    if ($(this).attr("lay-id") === menu.attr("url-id")) {
+                        isHas = true;
                         return;
                     }
+                })
+                if (!isHas) {
+                    active.tabAdd(menu.text(), menu.text(), menu.attr("url"));
                 }
-                active["tabAdd"].call(this);
-                active.tabChange($(this).text());
+                active.tabChange(menu.text());
             });
 
             $("#exit").on("click", function () {
                 layer.confirm('确认是否退出系统？', {
-                    title:"退出系统",
+                    title: "退出系统",
                     skin: 'layui-layer-molv',
                     btn: ['确定', '取消'], //按钮
-                    icon:3
+                    icon: 3
                 },
                     function () {
                         //确定...

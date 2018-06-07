@@ -9,9 +9,162 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>UserManage</title>
+    <style type="text/css">
+        /*table 样式修改 begin*/
+        .layui-table-hover {
+            background-color: #c2c2c2 !important;
+        }
+
+        .layui-table-click {
+            background-color: #393D49 !important;
+            color: white;
+        }
+        /*table 样式修改 end*/
+    </style>
 </head>
 <body>
-    <div> 
+    <div>
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>用户管理</legend>
+            <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-lg2">
+                <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+                    <ul id="treeGroup"></ul>
+                </div>
+            </div>
+            <div class="layui-col-lg10">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+                    <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
+                    <button class="layui-btn layui-btn-sm" data-type="delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
+                </div>
+                <hr />
+
+                <table class="layui-hide" id="tbUsers" lay-filter="tbUsers"></table>
+            </div>
+        </div>
     </div>
+
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        layui.use(['table', 'form', 'tree', 'jquery'], function () {
+
+            var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery;
+            var getTreeNodesData,//选中的树节点数据
+                   commandName,//执行命令名称
+                   SelectData,//table选中的数据
+                   layuiTableWhere = {  //layui table 查询条件
+                        
+                   };
+
+            layui.tree({
+                elem: '#treeGroup',
+                nodes: getByTree(),
+                click: function (node) {//node即为当前点击的节点数据
+                    getTreeNodesData = node;
+                    layuiTableWhere = { PowerGroupID : getTreeNodesData.id }
+                    displayTable();
+                }
+            });
+
+            
+            function displayTable()
+            {
+                table.render({
+                    elem: '#tbUsers',
+                    height: 520,
+                    url: '/User/GetUsersInfo',
+                    where: layuiTableWhere,
+                    page: true,
+                    cols:[[
+                        { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true }
+                        , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true }
+                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true}
+                        , { field: 'PowerGroupName', title: '群组角色', width: 170, event: 'select', align: 'center' }
+                        , { field: 'YeWuType', title: '业务类型', width: 170, event: 'select', align: 'center' }
+                        , { field: 'DefaultLanguage', title: '默认语言', width: 160, event: 'select', align: 'center', sort: true }
+                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select' ,sort: true}
+                    ]]
+                });
+            }
+
+            var active = {
+                //新增
+                add: function () {
+                    commandName = 'Insert';
+                   
+                },
+                //编辑
+                edit: function () {
+                    commandName = "Update";
+                    
+                },
+                del: function () {
+                    commandName = "Update";
+                    
+                }
+            }
+
+            $('.layui-btn-group .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            function getByTree() {
+                var result;
+                $.ajax({
+                    url: "/Authority/SelectPowerGroup",
+                    type: "post",
+                    async: false,//ajax请求方式，默认为true异步
+                    dataType: "json",
+                    success: function (data) {
+                        result = data;
+                    }
+                });
+                return result;
+            };
+
+            //监听选择事件
+            table.on('tool(tbUsers)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (obj.event === 'select') {
+                    //提示：只要sql查出来的数据里面有ID，列无需显示也可以获取
+                    SelectData = data;
+                    //layer.msg('ID<br/><span style="color:red;">' + data.ID + '</span><br/><span style="color:yellow;">' + JSON.stringify(data) + '</span>');
+                }
+                if (layEvent === 'uploadimg') {
+                    SelectData = data;
+                }
+                if (layEvent === 'queryImage') {
+                    SelectData = data;
+                    layer.photos({
+                        photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
+                        , anim: 4 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    });
+                }
+            });
+
+            //监听新增提交
+            form.on('submit(comSave)', function (data) {
+                
+            });
+
+            function InitTree() {
+                $("#treeGroup").empty();
+                layui.tree({
+                    elem: '#treeGroup',
+                    nodes: getByTree(),
+                    //node即为当前点击的节点数据
+                    click: function (node) {
+                        getTreeNodesData = node;
+                        displayTable(getTreeNodesData.id);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

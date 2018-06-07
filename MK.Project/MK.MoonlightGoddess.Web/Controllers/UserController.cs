@@ -22,6 +22,12 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View();
         }
 
+        public JsonResult GetUsersInfo(MK_Info_User model)
+        {
+            var jsonResult = ServiceContent<MK_Info_User>.Query( model,"MK_Info_User", "GetUsersInfo",true);
+            return Json(jsonResult,JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SecuritySettings()
         {
             var jsonResult = ServiceContent<MK_Info_User>.SelectSingleModel
