@@ -512,8 +512,8 @@
                 //添加
                 add: function () { //添加
                     activeName = "Insert";
-                    var index = layer.load(0, { shade: false });
                     if (SelectTreeNode) {
+                        var index = layer.load(0, { shade: false });
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
                                 title: "添加信息",
@@ -539,8 +539,8 @@
                 //修改
                 edit: function () {
                     activeName = "Update";
-                    var index = layer.load(0, { shade: false });
                     if (SelectData) {
+                        var index = layer.load(0, { shade: false });
                         $.post(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
                                 title: "修改信息",

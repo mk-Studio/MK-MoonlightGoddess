@@ -3,15 +3,51 @@
     Layout = null;
 }
 
-<!DOCTYPE html>
+<!--FormInfoUser-->
+<form class="layui-form layui-form-pane" action="" lay-filter="formInfoUser" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务类型</label>
+        <div class="layui-input-inline">
+            <select id="WuLiuYeWuID" name="WuLiuYeWuID" lay-verify="required" lay-search="" lay-filter="WuLiuYeWuID"></select>
+        </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>FormInfoUser</title>
-</head>
-<body>
-    <div> 
+        <label class="layui-form-label">角色群组</label>
+        <div class="layui-input-inline">
+            <select id="PowerGroupID" name="PowerGroupID" lay-verify="required" lay-search="" lay-filter="PowerGroupID"></select>
+        </div>
     </div>
-</body>
-</html>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="UserName" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="NickName" required lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">默认语言</label>
+        <div class="layui-input-inline">
+            <select id="DefaultLanguage" name="DefaultLanguage" lay-verify="required" lay-search="" lay-filter="DefaultLanguage">
+                <option value="ChineseSimplified">中文简体</option>
+                <option value="English">英语</option>
+            </select>
+        </div>
+
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" id="male" name="Sex" value="0" title="男" checked="">
+            <input type="radio" id="female" name="Sex" value="1" title="女">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="comSave">保存</button>
+        </div>
+    </div>
+</form>

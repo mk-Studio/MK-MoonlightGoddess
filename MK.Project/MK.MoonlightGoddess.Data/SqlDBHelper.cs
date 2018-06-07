@@ -35,7 +35,7 @@ namespace MK.MoonlightGoddess.Data
             }
             catch(Exception e)
             {
-                return null;
+                throw e;
             }
             finally
             {
@@ -62,9 +62,9 @@ namespace MK.MoonlightGoddess.Data
                 sdr.Fill(dt);
                 return dt;
             }
-            catch
+            catch ( Exception e )
             {
-                return null;
+                throw e;
             }
             finally
             {
@@ -89,9 +89,9 @@ namespace MK.MoonlightGoddess.Data
                 str = comm.ExecuteScalar().ToString();
                 return str;
             }
-            catch
+            catch ( Exception e )
             {
-                return str;
+                throw e;
             }
             finally
             {
@@ -116,9 +116,9 @@ namespace MK.MoonlightGoddess.Data
                 number = comm.ExecuteNonQuery();
                 return number;
             }
-            catch(Exception e)
+            catch ( Exception e )
             {
-                return number;
+                throw e;
             }
             finally
             {
@@ -166,9 +166,9 @@ namespace MK.MoonlightGoddess.Data
                         bulkCopy.WriteToServer(dt);
                         result = true;
                     }
-                    catch
+                    catch ( Exception e )
                     {
-                        return result;
+                        throw e;
                     }
                 }
             }

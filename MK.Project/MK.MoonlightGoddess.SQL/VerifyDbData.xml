@@ -66,4 +66,16 @@
     FROM MK_Info_Currency WHERE CurrencyCode = @CurrencyCode
     END
   </sql>
+
+  <sql name="VerifyExistsUser">
+    IF EXISTS(SELECT ID FROM MK_Info_User WHERE ID = @ID AND UserName = @UserName)
+    BEGIN
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该用户名已存在' ELSE 'OK' END
+    FROM MK_Info_User WHERE UserName = @UserName
+    END
+  </sql>
+  
 </VerifyDbData>

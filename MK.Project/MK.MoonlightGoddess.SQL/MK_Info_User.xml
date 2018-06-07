@@ -44,4 +44,19 @@
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
+
+  <sql name="InsertInfoUser">
+    INSERT dbo.MK_Info_User(ID,UserName,Password,NickName,Sex,PowerGroupID,WuLiuYeWuID,DefaultLanguage,CreateUser,CreateDate)
+    VALUES(NEWID(),@UserName,'ac59075b964b0715',@NickName,@Sex,@PowerGroupID,@WuLiuYeWuID,@DefaultLanguage,@CreateUser,@CreateDate)
+  </sql>
+  
+  <sql name="UpdateInfoUser">
+    UPDATE MK_Info_User SET UserName = @UserName,NickName = @NickName,Sex = @Sex,
+    PowerGroupID = @PowerGroupID,WuLiuYeWuID = @WuLiuYeWuID,DefaultLanguage = @DefaultLanguage
+    WHERE ID = @ID
+  </sql>
+  
+  <sql name="UpdateInfoUserMark">
+    UPDATE MK_Info_User SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
 </MK_Info_User>

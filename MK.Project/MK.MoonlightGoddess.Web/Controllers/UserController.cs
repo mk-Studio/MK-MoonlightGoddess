@@ -22,10 +22,35 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View();
         }
 
+        public ActionResult FormInfoUser()
+        {
+            return View("../User/Form/FormInfoUser");
+        }
+
+        public ActionResult QueryFormInfoUser()
+        {
+            return View("../User/QueryForm/QueryFormInfoUser");
+        }
+
         public JsonResult GetUsersInfo(MK_Info_User model)
         {
             var jsonResult = ServiceContent<MK_Info_User>.Query( model,"MK_Info_User", "GetUsersInfo",true);
             return Json(jsonResult,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ExceInfoUser(MK_Info_User model, string commandName)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            model.CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var jsonResult = ServiceContent<MK_Info_User>.AjaxSIDU(model, "MK_Info_User", commandName + "InfoUser");
+            return Json(jsonResult);
+        }
+
+        public JsonResult UpdateShowMark(string ID, string ShowMark, string name)
+        {
+            var jsonResult = ServiceContent<dynamic>.AjaxSIDU(new {  ID, ShowMark, name }, "MK_Info_User", name);
+            return Json(jsonResult);
         }
 
         public ActionResult SecuritySettings()

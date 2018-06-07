@@ -38,56 +38,103 @@
                 <div class="layui-btn-group">
                     <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
                     <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
-                    <button class="layui-btn layui-btn-sm" data-type="delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
                 </div>
                 <hr />
 
                 <table class="layui-hide" id="tbUsers" lay-filter="tbUsers"></table>
+                <script type="text/html" id="switchShow">
+                    <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+                </script>
+                <script type="text/html" id="sexStyle">
+                    {{#  if(d.Sex === 1){ }}
+                    <span style="color: #F581B1;"><i class="layui-icon layui-icon-female"></i></span>
+                    {{#  } else { }}
+                    <span style="color: #1E9FFF;"><i class="layui-icon layui-icon-male"></i></span>
+                    {{#  } }}
+                </script>
             </div>
         </div>
     </div>
 
     <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
         layui.use(['table', 'form', 'tree', 'jquery'], function () {
 
             var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery;
             var getTreeNodesData,//选中的树节点数据
-                   commandName,//执行命令名称
-                   SelectData,//table选中的数据
-                   layuiTableWhere = {  //layui table 查询条件
-                        
-                   };
+                commandName,//执行命令名称
+                SelectData,//table选中的数据
+                layuiTableWhere = {
+                    //layui table 查询条件
+                },
+                configParams = {
+                    formUrl: '/User/FormInfoUser',
+                    postUrl: '/User/ExceInfoUser',
+                    showActionName: "UpdateInfoUserMark",
+                    verifyName: "VerifyExistsUser",
+                    queryForm: function () {
+                        getQueryFormElem("/User/QueryFormInfoUser");
+                        //绑定业务下拉框
+                        InitNewCombobox("#WuLiuYeWuID", "YeWuType", form, true);
+                        //绑定群组下拉框
+                        InitNewCombobox("#PowerGroupID", "PowerGroupType", form, true);
+                        form.render('select');
+                    },
+                    formVal: function (isVal) {
+                        //绑定业务下拉框
+                        InitNewCombobox("#WuLiuYeWuID", "YeWuType", form, false);
+                        //绑定群组下拉框
+                        InitNewCombobox("#PowerGroupID", "PowerGroupType", form, false);
+                        //赋值修改的数据
+                        if (isVal) {
+                            form.val('formInfoUser', {
+                                "WuLiuYeWuID": SelectData.WuLiuYeWuID
+                                , "PowerGroupID": SelectData.PowerGroupID
+                                , "UserName": SelectData.UserName
+                                , "NickName": SelectData.NickName
+                                , "DefaultLanguage": SelectData.DefaultLanguage
+                                , "Sex": SelectData.Sex.toString()
+                            })
+                        }
+                    }
+                }
 
             layui.tree({
                 elem: '#treeGroup',
                 nodes: getByTree(),
                 click: function (node) {//node即为当前点击的节点数据
+                    //缓存选中树节点
                     getTreeNodesData = node;
-                    layuiTableWhere = { PowerGroupID : getTreeNodesData.id }
-                    displayTable();
+                    //显示table数据
+                    displayTable(getTreeNodesData.id);
+                    //清空选中数据缓存
+                    SelectData = undefined;
                 }
             });
 
-            
-            function displayTable()
-            {
+
+            function displayTable(id) {
+                layuiTableWhere = { PowerGroupID: id }
                 table.render({
                     elem: '#tbUsers',
                     height: 520,
                     url: '/User/GetUsersInfo',
                     where: layuiTableWhere,
                     page: true,
-                    cols:[[
+                    cols: [[
                         { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true }
                         , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true }
-                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true}
+                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true, templet: '#sexStyle' }
                         , { field: 'PowerGroupName', title: '群组角色', width: 170, event: 'select', align: 'center' }
                         , { field: 'YeWuType', title: '业务类型', width: 170, event: 'select', align: 'center' }
                         , { field: 'DefaultLanguage', title: '默认语言', width: 160, event: 'select', align: 'center', sort: true }
-                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select' ,sort: true}
-                    ]]
+                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select', sort: true, templet: '#switchShow' }
+                    ]],
+                    done: function (res, curr, count) {
+                        SelectData = undefined;
+                    }
                 });
             }
 
@@ -95,16 +142,44 @@
                 //新增
                 add: function () {
                     commandName = 'Insert';
-                   
+                    //显示加载动画
+                    var index = layer.load(0, { shade: false });
+                    //打开新增页面
+                    $.post(configParams.formUrl, {}, function (formElem) {
+                        layer.open({
+                            title: "添加信息",
+                            area: ['731px', '386px'],
+                            type: 1,
+                            content: formElem,
+                        });
+                        //关闭加载动画
+                        layer.close(index);
+                        //渲染页面
+                        form.render();
+                        //绑定下拉框
+                        configParams.formVal(false);
+                    });
                 },
                 //编辑
                 edit: function () {
                     commandName = "Update";
-                    
-                },
-                del: function () {
-                    commandName = "Update";
-                    
+                    //显示加载动画
+                    var index = layer.load(0, { shade: false });
+                    //打开新增页面
+                    $.post(configParams.formUrl, {}, function (formElem) {
+                        layer.open({
+                            title: "添加信息",
+                            area: ['731px', '386px'],
+                            type: 1,
+                            content: formElem,
+                        });
+                        //关闭加载动画
+                        layer.close(index);
+                        //渲染页面
+                        form.render();
+                        //绑定下拉框
+                        configParams.formVal(true);
+                    });
                 }
             }
 
@@ -127,37 +202,86 @@
                 return result;
             };
 
+            //获取指定的查询模块
+            function getQueryFormElem(url) {
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    dataType: "html",
+                    async: false,
+                    success: function (html) {
+                        $("#QueryForms").empty();
+                        $("#QueryForms").append(html);
+                    }
+                })
+            }
+
             //监听选择事件
             table.on('tool(tbUsers)', function (obj) {
                 var data = obj.data, layEvent = obj.event;
                 if (obj.event === 'select') {
-                    //提示：只要sql查出来的数据里面有ID，列无需显示也可以获取
-                    SelectData = data;
-                    //layer.msg('ID<br/><span style="color:red;">' + data.ID + '</span><br/><span style="color:yellow;">' + JSON.stringify(data) + '</span>');
-                }
-                if (layEvent === 'uploadimg') {
                     SelectData = data;
                 }
-                if (layEvent === 'queryImage') {
-                    SelectData = data;
-                    layer.photos({
-                        photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
-                        , anim: 4 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                    });
-                }
+            });
+
+            //监听显示标记操作
+            form.on('switch(ShowMark)', function (obj) {
+                var url = "/User/UpdateShowMark",
+                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N"), name: configParams.showActionName }
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: "post",
+                    dataType: "json",
+                    success: function (r) {
+                        if (!r.IsError) {
+                            layer.msg('更新成功', { icon: 1 });
+                        } else {
+                            layer.msg('更新失败！请稍后再试', { icon: 5 });
+                        }
+                    }
+                });
             });
 
             //监听新增提交
             form.on('submit(comSave)', function (data) {
-                
+                var model = commandName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID });
+                ajaxVerify(
+                    $.extend(model, { SqlName: configParams.verifyName }),
+                    (r) => {
+                        layer.msg(r.Data, { icon: 5 });
+                        layer.close(index);
+                        return false;
+                    },
+                    (r) => {
+                        $.post(
+                            configParams.postUrl,
+                            { model: model, commandName: commandName },
+                            function (r) {
+                                if (r.status) {
+                                    layer.msg('保存异常！' + r.message, { icon: 5 });
+                                    return;
+                                }
+                                else {
+                                    if (!r.IsError) {
+                                        layer.closeAll();
+                                        layer.msg("保存成功", { icon: 1 });
+                                        displayTable(model.PowerGroupID);
+                                    }
+                                }
+                            }
+                        );
+                    }
+                );
+                return false;
             });
 
+            //初始化树
             function InitTree() {
                 $("#treeGroup").empty();
                 layui.tree({
                     elem: '#treeGroup',
                     nodes: getByTree(),
-                    //node即为当前点击的节点数据
                     click: function (node) {
                         getTreeNodesData = node;
                         displayTable(getTreeNodesData.id);
