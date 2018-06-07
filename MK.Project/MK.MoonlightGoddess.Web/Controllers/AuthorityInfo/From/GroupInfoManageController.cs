@@ -17,9 +17,5 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo.From
         {
             return View("../Authority/Form/FormEditGroupInfo");
         }
-        public ActionResult moveGroupUresInfo()
-        {
-            return View("../Authority/Form/FormMoveGroupUersInfo");
-        }
     }
 }
