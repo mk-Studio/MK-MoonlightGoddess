@@ -17,6 +17,11 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View();
         }
 
+        public ActionResult UserManage()
+        {
+            return View();
+        }
+
         public ActionResult SecuritySettings()
         {
             var jsonResult = ServiceContent<MK_Info_User>.SelectSingleModel
@@ -34,18 +39,18 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             var jsonResult = ServiceContent<MK_Info_User>.AjaxSingleModel
                 (
-                    new MK_Info_User() { UserName = CurrAccount.UserName }, 
+                    new MK_Info_User() { UserName = CurrAccount.UserName },
                     "MK_Info_User",
                     "GetUserInfoByAccount"
                 );
-            return Json(jsonResult,JsonRequestBehavior.AllowGet);
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public JsonResult SaveSecuritySettings(MK_Info_User model)
         {
             model.Password = EncryptHelper.GetMD5_16(model.Password);
-            var jsonResult = ServiceContent<MK_Info_User>.AjaxSIDU(model,"MK_Info_User", "SaveSecuritySettings");
+            var jsonResult = ServiceContent<MK_Info_User>.AjaxSIDU(model, "MK_Info_User", "SaveSecuritySettings");
             return Json(jsonResult);
         }
     }

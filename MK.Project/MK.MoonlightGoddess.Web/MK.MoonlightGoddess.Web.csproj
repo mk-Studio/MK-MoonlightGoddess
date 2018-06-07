@@ -460,6 +460,7 @@
     <Content Include="Views\Authority\Form\FromAddGroupInfo.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\SecuritySettings.cshtml" />
+    <Content Include="Views\User\UserManage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
