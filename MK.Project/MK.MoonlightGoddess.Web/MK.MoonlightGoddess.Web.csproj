@@ -461,7 +461,6 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\SecuritySettings.cshtml" />
     <Content Include="Views\User\UserManage.cshtml" />
-    <Content Include="Views\Authority\Form\FormMoveGroupUersInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
