@@ -33,6 +33,9 @@
                     <button class="layui-btn layui-btn-sm" data-type="del">
                         <i class="layui-icon">&#xe640;</i>删除
                     </button>
+                    <button class="layui-btn layui-btn-sm" data-type="move">
+                        <i class="layui-icon">&#xe642;</i>组员调整
+                    </button>
                 </div>
                 <hr />
 
@@ -168,6 +171,31 @@
                     {
                         layer.close(index);
                         layer.msg("请先选中左边分组");
+                    }
+                },
+                move: function () {//组员调整
+                    var index = layer.load(1, { shade: false });
+                    if (getTreeNodesData && getTreeNodesData.id != '00000000-0000-0000-0000-000000000000') {
+                        $.post('/GroupInfoManage/moveGroupUresInfo', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: "组员调整",
+                                area: ['740px', '400px'],
+                                content: str,
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg("请先选中左边分组");
+                        layer.close(index);
                     }
                 }
             }
