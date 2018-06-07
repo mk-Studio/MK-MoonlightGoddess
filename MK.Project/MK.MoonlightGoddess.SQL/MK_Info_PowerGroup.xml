@@ -7,6 +7,9 @@
     select ID as id ,OnID as onid, PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'
   </sql>
 
+  <sql name="selectGroupNameRow">
+    SELECT COUNT(*) AS Number FROM dbo.MK_Info_PowerGroup WHERE  PowerGroupName=@PowerGroupName AND ShowMark='Y'
+  </sql>
   <sql name="UpdateGroupInfo">
     UPDATE dbo.MK_Info_PowerGroup
     SET PowerGroupName=@PowerGroupName,CreateUser=@CreateUser,CreateDate=GETDATE()
