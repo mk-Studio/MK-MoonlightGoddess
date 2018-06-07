@@ -115,9 +115,26 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         [HttpPost]
         public JsonResult EditGroupInfo(MK_Info_PowerGroup model)
         {
-            model.CreateUser = CurrAccount.UserName;
-            var jsonResult = ServiceContent<MK_Info_PowerGroup>.AjaxSIDU(model, "MK_Info_PowerGroup", "UpdateGroupInfo");
-            return Json(jsonResult);
+            var selectGroupRowCount = ServiceContent<MK_Info_PowerGroup>.SelectData(model,"MK_Info_PowerGroup","selectGroupNameRow");
+            int number = (int)selectGroupRowCount.Rows[0]["Number"];
+            if (number > 0)
+            {
+                return Json(new
+                {
+                    result = "组名[" + model.PowerGroupName + "]已存在",
+                    bl = false
+                });
+            }
+            else
+            {
+                model.CreateUser = CurrAccount.UserName;
+                var jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectSIDU(model, "MK_Info_PowerGroup", "UpdateGroupInfo");
+                if (jsonResult == true)
+                    return Json(new { result = "修改成功", bl = true });
+                else
+                    return Json(new { result = "修改失败", bl = false });
+            }
+           
         }
     }
 }
