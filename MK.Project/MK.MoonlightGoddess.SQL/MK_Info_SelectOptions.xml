@@ -28,5 +28,10 @@
   <sql name="PowerGroupType">
     SELECT ID AS Value,PowerGroupName AS Text FROM dbo.MK_Info_PowerGroup WHERE ID != '00000000-0000-0000-0000-000000000000' AND ShowMark = 'Y'
   </sql>
-  
+
+  <sql name="LanguageType">
+    SELECT 'ChineseSimplified' AS Value,'中文简体' AS Text UNION ALL
+    SELECT 'English' AS Value,'英语' AS Text 
+  </sql>
+
 </MK_Info_SelectOptions>

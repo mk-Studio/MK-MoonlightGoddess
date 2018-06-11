@@ -80,13 +80,18 @@
                         InitNewCombobox("#WuLiuYeWuID", "YeWuType", form, true);
                         //绑定群组下拉框
                         InitNewCombobox("#PowerGroupID", "PowerGroupType", form, true);
-                        form.render('select');
+                        //绑定语种类型
+                        InitNewCombobox("#DefaultLanguage", "LanguageType", form, true);
+                        
                     },
                     formVal: function (isVal) {
                         //绑定业务下拉框
                         InitNewCombobox("#WuLiuYeWuID", "YeWuType", form, false);
                         //绑定群组下拉框
                         InitNewCombobox("#PowerGroupID", "PowerGroupType", form, false);
+                        //绑定语种类型
+                        InitNewCombobox("#DefaultLanguage", "LanguageType", form, false);
+                        
                         //赋值修改的数据
                         if (isVal) {
                             form.val('formInfoUser', {
@@ -98,6 +103,7 @@
                                 , "Sex": SelectData.Sex.toString()
                             })
                         }
+                        form.render('select');
                     }
                 }
 
@@ -265,7 +271,7 @@
                                 else {
                                     if (!r.IsError) {
                                         layer.closeAll();
-                                        layer.msg("保存成功", { icon: 1 });
+                                        layer.alert("保存成功！<span style='color:red;'>默认密码为：123</span>", { icon: 1 });
                                         displayTable(model.PowerGroupID);
                                     }
                                 }
