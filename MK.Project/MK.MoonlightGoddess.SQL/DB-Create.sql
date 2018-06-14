@@ -423,11 +423,12 @@ GO
 
 
 
---功能(菜单-功能)
+--功能(菜单功能)
 CREATE TABLE MK_Info_Features(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	PowerID NVARCHAR(36),
 	FeaturesName NVARCHAR(36),
+	DataType  NVARCHAR(36),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
@@ -440,6 +441,35 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'菜单ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'PowerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'功能名称', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'FeaturesName'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'数据类型名', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'DataType'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'ShowMark'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'CreateUser'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'CreateDate'
+GO
+
+--功能清单
+CREATE TABLE MK_Type_FunctionList(
+	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	FeaturesID NVARCHAR(36),
+	PowerAllotID  NVARCHAR(36),
+	Status NVARCHAR(2) DEFAULT '0',
+	ShowMark CHAR(1) DEFAULT 'Y',
+	CreateUser NVARCHAR(30),
+	CreateDate DATETIME,
+)
+EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 功能清单', N'SCHEMA', N'dbo', N'TABLE', N'MK_Type_FunctionList', NULL, NULL
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_FunctionList', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'功能ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_FunctionList', 'COLUMN', N'FeaturesID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'权限分配ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_FunctionList', 'COLUMN', N'PowerAllotID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'权限标识:0-无权限，1-有权限', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_PowerAllot', 'COLUMN', N'Status'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'ShowMark'
 GO
