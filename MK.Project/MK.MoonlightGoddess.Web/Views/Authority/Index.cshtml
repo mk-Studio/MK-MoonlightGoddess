@@ -104,6 +104,23 @@
                 , nodes: initTree()
             });
 
+            //功能操作
+
+            function setupFunction(id)
+            {
+                table.render({
+                    elem: '#tbFunction'
+                    , url: '' //数据接口
+                    , where: { model: { PowerGroupID: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'PowerName', title: '名称', width: 150, sort: true, align: 'center',fixed: 'left' }
+                        , { field: 'edit', title: '操作', width: 165, align: 'center', toolbar: '#barDemo' }
+                    ]]
+                });
+            };
+
             //操作监听工具条
             table.on('tool(tbPowerType)', function (obj) {
                 var TakeData = obj.data //获得当前行数据
@@ -134,7 +151,25 @@
                         });
                     }
                 } else if (layEvent === 'gnedit') {
-                    layer.msg('开放中，，，');
+                    $.post('/GroupInfoManage/FunctionInfo', {}, function (str) {
+                        layer.open({
+                            type: 1,
+                            title: '功能',
+                            area: ['731px', '386px'],
+                            content: str, //注意，如果str是object，那么需要字符拼接。
+                            cancel: function () {
+                                //右上角关闭回调
+                                //layer.msg("关闭啦~");
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            },
+                            success: function () {
+                                setupFunction(TakeData.ID);
+                            }
+                        });
+                        layer.close(index);
+                        //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                        form.render();
+                    });
                 }
             });
 

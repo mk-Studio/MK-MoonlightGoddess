@@ -17,5 +17,9 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo.From
         {
             return View("../Authority/Form/FormEditGroupInfo");
         }
+        public ActionResult FunctionInfo()
+        {
+            return View("../Authority/Form/FormFunctionManagement");
+        }
     }
 }

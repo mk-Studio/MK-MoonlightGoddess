@@ -432,6 +432,7 @@ CREATE TABLE MK_Info_Features(
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
 )
+
 EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 功能', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Features', NULL, NULL
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'功能ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'ID'
