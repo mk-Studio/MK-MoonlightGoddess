@@ -24,14 +24,19 @@
 
   <sql name="GetUsersInfo">
     SELECT TOP (@limit)
-    ID,UserName,NickName,Sex,PowerGroupID,PowerGroupName,WuLiuYeWuID,YeWuType,DefaultLanguage,ShowMark,CreateUser,CreateDate INTO #TableResult
+    ID,UserName,NickName,Sex,PowerGroupID,PowerGroupName,WuLiuYeWuID,YeWuType,DefaultLanguage,
+    ApproveName,t.CCName,Approve_ChangeMark,CC_ChangeMark,ShowMark,CreateUser,CreateDate
+    INTO #TableResult
     FROM (
     SELECT ROW_NUMBER() OVER (ORDER BY u.CreateDate DESC ) AS RowID,
-    u.ID,u.UserName,u.NickName,u.Sex,u.PowerGroupID,pg.PowerGroupName,u.WuLiuYeWuID,wlyw.YeWuType,u.DefaultLanguage,u.ShowMark,u.CreateUser,u.CreateDate
+    u.ID,u.UserName,u.NickName,u.Sex,u.PowerGroupID,pg.PowerGroupName,u.WuLiuYeWuID,wlyw.YeWuType,u.DefaultLanguage,
+    ar.ApproveName,(SELECT '['+ cc.CCName +'] ' FROM dbo.MK_Info_CC cc WHERE cc.UserID = u.ID FOR XML PATH('')) AS CCName,
+    u.Approve_ChangeMark,u.CC_ChangeMark,u.ShowMark,u.CreateUser,u.CreateDate
     FROM dbo.MK_Info_User u
     JOIN dbo.MK_Info_PowerGroup pg ON pg.ID = u.PowerGroupID
     JOIN dbo.MK_Type_WuLiuYeWu wlyw ON wlyw.ID = u.WuLiuYeWuID
-    WHERE u.UserName = ISNULL(@UserName,UserName) 
+    LEFT JOIN dbo.MK_Info_Approve ar ON ar.UserID = u.ID
+    WHERE u.UserName = ISNULL(@UserName,UserName)
     AND u.NickName = ISNULL(@NickName,NickName)
     AND u.PowerGroupID = ISNULL(@PowerGroupID,u.PowerGroupID )
     AND u.WuLiuYeWuID = ISNULL(@WuLiuYeWuID,u.WuLiuYeWuID )
@@ -47,16 +52,40 @@
 
   <sql name="InsertInfoUser">
     INSERT dbo.MK_Info_User(ID,UserName,Password,NickName,Sex,PowerGroupID,WuLiuYeWuID,DefaultLanguage,CreateUser,CreateDate)
-    VALUES(NEWID(),@UserName,'ac59075b964b0715',@NickName,@Sex,@PowerGroupID,@WuLiuYeWuID,@DefaultLanguage,@CreateUser,@CreateDate)
+    VALUES(@ID,@UserName,'ac59075b964b0715',@NickName,@Sex,@PowerGroupID,@WuLiuYeWuID,@DefaultLanguage,@CreateUser,@CreateDate)
   </sql>
-  
+
+  <sql name="InsertInfoApprove">
+    INSERT MK_Info_Approve(ID,UserID,ApproveID,ApproveName,CreateUser,CreateDate)
+    VALUES(@ID,@UserID,@ApproveID,@ApproveName,@CreateUser,@CreateDate)
+  </sql>
+
   <sql name="UpdateInfoUser">
     UPDATE MK_Info_User SET UserName = @UserName,NickName = @NickName,Sex = @Sex,
     PowerGroupID = @PowerGroupID,WuLiuYeWuID = @WuLiuYeWuID,DefaultLanguage = @DefaultLanguage
     WHERE ID = @ID
+
+    DELETE FROM MK_Info_Approve WHERE UserID = @ID
+    DELETE FROM MK_Info_CC WHERE UserID = @ID
   </sql>
-  
+
   <sql name="UpdateInfoUserMark">
     UPDATE MK_Info_User SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+  
+  <sql name="UpdateInfoUserCCMark">
+    UPDATE MK_Info_User SET CC_ChangeMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateInfoUserApproveMark">
+    UPDATE MK_Info_User SET Approve_ChangeMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="GetApproveIDByUserID">
+    SELECT ApproveID FROM MK_Info_Approve WHERE UserID = @UserID
+  </sql>
+
+  <sql name="GetCCIDByUserID">
+    SELECT CCID FROM MK_Info_CC WHERE UserID = @UserID
   </sql>
 </MK_Info_User>

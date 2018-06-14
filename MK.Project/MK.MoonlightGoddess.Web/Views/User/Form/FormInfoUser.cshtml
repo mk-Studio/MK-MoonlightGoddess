@@ -5,17 +5,6 @@
 
 <!--FormInfoUser-->
 <form class="layui-form layui-form-pane" action="" lay-filter="formInfoUser" style="padding:20px 20px;">
-    <div class="layui-form-item">
-        <label class="layui-form-label">业务类型</label>
-        <div class="layui-input-inline">
-            <select id="WuLiuYeWuID" name="WuLiuYeWuID" lay-verify="required" lay-search="" lay-filter="WuLiuYeWuID"></select>
-        </div>
-
-        <label class="layui-form-label">角色群组</label>
-        <div class="layui-input-inline">
-            <select id="PowerGroupID" name="PowerGroupID" lay-verify="required" lay-search="" lay-filter="PowerGroupID"></select>
-        </div>
-    </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
@@ -26,6 +15,34 @@
         <label class="layui-form-label">昵称</label>
         <div class="layui-input-inline">
             <input type="text" name="NickName" required lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">审批人</label>
+        <div class="layui-input-block">
+            <select id="ApproveID" xm-select="ApproveID" xm-select-type="3" xm-select-icon="&#xe605;"
+                    xm-select-placeholder="请选择" xm-select-skin="primary" xm-select-search xm-select-radio></select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">抄送人</label>
+        <div class="layui-input-block">
+            <select id="CCID" xm-select="CCID" xm-select-type="3" xm-select-icon="&#xe605;"
+                    xm-select-placeholder="请选择" xm-select-skin="primary" xm-select-search></select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务类型</label>
+        <div class="layui-input-inline">
+            <select id="WuLiuYeWuID" name="WuLiuYeWuID" lay-verify="required" lay-search="" lay-filter="WuLiuYeWuID"></select>
+        </div>
+
+        <label class="layui-form-label">角色群组</label>
+        <div class="layui-input-inline">
+            <select id="PowerGroupID" name="PowerGroupID" lay-verify="required" lay-search="" lay-filter="PowerGroupID"></select>
         </div>
     </div>
 

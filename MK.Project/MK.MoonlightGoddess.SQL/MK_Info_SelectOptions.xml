@@ -21,8 +21,12 @@
     SELECT ID AS Value,Name AS Text FROM dbo.MK_Info_WuLiuCompany WHERE ShowMark = 'Y'
   </sql>
   
-  <sql name="UserType">
+  <sql name="UserNameType">
     SELECT UserName AS Value,UserName AS Text FROM dbo.MK_Info_User WHERE ShowMark = 'Y'
+  </sql>
+
+  <sql name="UserType">
+    SELECT ID AS Value,NickName AS Text FROM dbo.MK_Info_User WHERE ShowMark = 'Y'
   </sql>
 
   <sql name="PowerGroupType">

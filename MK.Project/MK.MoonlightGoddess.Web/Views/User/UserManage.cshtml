@@ -45,6 +45,14 @@
                 <script type="text/html" id="switchShow">
                     <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
                 </script>
+                <script type="text/html" id="switchApprove">
+                    <input type="checkbox" name="ApproveChangeMark" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="Approve_ChangeMark" {{ d.Approve_ChangeMark == 'Y' ? 'checked' : '' }}>
+                </script>
+                <script type="text/html" id="switchCC">
+                    <input type="checkbox" name="CCChangeMark" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="CC_ChangeMark" {{ d.CC_ChangeMark == 'Y' ? 'checked' : '' }}>
+                </script>
+                
+                
                 <script type="text/html" id="sexStyle">
                     {{#  if(d.Sex === 1){ }}
                     <span style="color: #F581B1;"><i class="layui-icon layui-icon-female"></i></span>
@@ -60,9 +68,14 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
-        layui.use(['table', 'form', 'tree', 'jquery'], function () {
+        layui.config({
+            base: '../Js/'
+        }).extend({
+            formSelects: 'formSelects-v3'
+        })
+        layui.use(['table', 'form', 'tree', 'formSelects', 'jquery'], function () {
 
-            var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery;
+            var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery, formSelects = layui.formSelects;//多选下拉框
             var getTreeNodesData,//选中的树节点数据
                 commandName,//执行命令名称
                 SelectData,//table选中的数据
@@ -73,6 +86,8 @@
                     formUrl: '/User/FormInfoUser',
                     postUrl: '/User/ExceInfoUser',
                     showActionName: "UpdateInfoUserMark",
+                    ccActionName: "UpdateInfoUserCCMark",
+                    approveActionName: "UpdateInfoUserApproveMark",
                     verifyName: "VerifyExistsUser",
                     queryForm: function () {
                         getQueryFormElem("/User/QueryFormInfoUser");
@@ -82,7 +97,8 @@
                         InitNewCombobox("#PowerGroupID", "PowerGroupType", form, true);
                         //绑定语种类型
                         InitNewCombobox("#DefaultLanguage", "LanguageType", form, true);
-                        
+                        //绑定群组下拉框
+                        InitNewCombobox("#PowerGroupID", "PowerGroupType", form, true);
                     },
                     formVal: function (isVal) {
                         //绑定业务下拉框
@@ -91,7 +107,11 @@
                         InitNewCombobox("#PowerGroupID", "PowerGroupType", form, false);
                         //绑定语种类型
                         InitNewCombobox("#DefaultLanguage", "LanguageType", form, false);
-                        
+                        //绑定审批人
+                        InitNewCombobox("#ApproveID", "UserType", form, false);
+                        //绑定抄送人
+                        InitNewCombobox("#CCID", "UserType", form, false);
+
                         //赋值修改的数据
                         if (isVal) {
                             form.val('formInfoUser', {
@@ -102,8 +122,16 @@
                                 , "DefaultLanguage": SelectData.DefaultLanguage
                                 , "Sex": SelectData.Sex.toString()
                             })
+                            form.render('select');
+                            formSelects.render({
+                                name: 'ApproveID'
+                            });
+                            formSelects.render({
+                                name: 'CCID'
+                            });
+                            formSelects.value('ApproveID', getFormSelectsByUserID(SelectData.ID, "Approve"))
+                            formSelects.value('CCID', getFormSelectsByUserID(SelectData.ID,"CC"))
                         }
-                        form.render('select');
                     }
                 }
 
@@ -130,13 +158,17 @@
                     where: layuiTableWhere,
                     page: true,
                     cols: [[
-                        { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true }
-                        , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true }
-                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true, templet: '#sexStyle' }
+                        { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true, fixed: 'left'}
+                        , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true}
+                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true, templet: '#sexStyle'}
                         , { field: 'PowerGroupName', title: '群组角色', width: 170, event: 'select', align: 'center' }
                         , { field: 'YeWuType', title: '业务类型', width: 170, event: 'select', align: 'center' }
                         , { field: 'DefaultLanguage', title: '默认语言', width: 160, event: 'select', align: 'center', sort: true }
-                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select', sort: true, templet: '#switchShow' }
+                        , { field: 'ApproveName', title: '审批人', width: 120, event: 'select', align: 'center', sort: true }
+                        , { field: 'Approve_ChangeMark', title: '审批人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchApprove' }
+                        , { field: 'CCName', title: '抄送人', width: 120, event: 'select', align: 'center', sort: true }
+                        , { field: 'CC_ChangeMark', title: '抄送人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchCC'}
+                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select', sort: true, templet: '#switchShow', fixed: 'right'}
                     ]],
                     done: function (res, curr, count) {
                         SelectData = undefined;
@@ -208,6 +240,22 @@
                 return result;
             };
 
+            //获取下拉框绑定的数据
+            function getFormSelectsByUserID(userID,type) {
+                var result = "";
+                $.ajax({
+                    url: "/User/" + (type === "Approve" ? "GetApproveInfo" : "GetCCInfo" ),
+                    type: "get",
+                    data: { userID: userID },
+                    dataType: "json",
+                    async: false,
+                    success: function (r) {
+                        result = r
+                    }
+                })
+                return result;
+            }
+
             //获取指定的查询模块
             function getQueryFormElem(url) {
                 $.ajax({
@@ -222,18 +270,8 @@
                 })
             }
 
-            //监听选择事件
-            table.on('tool(tbUsers)', function (obj) {
-                var data = obj.data, layEvent = obj.event;
-                if (obj.event === 'select') {
-                    SelectData = data;
-                }
-            });
-
-            //监听显示标记操作
-            form.on('switch(ShowMark)', function (obj) {
-                var url = "/User/UpdateShowMark",
-                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N"), name: configParams.showActionName }
+            //更改标识状态
+            function changeMark(url, data) {
                 $.ajax({
                     url: url,
                     data: data,
@@ -247,11 +285,44 @@
                         }
                     }
                 });
+            }
+
+            //监听选择事件
+            table.on('tool(tbUsers)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (obj.event === 'select') {
+                    SelectData = data;
+                }
+            });
+
+            //监听显示标记操作
+            form.on('switch(ShowMark)', function (obj) {
+                var url = "/User/UpdateMark",
+                    data = { ID: this.value, Mark: (obj.elem.checked ? "Y" : "N"), name: configParams.showActionName }
+                changeMark(url, data);
+            });
+
+            //监听显示标记操作
+            form.on('switch(Approve_ChangeMark)', function (obj) {
+                var url = "/User/UpdateMark",
+                    data = { ID: this.value, Mark: (obj.elem.checked ? "Y" : "N"), name: configParams.approveActionName }
+                changeMark(url, data);
+            });
+
+            //监听显示标记操作
+            form.on('switch(CC_ChangeMark)', function (obj) {
+                var url = "/User/UpdateMark",
+                    data = { ID: this.value, Mark: (obj.elem.checked ? "Y" : "N"), name: configParams.ccActionName }
+                changeMark(url, data);
             });
 
             //监听新增提交
             form.on('submit(comSave)', function (data) {
-                var model = commandName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID });
+                var model = commandName === "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID });
+                if (formSelects.value('ApproveID').length === 0 || formSelects.value('CCID').length === 0) {    
+                    layer.msg('审批人或抄送人都不能为空！', { icon: 5 });
+                    return false;
+                }
                 ajaxVerify(
                     $.extend(model, { SqlName: configParams.verifyName }),
                     (r) => {
@@ -262,7 +333,7 @@
                     (r) => {
                         $.post(
                             configParams.postUrl,
-                            { model: model, commandName: commandName },
+                            { model: model, approve: formSelects.value('ApproveID'), cc: formSelects.value('CCID'), commandName: commandName },
                             function (r) {
                                 if (r.status) {
                                     layer.msg('保存异常！' + r.message, { icon: 5 });
@@ -271,7 +342,10 @@
                                 else {
                                     if (!r.IsError) {
                                         layer.closeAll();
-                                        layer.alert("保存成功！<span style='color:red;'>默认密码为：123</span>", { icon: 1 });
+                                        var msg = commandName === "Insert"
+                                            ? "账号添加成功！<span style='color:red;'>默认密码为：123</span>"
+                                            :  "修改成功！"
+                                        layer.alert(msg, { icon: 1 });
                                         displayTable(model.PowerGroupID);
                                     }
                                 }

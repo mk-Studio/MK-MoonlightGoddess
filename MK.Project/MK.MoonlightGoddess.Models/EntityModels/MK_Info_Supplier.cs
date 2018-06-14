@@ -20,4 +20,9 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         public string val { get; set; }
         public string name { get; set; }
     }
+
+    public class FormSelectes : SupelierWuLiaoDetail
+    {
+
+    }
 }

@@ -52,5 +52,46 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// 性别 [0 => 男；1 => 女]
         /// </summary>
         public int Sex { get; set; }
+
+        /// <summary>
+        /// 审批人可更改标识，Y=可更改，N=不可更改
+        /// </summary>
+        public string Approve_ChangeMark { get; set; }
+
+        /// <summary>
+        /// 抄送人可更改标识，Y=可更改，N=不可更改
+        /// </summary>
+        public string CC_ChangeMark { get; set; }
+
+        /// <summary>
+        /// 审批人
+        /// </summary>
+        public string ApproveName { get; set; }
+
+        /// <summary>
+        /// 抄送人
+        /// </summary>
+        public string CCName { get; set; }
+        
+    }
+
+    /// <summary>
+    /// 与用户绑定的审批人信息
+    /// </summary>
+    public class MK_Info_Approve : BaseModel
+    {
+        public string UserID { get; set; }
+        public string ApproveID { get; set; }
+        public string ApproveName { get; set; }
+    }
+
+    /// <summary>
+    /// 与用户绑定的抄送人信息
+    /// </summary>
+    public class MK_Info_CC : BaseModel
+    {
+        public string UserID { get; set; }
+        public string CCID { get; set; }
+        public string CCName { get; set; }
     }
 }
