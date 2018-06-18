@@ -18,6 +18,9 @@
             border-top-color: #e6e6e6;
             border-right-color: #e6e6e6;
         }
+        a:hover {
+            cursor:pointer;
+        }
         /*右键菜单*/
         .rightmenu {
             position: absolute;
@@ -82,20 +85,22 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="test">
+
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="模板" lay-direction="2">
+                        <a href="javascript:;" lay-tips="测试模板" lay-direction="2">
                             <i class="layui-icon layui-icon-app"></i>
-                            <cite>模板</cite>
+                            <cite>测试模板</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd><a name='a' url="http://www.baidu.com/" url-id="百度一下">百度一下</a></dd>
                             <dd><a name='a' url="/MKTypeWuLiao/Index" url-id="物料类型">物料类型</a></dd>
                         </dl>
                     </li>
+
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a url="javascript:;" lay-tips="解决方案" lay-direction="2">
+                        <a url="javascript:;" lay-tips="外站导航" lay-direction="2">
                             <i class="layui-icon layui-icon-template"></i>
-                            <cite>解决方案</cite>
+                            <cite>外站导航</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd><a name='a' url="https://passport.bilibili.com/" url-id="bilibili">bilibili</a></dd>
@@ -103,6 +108,21 @@
                             <dd><a name='a' url="https://www.huya.com/" url-id="YY">YY</a></dd>
                         </dl>
                     </li>
+
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="审批" lay-direction="2">
+                            <i class="layui-icon layui-icon-survey"></i>
+                            <cite>审批</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a name='a' url="/Approvals/InitiateApprovals" url-id="发起审批">发起审批</a></dd>
+                            <dd><a name='a' url="/Approvals/WaitingMyApprovals" url-id="待我审批的">待我审批的</a></dd>
+                            <dd><a name='a' url="/Approvals/IHaveApprovals" url-id="我已审批的">我已审批的</a></dd>
+                            <dd><a name='a' url="/Approvals/MyInitiateApprovals" url-id="我发起的">我发起的</a></dd>
+                            <dd><a name='a' url="/Approvals/CCMyApprovals" url-id="抄送我的">抄送我的</a></dd>
+                        </dl>
+                    </li>
+
                     <li class="layui-nav-item layui-nav-itemed">
                         <a url="javascript:;" lay-tips="云市场" lay-direction="2">
                             <i class="layui-icon layui-icon-component"></i>
@@ -113,8 +133,8 @@
                             <dd><a name='a' url="/Authority/Grouping" url-id="分组管理">分组管理</a></dd>
                             <dd><a name='a' url="/User/UserManage" url-id="用户管理">用户管理</a></dd>
                         </dl>
-
                     </li>
+
                     <li class="layui-nav-item layui-nav-itemed">
                         <a url="javascript:;" lay-tips="基础数据" lay-direction="2">
                             <i class="layui-icon layui-icon-senior"></i>
@@ -133,6 +153,7 @@
                             <cite>暂留</cite>
                         </a>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -154,23 +175,12 @@
 
         <div class="layui-footer">
             <!-- 底部固定区域 -->
-            © layui.com - 底部固定区域
+            © layui.com  MoonlightGoddess
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
-    <script>
-
-        //调整iframe高度
-        function reinitIframe() {
-            var iframes = document.getElementsByName("iframe");
-            try {
-                for (var i = 0; i < iframes.length; i++)
-                    //iframes[i].height = iframes[i].contentWindow.document.documentElement.scrollHeight;
-                    iframes[i].height = window.screen.height - 320;
-            } catch (ex) { }
-        }
-
+    <script type="text/javascript">
         var $, element;
 
         //添加tab
@@ -195,21 +205,33 @@
         },
 
 
-            //激活并添加tab，供于除本页面以外的所有子页面调用
-            //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
-            activeTab = (id, title, url) => {
-                var isHas = false;
-                $.each($(".layui-tab-title li"), function () {
-                    if ($(this).attr("lay-id") === title) {
-                        isHas = true;
-                        return;
-                    }
-                })
-                if (!isHas) {
-                    addTab(id, title, url);
+        //激活并添加tab，供于除本页面以外的所有子页面调用
+        //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+        activeTab = (id, title, url) => {
+            var isHas = false;
+            $.each($(".layui-tab-title li"), function () {
+                if ($(this).attr("lay-id") === title) {
+                    isHas = true;
+                    return;
                 }
-                element.tabChange('homeContentTabs', id);
+            })
+            if (!isHas) {
+                addTab(id, title, url);
             }
+            element.tabChange('homeContentTabs', id);
+        }
+
+
+        //调整iframe高度
+        function reinitIframe() {
+            var iframes = document.getElementsByName("iframe");
+            try {
+                for (var i = 0; i < iframes.length; i++)
+                    //iframes[i].height = iframes[i].contentWindow.document.documentElement.scrollHeight;
+                    iframes[i].height = window.screen.height - 320;
+            } catch (ex) { }
+        }
+
 
         //绑定右键菜单
         function CustomRightClick(id) {
@@ -236,34 +258,33 @@
         window.setInterval("reinitIframe()", 200);
         //layui.use代码区域
         layui.use(['element', 'layer'], function () {
-            $ = layui.jquery,
-                element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-
-            //触发事件
+            //Tab的切换功能，切换事件监听等，需要依赖element模块
+            $ = layui.jquery, element = layui.element; 
+            //tab触发事件
             var active = {
+                //添加指定Tab项
                 tabAdd: function (id, title, url) {
                     addTab(id, title, url);
                 },
+                 //删除指定Tab项
                 tabDelete: function (index) {
-                    //删除指定Tab项
-                    element.tabDelete('homeContentTabs', index); //删除（注意序号是从0开始计算）
+                    element.tabDelete('homeContentTabs', index); 
                 },
+                //切换到指定Tab项
                 tabChange: function (index) {
-                    //切换到指定Tab项
-                    element.tabChange('homeContentTabs', index); //切换（注意序号是从0开始计算）
+                    element.tabChange('homeContentTabs', index); 
                 }, 
+                 //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
                 tabDeleteAll : function (ids) {
                     $.each(ids, function (i, item) {
-                        element.tabDelete("homeContentTabs", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                        element.tabDelete("homeContentTabs", item);
                     })
                 }
             };
 
-            /**
-            * 注册tab右键菜单点击事件
-            */
-            $(".rightmenu li").click(function () {
 
+            //注册tab右键菜单点击事件
+            $(".rightmenu li").click(function () {
                 //右键菜单中的选项被点击之后，判断type的类型，决定关闭所有还是关闭当前。
                 if ($(this).attr("data-type") == "closethis") {
                     //如果关闭当前，即根据显示右键菜单时所绑定的id，执行tabDelete
@@ -278,15 +299,18 @@
                     //如果关闭所有 ，即将所有的lay-id放进数组，执行tabDeleteAll
                     active.tabDeleteAll(ids);
                 }
-
-                $('.rightmenu').hide(); //最后再隐藏右键菜单
+                //最后再隐藏右键菜单
+                $('.rightmenu').hide(); 
             })
+
             
             // 点击空白处关闭右键弹窗
             $(document).click(function () {
                 $('.rightmenu').hide();
             })
-            
+
+
+            //菜单栏点击事件处理
             $("a[name='a']").on("click", function () {
                 var menu = $(this);
                 var isHas = false;
@@ -303,6 +327,8 @@
                 active.tabChange(menu.text());
             });
 
+
+            //退出系统
             $("#exit").on("click", function () {
                 layer.confirm('确认是否退出系统？', {
                     title: "退出系统",

@@ -153,6 +153,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attribute\MKExceptionFilterAttribute.cs" />
+    <Compile Include="Controllers\Approved\ApprovalsController.cs" />
     <Compile Include="Controllers\AuthorityInfo\AuthorityController.cs" />
     <Compile Include="Controllers\AuthorityInfo\From\GroupInfoManageController.cs" />
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
@@ -464,6 +465,11 @@
     <Content Include="Views\User\Form\FormInfoUser.cshtml" />
     <Content Include="Views\User\QueryForm\QueryFormInfoUser.cshtml" />
     <Content Include="Views\Authority\Form\FormFunctionManagement.cshtml" />
+    <Content Include="Views\Approvals\InitiateApprovals.cshtml" />
+    <Content Include="Views\Approvals\WaitingMyApprovals.cshtml" />
+    <Content Include="Views\Approvals\IHaveApprovals.cshtml" />
+    <Content Include="Views\Approvals\MyInitiateApprovals.cshtml" />
+    <Content Include="Views\Approvals\CCMyApprovals.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
