@@ -136,5 +136,19 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             }
            
         }
+        [HttpPost]
+        public JsonResult SelectFunctionList(MK_Type_FunctionList model)
+        {
+            var jsonResult = ServiceContent<MK_Type_FunctionList>.Select(model, "MK_Type_FunctionList", "SelectFunctionList");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateFunctionListStatus(MK_Type_FunctionList model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Type_FunctionList>.AjaxSIDU(model, "MK_Type_FunctionList", "UpdateFunctionListStatus");
+            return Json(jsonResult);
+        }
     }
 }

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Type_FunctionList>
+
+  <sql name="SelectFunctionList">
+    SELECT ft.ID AS ID,fs.FeaturesName AS FeaturesName,ft.Status AS Status,ft.CreateUser AS CreateUser,ft.CreateDate AS CreateDate
+    FROM dbo.MK_Type_FunctionList AS ft
+    INNER JOIN dbo.MK_Info_Features AS fs
+    ON ft.FeaturesID=fs.ID
+    WHERE ft.PowerAllotID=@PowerAllotID
+    AND ft.ShowMark='Y'
+    ORDER BY ft.CreateDate DESC
+  </sql>
+
+  <sql name="UpdateFunctionListStatus">
+    UPDATE dbo.MK_Type_FunctionList 
+    SET Status=@Status,CreateUser=@CreateUser 
+    WHERE ID=@ID 
+    AND ShowMark='Y'
+  </sql>
+  
+</MK_Type_FunctionList>

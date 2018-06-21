@@ -50,6 +50,7 @@
     <Compile Include="EntityModels\MK_Info_User.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiuCompany.cs" />
+    <Compile Include="EntityModels\MK_Type_FunctionList.cs" />
     <Compile Include="EntityModels\MK_Type_Power.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiuYeWu.cs" />

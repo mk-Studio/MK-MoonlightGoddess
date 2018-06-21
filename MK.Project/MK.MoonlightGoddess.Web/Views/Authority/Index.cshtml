@@ -105,22 +105,46 @@
             });
 
             //功能操作
-
             function setupFunction(id)
             {
                 table.render({
                     elem: '#tbFunction'
-                    , url: '' //数据接口
-                    , where: { model: { PowerGroupID: id } }
+                    , url: '/Authority/SelectFunctionList' //数据接口
+                    , where: { model: { PowerAllotID: id } }
                     , method: 'post'
                     , page: true //开启分页
                     , cols: [[ //表头
-                        { field: 'PowerName', title: '名称', width: 150, sort: true, align: 'center',fixed: 'left' }
-                        , { field: 'edit', title: '操作', width: 165, align: 'center', toolbar: '#barDemo' }
+                        { title: '序号', type: 'numbers' }
+                        , { field: 'FeaturesName', title: '功能名称',width: 160, sort: true, align: 'center',}
+                        , { field: 'Status', title: '状态', width: 165, templet: '#switchTpl', align: 'center', unresize: true }
                     ]]
                 });
             };
-
+            //监听功能操作
+            form.on('switch(StatusDemo)', function (obj) {
+                var url = "/Authority/UpdateFunctionListStatus",
+                    data = { ID: this.value, Status: (obj.elem.checked ? "1" : "0") },
+                    prompt
+                if (obj.elem.checked == "0") {
+                    prompt = "取消授权";
+                } else if (obj.elem.checked == "1") {
+                    prompt = "授权";
+                }
+                $.ajax({
+                    url: url,
+                    data:data,
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (r) {
+                        if (!r.IsError) {
+                            layer.msg(prompt + '成功！', { icon: 1 });
+                        } else if (r.IsError) {
+                            layer.msg(prompt + '失败！', { icon: 5 });
+                        }
+                    }
+                });
+            });
+            
             //操作监听工具条
             table.on('tool(tbPowerType)', function (obj) {
                 var TakeData = obj.data //获得当前行数据
@@ -164,6 +188,7 @@
                             },
                             success: function () {
                                 setupFunction(TakeData.ID);
+                                
                             }
                         });
                         layer.close(index);
