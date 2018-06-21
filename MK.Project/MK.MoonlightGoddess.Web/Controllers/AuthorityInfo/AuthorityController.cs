@@ -22,6 +22,10 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         {
             return View();
         }
+        public ActionResult MenuManagement()
+        {
+            return View();
+        }
         [HttpPost]
         public JsonResult Select(MK_Type_Power model)
         {

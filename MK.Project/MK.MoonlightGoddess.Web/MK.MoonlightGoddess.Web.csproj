@@ -470,6 +470,7 @@
     <Content Include="Views\Approvals\IHaveApprovals.cshtml" />
     <Content Include="Views\Approvals\MyInitiateApprovals.cshtml" />
     <Content Include="Views\Approvals\CCMyApprovals.cshtml" />
+    <Content Include="Views\Authority\MenuManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
