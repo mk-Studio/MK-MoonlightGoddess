@@ -355,6 +355,7 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_PowerGroup_CreateDate ON dbo.MK_Info_PowerG
 --权限表(菜单)
 CREATE TABLE MK_Type_Power(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	NavigationID  NVARCHAR(36),
 	PowerName  NVARCHAR(30),
 	MenuAddress NVARCHAR(255),
 	ShowMark CHAR(1) DEFAULT 'Y',
@@ -365,6 +366,8 @@ CREATE TABLE MK_Type_Power(
 EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 权限', N'SCHEMA', N'dbo', N'TABLE', N'MK_Type_Power', NULL, NULL
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'权限ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'导航ID', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'NavigationID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'权限名', 'SCHEMA', N'dbo', 'TABLE', N'MK_Type_Power', 'COLUMN', N'PowerName'
 GO
