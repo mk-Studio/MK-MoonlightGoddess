@@ -154,5 +154,14 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = ServiceContent<MK_Type_FunctionList>.AjaxSIDU(model, "MK_Type_FunctionList", "UpdateFunctionListStatus");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult SelectNavigation(MK_Info_Navigationbar model)
+        {
+            var jsonTable = ServiceContent<MK_Info_Navigationbar>.SelectData(model, "MK_Info_Navigationbar", "SelectNavigation");
+            NavigationbarTree textTree = new NavigationbarTree();
+            var jsonResult = textTree.Navigation(jsonTable);
+            return Json(jsonResult);
+        }
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="BaseModel.cs" />
     <Compile Include="DataTableToDBColumnsAttribute.cs" />
     <Compile Include="EntityModels\MK_Info_Currency.cs" />
+    <Compile Include="EntityModels\MK_Info_Navigationbar.cs" />
     <Compile Include="EntityModels\MK_Info_PowerAllot.cs" />
     <Compile Include="EntityModels\MK_Info_PowerGroup.cs" />
     <Compile Include="EntityModels\MK_Info_Supplier.cs" />

@@ -43,7 +43,42 @@
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script>
+        layui.use(['table', 'form', 'tree', 'upload'], function () {
+            var table,  //表格
+                form,  //表单
+                tree, //树形对象
+                SelectData, //表格选中的行对象
+                SelectTreeNode, //选中的树节点对象
+                active;//表上面的按钮事件管理对象
 
+            var table = layui.table
+                , form = layui.form
+                , tree = layui.tree
+                , upload = layui.upload;
+
+            function initTree() {
+                var result;
+                $.ajax({
+                    url: "/Authority/SelectNavigation",
+                    type: "post",
+                    async: false,
+                    dataType: "json",
+                    success: function (r) {
+                        result = r;
+                    }
+                });
+                return result
+            }
+            layui.tree({
+                elem: '#treeMenu' //指定元素
+                , click: function (item) { //点击节点回调
+                    SelectTreeNode = item;
+                    layer.msg(SelectTreeNode.id + ':' + SelectTreeNode.name);
+                    //getTableByTable(id);
+                }
+                , nodes: initTree()
+            });
+        });
     </script>
 </body>
 </html>

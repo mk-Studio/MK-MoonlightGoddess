@@ -46,4 +46,37 @@ namespace MK.MoonlightGoddess.Models.ResultModels
             outList = _root;
         }
     }
+
+    public class NavigationbarTree
+    {
+        public List<LayuiTreeResultModel> result { get; set; }
+        public List<LayuiTreeResultModel> Navigation(System.Data.DataTable data)
+        {
+            List<LayuiTreeResultModel> result = new List<LayuiTreeResultModel>();
+            LayuiTreeResultModel nodes = new LayuiTreeResultModel();
+            nodes.id = "00000000-0000-0000-0000-000000000000";
+            nodes.name = "导航栏";
+            List<LayuiTreeResultModel> outList = null;
+            AddChildren(data, nodes.id, out outList);
+            nodes.children = outList;
+            result.Add(nodes);
+            return result;
+        }
+        public void AddChildren(DataTable data, string pId, out List<LayuiTreeResultModel> outList)
+        {
+            List<LayuiTreeResultModel> _root = new List<LayuiTreeResultModel>();
+            System.Data.DataRow[] nodes = data.Select();
+            foreach (System.Data.DataRow row in nodes)
+            {
+                LayuiTreeResultModel node = new LayuiTreeResultModel();
+                node.id = row["id"].ToString();
+                node.name = row["name"].ToString();
+                List<LayuiTreeResultModel> _outList = null;
+                //AddChildren(data, row["id"].ToString(), out _outList);
+                node.children = _outList;
+                _root.Add(node);
+            }
+            outList = _root;
+        }
+    }
 }
