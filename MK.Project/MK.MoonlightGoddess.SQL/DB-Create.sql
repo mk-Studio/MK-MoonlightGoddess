@@ -480,3 +480,44 @@ EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TAB
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Features', 'COLUMN', N'CreateDate'
 GO
+
+--导航栏
+CREATE TABLE MK_Info_Navigationbar(
+	ID NVARCHAR(36),
+	NavigationName NVARCHAR(36),
+	Tips NVARCHAR(36),
+	Directio NVARCHAR(2) DEFAULT '2',
+	ShowMark CHAR(1) DEFAULT 'Y',
+	CreateUser NVARCHAR(30),
+	CreateDate DATETIME,
+)
+EXEC sp_addextendedproperty N'MS_Description', N'MK_MoonlightGoddess * 导航栏', N'SCHEMA', N'dbo', N'TABLE', N'MK_Info_Navigationbar', NULL, NULL
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'ID【GUID】', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'ID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'导航导航名称', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'NavigationName'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'导航提示', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'Tips'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'导航级', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'Directio'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'显示标识', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'ShowMark'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建人', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'CreateUser'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'创建时间', 'SCHEMA', N'dbo', 'TABLE', N'MK_Info_Navigationbar', 'COLUMN', N'CreateDate'
+GO
+INSERT INTO dbo.MK_Info_Navigationbar
+(
+    ID,
+    NavigationName,
+    Tips,
+    Directio,
+    ShowMark,
+    CreateUser,
+    CreateDate
+)
+VALUES
+(   NEWID(), N'审批', N'审批', N'2', 'Y',  N'mk', GETDATE() )
+,(   NEWID(), N'系统', N'系统', N'2', 'Y',  N'mk', GETDATE() )
+,(   NEWID(), N'基础数据', N'基础数据', N'2', 'Y',  N'mk', GETDATE() )
