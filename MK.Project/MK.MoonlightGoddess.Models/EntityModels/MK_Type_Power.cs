@@ -9,6 +9,11 @@ namespace MK.MoonlightGoddess.Models.EntityModels
     public class MK_Type_Power:BaseModel
     {
         /// <summary>
+        /// 导航ID
+        /// </summary>
+        public string NavigationID { get; set; }
+
+        /// <summary>
         /// 菜单名称
         /// </summary>
         public string PowerName { get; set; }

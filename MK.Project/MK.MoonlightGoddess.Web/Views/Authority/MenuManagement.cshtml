@@ -36,7 +36,7 @@
                 </div>
                 <hr />
 
-                <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
+                <table class="layui-hide" id="tbPower" lay-filter="tbPower"></table>
             </div>
         </div>
     </div>
@@ -56,6 +56,23 @@
                 , tree = layui.tree
                 , upload = layui.upload;
 
+            var getTableByTable = function (id) {
+                table.render({
+                    elem: '#tbPower'
+                    , url: '/Authority/SelectPower' //数据接口
+                    , where: { model: { id: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { title: '序号', type: 'numbers' }
+                        , { field: 'PowerName', title: '菜单名称', width: 150, align: 'center', sort: true }
+                        , { field: 'Notes', title: '备注', align: 'center', width: 140 }
+                        , { field: 'Status', title: '权限', width: 100, align: 'center' }
+                        , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
+                    ]]
+                });
+            };
+
             function initTree() {
                 var result;
                 $.ajax({
@@ -73,11 +90,16 @@
                 elem: '#treeMenu' //指定元素
                 , click: function (item) { //点击节点回调
                     SelectTreeNode = item;
-                    layer.msg(SelectTreeNode.id + ':' + SelectTreeNode.name);
-                    //getTableByTable(id);
+                    getTableByTable(SelectTreeNode.id);
                 }
                 , nodes: initTree()
             });
+            active = {
+                add: function () {
+                    var title = 'Insert';
+
+                }
+            }
         });
     </script>
 </body>

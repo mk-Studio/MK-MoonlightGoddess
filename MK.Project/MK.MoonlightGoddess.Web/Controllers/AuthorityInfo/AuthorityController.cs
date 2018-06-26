@@ -163,5 +163,11 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = textTree.Navigation(jsonTable);
             return Json(jsonResult);
         }
+
+        public JsonResult SelectPower(MK_Type_Power model)
+        {
+            var jsonResult = ServiceContent<MK_Type_Power>.Select(model, "MK_Type_Power", "SelectPower");
+            return Json(jsonResult);
+        }
     }
 }
