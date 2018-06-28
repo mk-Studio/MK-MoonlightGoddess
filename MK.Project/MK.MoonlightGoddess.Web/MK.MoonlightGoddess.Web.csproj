@@ -156,6 +156,7 @@
     <Compile Include="Controllers\Approved\ApprovalsController.cs" />
     <Compile Include="Controllers\AuthorityInfo\AuthorityController.cs" />
     <Compile Include="Controllers\AuthorityInfo\From\GroupInfoManageController.cs" />
+    <Compile Include="Controllers\AuthorityInfo\PowerForm\PowerInfoManageController.cs" />
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\Form\FormDataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
@@ -471,12 +472,15 @@
     <Content Include="Views\Approvals\MyInitiateApprovals.cshtml" />
     <Content Include="Views\Approvals\CCMyApprovals.cshtml" />
     <Content Include="Views\Authority\MenuManagement.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormAddPower.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormEditPower.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\DataDictionary\" />
     <Folder Include="Views\GroupInfoManage\" />
+    <Folder Include="Views\PowerInfoManage\" />
     <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formeditPower" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="EditPowerName" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input" id="editPowerName">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="EditPowerMenuAddress" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" id="editPowerMenuAddress">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="EditNotes" class="layui-textarea" id="editNotes">无</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="powerEdit">保存</button>
+        </div>
+    </div>
+</form>

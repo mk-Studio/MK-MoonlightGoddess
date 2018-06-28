@@ -25,25 +25,25 @@
             <div class="layui-col-lg10">
                 <div class="layui-btn-group">
                     <button class="layui-btn layui-btn-sm " data-type="add">
-                        <i class="layui-icon">&#xe654;</i>新增
-                    </button>
-                    <button class="layui-btn layui-btn-sm" data-type="edit">
-                        <i class="layui-icon">&#xe642;</i>编辑
-                    </button>
-                    <button class="layui-btn layui-btn-sm" data-type="del">
-                        <i class="layui-icon">&#xe640;</i>删除
+                        <i class="layui-icon">&#xe654;</i>新增菜单
                     </button>
                 </div>
                 <hr />
-
                 <table class="layui-hide" id="tbPower" lay-filter="tbPower"></table>
+                <script type="text/html" id="barDemo">
+                    <a class="layui-btn layui-btn-xs" lay-event="gnedit">功能设置</a>
+                </script>
+                <script type="text/html" id="barCz">
+                    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+                </script>
             </div>
         </div>
     </div>
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script>
-        layui.use(['table', 'form', 'tree', 'upload'], function () {
+        layui.use(['table', 'form', 'tree', 'upload','jquery'], function () {
             var table,  //表格
                 form,  //表单
                 tree, //树形对象
@@ -54,7 +54,8 @@
             var table = layui.table
                 , form = layui.form
                 , tree = layui.tree
-                , upload = layui.upload;
+                , upload = layui.upload
+                , $ = layui.$;
 
             var getTableByTable = function (id) {
                 table.render({
@@ -66,13 +67,14 @@
                     , cols: [[ //表头
                         { title: '序号', type: 'numbers' }
                         , { field: 'PowerName', title: '菜单名称', width: 150, align: 'center', sort: true }
+                        , { field: 'MenuAddress', title: '地址', width: 180, align: 'center' }
                         , { field: 'Notes', title: '备注', align: 'center', width: 140 }
-                        , { field: 'Status', title: '权限', width: 100, align: 'center' }
                         , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
+                        , { field: 'cz', title: '功能', width: 165, align: 'center', toolbar: '#barCz' }
                     ]]
                 });
             };
-
+            
             function initTree() {
                 var result;
                 $.ajax({
@@ -97,9 +99,130 @@
             active = {
                 add: function () {
                     var title = 'Insert';
-
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectTreeNode && SelectTreeNode.id != '00000000-0000-0000-0000-000000000000') {
+                        $.post('/PowerInfoManage/AddPower', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '添加菜单',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg("请选择左边分组进行添加");
+                        layer.close(index);
+                    }
                 }
-            }
+            };
+
+            $('.layui-btn-group .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //监听新增提交
+            form.on('submit(powerAdd)', function (data) {
+                $.post('/Authority/InsertPower',
+                    {
+                        NavigationID: SelectTreeNode.id,
+                        PowerName: data.field.AddPowerName,
+                        MenuAddress: data.field.AddPowerMenuAddress,
+                        Notes: data.field.AddNotes
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.closeAll();
+                            layer.msg(r.result, { icon: 1 });
+                            getTableByTable(SelectTreeNode.id);
+                        }
+                    }
+                );
+                return false;
+            });
+
+            //操作监听工具条
+            table.on('tool(tbPower)', function (obj) {
+                SelectData = obj.data //获得当前行数据
+                var layEvent = obj.event //获得 lay-event 对应的值
+                if (layEvent === 'edit') {
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectData) {
+                        $.post('/PowerInfoManage/EditPower', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '编辑',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    $('#editPowerName').val(SelectData.PowerName);
+                                    $('#editPowerMenuAddress').val(SelectData.MenuAddress);
+                                    $('#editNotes').val(SelectData.Notes);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
+                } else if (layEvent==='del') {
+                    layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
+                        $.post('/Authority/DelPower',
+                            { ID: SelectData.ID },
+                            function (r) {
+                                if (r.number === '0') {
+                                    layer.closeAll();
+                                    layer.msg(r.result, { icon: 1 });
+                                    getTableByTable(SelectTreeNode.id);
+                                } else if (r.number = '1') {
+                                    layer.msg(r.result, { icon: 5 });
+                                }
+                            }
+                        );
+                    });
+                }
+            });
+
+            //监听新增提交
+            form.on('submit(powerEdit)', function (data) {
+                $.post('/Authority/UpdatePower',
+                    {
+                        ID: SelectData.ID,
+                        PowerName: data.field.EditPowerName,
+                        MenuAddress: data.field.EditPowerMenuAddress,
+                        Notes: data.field.EditNotes
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.closeAll();
+                            layer.msg(r.result, { icon: 1 });
+                            getTableByTable(SelectTreeNode.id);
+                        }
+                    }
+                );
+                return false;
+            });
+
         });
     </script>
 </body>
