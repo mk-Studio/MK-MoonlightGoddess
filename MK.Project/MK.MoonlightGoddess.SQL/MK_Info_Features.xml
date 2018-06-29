@@ -11,5 +11,20 @@
     EXEC @Number=PR_InsertFunction @PowerID,@FeaturesName, @DataType,@CreateUser,@Prompt output
     select @Prompt AS Result,@Number AS Number
   </sql>
+
+  <sql name="VerificationFeaturesName">
+    SELECT COUNT(*) AS Number FROM dbo.MK_Info_Features WHERE FeaturesName=@FeaturesName AND  ShowMark='Y'
+  </sql>
+  
+  <sql name="Updateunction">
+    UPDATE dbo.MK_Info_Features SET FeaturesName=@FeaturesName,DataType=@DataType WHERE ID=@ID AND ShowMark='Y'
+  </sql>
+
+  <sql name="DelFunction">
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_DelFunction @ID,@Prompt output
+    select @Prompt AS Result,@Number AS Number
+  </sql>
   
 </MK_Info_Features>

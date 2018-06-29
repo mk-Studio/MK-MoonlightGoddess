@@ -226,5 +226,33 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
                 number = jsonResult.Rows[0]["Number"].ToString().Trim()
             });
         }
+
+        [HttpPost]
+        public JsonResult VerificationFeaturesName(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "VerificationFeaturesName");
+            return Json(new { number = Convert.ToInt32(jsonResult.Rows[0]["Number"].ToString().Trim()) });
+        }
+
+        [HttpPost]
+        public JsonResult Updateunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.AjaxSIDU(model, "MK_Info_Features", "Updateunction");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult DelFunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "DelFunction");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
     }
 }

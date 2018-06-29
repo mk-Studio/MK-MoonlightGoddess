@@ -272,7 +272,7 @@
                 }
             });
 
-            //监听新增提交
+            //监听编辑提交
             form.on('submit(powerEdit)', function (data) {
                 $.post('/Authority/UpdatePower',
                     {
@@ -321,12 +321,12 @@
                 var layEvent = obj.event //获得 lay-event 对应的值
                 if (layEvent === 'edit') {
                     var index = layer.load(1, { shade: false });//加载
-                    if (SelectData) {
-                        $.post('/PowerInfoManage/EditPower', {}, function (str) {
+                    if (SelectFunctionData) {
+                        $.post('/PowerInfoManage/EditFunction', {}, function (str) {
                             layer.open({
                                 type: 1,
                                 title: '编辑',
-                                area: ['731px', '400px'],
+                                area: ['731px', '360px'],
                                 content: str, //注意，如果str是object，那么需要字符拼接。
                                 cancel: function () {
                                     //右上角关闭回调
@@ -334,9 +334,8 @@
                                     //return false 开启该代码可禁止点击该按钮关闭
                                 },
                                 success: function () {
-                                    $('#editPowerName').val(SelectData.PowerName);
-                                    $('#editPowerMenuAddress').val(SelectData.MenuAddress);
-                                    $('#editNotes').val(SelectData.Notes);
+                                    $('#editFunctionName').val(SelectFunctionData.FeaturesName);
+                                    $('#editFunctionDataType').val(SelectFunctionData.DataType);
                                 }
                             });
                             layer.close(index);
@@ -349,13 +348,12 @@
                     }
                 } else if (layEvent === 'del') {
                     layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
-                        $.post('/Authority/DelPower',
-                            { ID: SelectData.ID },
+                        $.post('/Authority/DelFunction',
+                            { ID: SelectFunctionData.ID },
                             function (r) {
                                 if (r.number === '0') {
-                                    layer.closeAll();
                                     layer.msg(r.result, { icon: 1 });
-                                    getTableByTable(SelectTreeNode.id);
+                                    getFunction(SelectData.ID);
                                 } else if (r.number = '1') {
                                     layer.msg(r.result, { icon: 5 });
                                 }
@@ -365,6 +363,39 @@
                 } 
             });
 
+            //监听编辑提交验证（功能）
+            form.on('submit(FunctionEdit)', function (data) {
+                var ID = SelectFunctionData.ID
+                    , FeaturesName = data.field.EditFunctionName
+                    , DataType = data.field.EditFunctionDataType;
+                $.post('/Authority/VerificationFeaturesName',
+                    { FeaturesName },
+                    function (r) {
+                        if (r.number > 0) {
+                            layer.msg('功能名称已存在！', { icon: 5 });
+                        } else if (r.number === 0) {
+                            updateFunction(ID, FeaturesName, DataType);
+                        }
+                    }
+                );
+                return false;
+            });
+
+             //监听编辑提交（功能）
+            function updateFunction(ID, FeaturesName, DataType) {
+                $.post('/Authority/Updateunction',
+                    { ID, FeaturesName, DataType },
+                    function (r) {
+                        if (!r.IsError) {
+                            layer.close(layer.index);
+                            layer.msg('编辑成功！', { icon: 1 });
+                            getFunction(SelectData.ID);
+                        } else if (r.IsError)  {
+                            layer.msg('编辑失败！', { icon: 5 });
+                        }
+                    }
+                );
+            }
         });
     </script>
 </body>
