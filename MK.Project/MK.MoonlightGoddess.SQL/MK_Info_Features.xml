@@ -1,8 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <MK_Info_Features>
   <sql name="SelectFeatures">
-    SELECT fs.ID AS id, fs.PowerID AS powerid, fs.FeaturesName AS name ,fs.DataType AS dataType
-    FROM dbo.MK_Info_Features AS fs
-    WHERE powerid=@PowerID AND  fs.ShowMark='Y'
+    SELECT * FROM dbo.MK_Info_Features  WHERE PowerID=@PowerID AND  ShowMark='Y'
   </sql>
+
+  <sql name="InsertFunction">
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_InsertFunction @PowerID,@FeaturesName, @DataType,@CreateUser,@Prompt output
+    select @Prompt AS Result,@Number AS Number
+  </sql>
+  
 </MK_Info_Features>

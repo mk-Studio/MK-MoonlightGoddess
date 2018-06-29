@@ -214,5 +214,17 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             var jsonResult = ServiceContent<MK_Info_Features>.Select(model, "MK_Info_Features", "SelectFeatures");
             return Json(jsonResult);
         }
+
+        [HttpPost]
+        public JsonResult InsertFunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "InsertFunction");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
     }
 }

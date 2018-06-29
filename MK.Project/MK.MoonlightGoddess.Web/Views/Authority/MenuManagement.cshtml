@@ -50,8 +50,7 @@
                 SelectData, //表格选中的行对象
                 SelectFunctionData, //表格选中的行对象(功能)
                 SelectTreeNode, //选中的树节点对象
-                active,//表上面的按钮事件管理对象
-                Functionactive;//表上面的按钮事件管理对象(功能)
+                active//表上面的按钮事件管理对象
 
             var table = layui.table
                 , form = layui.form
@@ -87,8 +86,8 @@
                     , page: true //开启分页
                     , cols: [[ //表头
                         { title: '序号', type: 'numbers' }
-                        , { field: 'name', title: '功能名称', width: 160, sort: true, align: 'center', }
-                        , { field: 'dataType', title: '功能类型', width: 160, align: 'center', }
+                        , { field: 'FeaturesName', title: '功能名称', width: 160, sort: true, align: 'center', }
+                        , { field: 'DataType', title: '功能类型', width: 160, align: 'center', }
                         , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
                     ]]
                 });
@@ -218,6 +217,7 @@
                         );
                     });
                 } else if (layEvent === 'gnedit') {
+                    var title = this;
                     var index = layer.load(1, { shade: false });//加载
                     if (SelectData) {
                         $.post('/PowerInfoManage/FunctionOperation', {}, function (str) {
@@ -226,6 +226,32 @@
                                 title: '功能操作【' + SelectData.PowerName + '】',
                                 area: ['731px', '400px'],
                                 content: str, //注意，如果str是object，那么需要字符拼接。
+                                btn: ['添加功能', '关闭'] //只是为了演示
+                                , yes: function () {
+                                    $(function () {
+                                        var title = 'InsertFunction';
+                                        var index = layer.load(1, { shade: false });//加载
+                                        if (SelectData) {
+                                            $.post('/PowerInfoManage/AddFunction', {}, function (str) {
+                                                layer.open({
+                                                    type: 1,
+                                                    title: '添加功能',
+                                                    area: ['731px', '360px'],
+                                                    content: str, //注意，如果str是object，那么需要字符拼接。
+                                                    cancel: function () {
+                                                        layer.close(layer.index); 
+                                                    }
+                                                });
+                                                layer.close(index);
+                                                //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                                                form.render();
+                                            });
+                                        } else {
+                                            layer.msg("请先选择菜单");
+                                            layer.close(index);
+                                        }
+                                    });
+                                },
                                 cancel: function () {
                                     //右上角关闭回调
                                     //layer.msg("关闭啦~");
@@ -266,6 +292,77 @@
                     }
                 );
                 return false;
+            });
+
+            //监听新增提交(功能)
+            form.on('submit(FunctionAdd)', function (data) {
+                $.post('/Authority/InsertFunction',
+                    {
+                        PowerID: SelectData.ID,
+                        FeaturesName: data.field.AddFunctionName,
+                        DataType: data.field.AddFunctionDataType,
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.close(layer.index); 
+                            layer.msg(r.result, { icon: 1 });
+                            getFunction(SelectData.ID);
+                        }
+                    }
+                );
+                return false;
+            });
+
+            //操作监听工具条(功能)
+            table.on('tool(tbFunctionOperation)', function (obj) {
+                SelectFunctionData = obj.data //获得当前行数据
+                var layEvent = obj.event //获得 lay-event 对应的值
+                if (layEvent === 'edit') {
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectData) {
+                        $.post('/PowerInfoManage/EditPower', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '编辑',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    $('#editPowerName').val(SelectData.PowerName);
+                                    $('#editPowerMenuAddress').val(SelectData.MenuAddress);
+                                    $('#editNotes').val(SelectData.Notes);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
+                } else if (layEvent === 'del') {
+                    layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
+                        $.post('/Authority/DelPower',
+                            { ID: SelectData.ID },
+                            function (r) {
+                                if (r.number === '0') {
+                                    layer.closeAll();
+                                    layer.msg(r.result, { icon: 1 });
+                                    getTableByTable(SelectTreeNode.id);
+                                } else if (r.number = '1') {
+                                    layer.msg(r.result, { icon: 5 });
+                                }
+                            }
+                        );
+                    });
+                } 
             });
 
         });

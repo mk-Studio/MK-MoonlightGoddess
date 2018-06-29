@@ -23,5 +23,15 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo.PowerForm
         {
             return View("../Authority/PowerForm/FormFunctionalOperation");
         }
+
+        public ActionResult AddFunction()
+        {
+            return View("../Authority/PowerForm/FormAddFunction");
+        }
+
+        public ActionResult EditFunction()
+        {
+            return View("../Authority/PowerForm/FormEditFunction");
+        }
     }
 }
