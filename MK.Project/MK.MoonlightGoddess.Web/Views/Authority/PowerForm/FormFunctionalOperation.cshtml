@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<div class="layui-col-lg10">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-sm " data-type="addFunction">
+            <i class="layui-icon">&#xe654;</i>新增功能
+        </button>
+    </div>
+    <hr />
+    <table class="layui-hide" id="tbFunctionOperation" lay-filter="tbFunctionOperation"></table>
+    <script type="text/html" id="barCz">
+        <a class="layui-btn layui-btn-xs" lay-event="editFunction">编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="delFunction">删除</a>
+    </script>
+</div>
+

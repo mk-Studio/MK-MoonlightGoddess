@@ -1,0 +1,26 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formAddFunction" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">功能名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="AddFunctionName" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">功能类型</label>
+        <div class="layui-input-block">
+            <input type="text" name="AddFunctionDataType" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="FunctionAdd">保存</button>
+        </div>
+    </div>
+</form>

@@ -207,5 +207,12 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
                 number = jsonResult.Rows[0]["Number"].ToString().Trim()
             });
         }
+
+        [HttpPost]
+        public JsonResult SelectFeatures(MK_Info_Features model)
+        {
+            var jsonResult = ServiceContent<MK_Info_Features>.Select(model, "MK_Info_Features", "SelectFeatures");
+            return Json(jsonResult);
+        }
     }
 }

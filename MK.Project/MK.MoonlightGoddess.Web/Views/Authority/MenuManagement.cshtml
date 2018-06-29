@@ -48,8 +48,10 @@
                 form,  //表单
                 tree, //树形对象
                 SelectData, //表格选中的行对象
+                SelectFunctionData, //表格选中的行对象(功能)
                 SelectTreeNode, //选中的树节点对象
-                active;//表上面的按钮事件管理对象
+                active,//表上面的按钮事件管理对象
+                Functionactive;//表上面的按钮事件管理对象(功能)
 
             var table = layui.table
                 , form = layui.form
@@ -70,6 +72,23 @@
                         , { field: 'MenuAddress', title: '地址', width: 240, align: 'center' }
                         , { field: 'Notes', title: '备注', align: 'center', width: 180 }
                         , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
+                        , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
+                    ]]
+                });
+            };
+
+            //功能操作
+            function getFunction(id) {
+                table.render({
+                    elem: '#tbFunctionOperation'
+                    , url: '/Authority/SelectFeatures' //数据接口
+                    , where: { model: { PowerID: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { title: '序号', type: 'numbers' }
+                        , { field: 'name', title: '功能名称', width: 160, sort: true, align: 'center', }
+                        , { field: 'dataType', title: '功能类型', width: 160, align: 'center', }
                         , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
                     ]]
                 });
@@ -183,7 +202,7 @@
                         layer.msg('请选择数据进行编辑');
                         layer.close(index);
                     }
-                } else if (layEvent==='del') {
+                } else if (layEvent === 'del') {
                     layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
                         $.post('/Authority/DelPower',
                             { ID: SelectData.ID },
@@ -198,6 +217,32 @@
                             }
                         );
                     });
+                } else if (layEvent === 'gnedit') {
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectData) {
+                        $.post('/PowerInfoManage/FunctionOperation', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '功能操作【' + SelectData.PowerName + '】',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    getFunction(SelectData.ID);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
                 }
             });
 

@@ -474,6 +474,9 @@
     <Content Include="Views\Authority\MenuManagement.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormAddPower.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormEditPower.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormFunctionalOperation.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormAddFunction.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormEditFunction.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

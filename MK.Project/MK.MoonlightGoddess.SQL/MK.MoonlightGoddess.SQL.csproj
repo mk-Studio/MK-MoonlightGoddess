@@ -59,6 +59,7 @@
     </Content>
     <Content Include="DB-Create.sql" />
     <Content Include="MK_Info_Authority.xml" />
+    <Content Include="MK_Info_Features.xml" />
     <Content Include="MK_Info_Navigationbar.xml" />
     <Content Include="MK_Info_PowerAllot.xml">
       <SubType>Designer</SubType>

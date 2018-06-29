@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_Features>
+  <sql name="SelectFeatures">
+    SELECT fs.ID AS id, fs.PowerID AS powerid, fs.FeaturesName AS name ,fs.DataType AS dataType
+    FROM dbo.MK_Info_Features AS fs
+    WHERE powerid=@PowerID AND  fs.ShowMark='Y'
+  </sql>
+</MK_Info_Features>
