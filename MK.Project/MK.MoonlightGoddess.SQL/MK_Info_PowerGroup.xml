@@ -8,7 +8,7 @@
   </sql>
 
   <sql name="selectGroupNameRow">
-    SELECT COUNT(*) AS Number FROM dbo.MK_Info_PowerGroup WHERE  PowerGroupName=@PowerGroupName AND ShowMark='Y'
+    SELECT COUNT(*) AS Number FROM dbo.MK_Info_PowerGroup WHERE ID NOT IN (@ID)  PowerGroupName=@PowerGroupName AND ShowMark='Y'
   </sql>
   <sql name="UpdateGroupInfo">
     UPDATE dbo.MK_Info_PowerGroup
