@@ -3,7 +3,7 @@
 <MK_Info_Authority>
   
   <sql name="SelectAuthority">
-    SELECT * FROM MK_Type_Power WHERE ShowMark = 'Y'
+    SELECT * FROM MK_Type_Power WHERE ShowMark = 'Y' ORDER BY CreateDate DESC
   </sql>
   
 </MK_Info_Authority>

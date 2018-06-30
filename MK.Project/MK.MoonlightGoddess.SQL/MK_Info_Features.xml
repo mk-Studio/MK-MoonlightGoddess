@@ -2,7 +2,7 @@
 
 <MK_Info_Features>
   <sql name="SelectFeatures">
-    SELECT * FROM dbo.MK_Info_Features  WHERE PowerID=@PowerID AND  ShowMark='Y'
+    SELECT * FROM dbo.MK_Info_Features  WHERE PowerID=@PowerID AND  ShowMark='Y' ORDER BY CreateDate DESC
   </sql>
 
   <sql name="InsertFunction">

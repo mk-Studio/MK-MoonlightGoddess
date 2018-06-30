@@ -4,7 +4,7 @@
 
   <!--权限组-->
   <sql name="SelectPowerGroupTree">
-    select ID as id ,OnID as onid, PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'
+    select ID as id ,OnID as onid, PowerGroupName as name from MK_Info_PowerGroup  where ShowMark='Y'  ORDER BY CreateDate DESC
   </sql>
 
   <sql name="selectGroupNameRow">
