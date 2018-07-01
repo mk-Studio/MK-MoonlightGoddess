@@ -6,38 +6,38 @@ using System.Web.Mvc;
 
 namespace MK.MoonlightGoddess.Web.Controllers.Approved
 {
-    public class ApprovalsController : Controller
+    public class ApprovalsController : VerifyLoginController
     {
         // GET: Approvals
         
         // 发起审批
         public ActionResult InitiateApprovals()
         {
-            return View("../Approvals/InitiateApprovals");
+            return View();
         }
 
         // 待我审批的
         public ActionResult WaitingMyApprovals()
         {
-            return View("../Approvals/WaitingMyApprovals");
+            return View();
         }
 
         // 我已审批的
         public ActionResult IHaveApprovals()
         {
-            return View("../Approvals/IHaveApprovals");
+            return View();
         }
 
         // 我发起的
         public ActionResult MyInitiateApprovals()
         {
-            return View("../Approvals/MyInitiateApprovals");
+            return View();
         }
 
         // 抄送我的
         public ActionResult CCMyApprovals()
         {
-            return View("../Approvals/CCMyApprovals");
+            return View();
         }
     }
 }

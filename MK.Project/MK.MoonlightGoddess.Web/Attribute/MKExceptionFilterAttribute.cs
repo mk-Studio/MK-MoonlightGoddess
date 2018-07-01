@@ -32,7 +32,8 @@ namespace MK.MoonlightGoddess.Web.Attribute
             {
                 JsonResult jsonResult = new JsonResult();
                 jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-                jsonResult.Data = new { status = false, code = httpException.GetHttpCode(), message = filterContext.Exception.Message };
+                object data = Models.AjaxResultModel.CreateMessage(true, filterContext.Exception.Message, 500, filterContext.Exception.InnerException);
+                jsonResult.Data = data;
                 filterContext.Result = jsonResult;
             }
             /*---------------------------------------------------------

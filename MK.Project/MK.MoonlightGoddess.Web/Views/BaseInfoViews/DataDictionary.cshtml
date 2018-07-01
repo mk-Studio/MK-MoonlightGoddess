@@ -460,7 +460,7 @@
                             layer.msg('更新成功', { icon: 1 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         } else {
-                            layer.msg('更新失败！请稍后再试', { icon: 5 });
+                            layer.msg('更新失败！请稍后再试。' + r.Msg, { icon: 5 });
                             getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                         }
                     }
@@ -578,7 +578,7 @@
                                         layer.msg("删除成功", { icon: 1 });
                                         getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                                     } else {
-                                        layer.msg('删除异常！', { icon: 5 });
+                                        layer.msg('删除异常！'+ r.Msg, { icon: 5 });
                                     }
                                 }
                             );
@@ -643,7 +643,7 @@
                                     getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                                 } else {
                                     layer.closeAll();
-                                    layer.msg('保存异常！', { icon: 5 });
+                                    layer.msg('保存异常！' + r.Msg, { icon: 5 });
                                 }
                             }
                         );
@@ -674,7 +674,7 @@
                                     getTabelByUrl(SelectTreeNode.tbUrl, SelectTreeNode.tbCols);
                                 } else {
                                     layer.closeAll();
-                                    layer.msg('保存异常！', { icon: 5 });
+                                    layer.msg('保存异常！' + r.Msg, { icon: 5 });
                                 }
                             }
                         );
