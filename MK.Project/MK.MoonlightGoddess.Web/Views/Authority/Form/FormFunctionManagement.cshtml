@@ -1,16 +1,12 @@
 ﻿
 @{
-                /**/
-
-                Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
 
 <table class="layui-hide" id="tbFunction" lay-filter="tbFunction"></table>
 
-<div class="layui-form-item">
-    <div class="layui-input-block">
-        <button class="layui-btn" lay-submit lay-filter="function">保存</button>
-    </div>
-</div>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="Status" value="{{d.ID}}" lay-skin="switch" lay-text="授权|无权" lay-filter="StatusDemo" {{ d.Status == 1 ? 'checked' : '' }}>
+</script>

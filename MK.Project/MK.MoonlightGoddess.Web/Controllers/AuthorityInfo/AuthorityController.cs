@@ -22,6 +22,10 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         {
             return View();
         }
+        public ActionResult MenuManagement()
+        {
+            return View();
+        }
         [HttpPost]
         public JsonResult Select(MK_Type_Power model)
         {
@@ -46,7 +50,7 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
-        public JsonResult UpdateStatus(MK_Info_PowerAllot model,string Status)
+        public JsonResult UpdateStatus(MK_Info_PowerAllot model, string Status)
         {
             model.Status = Status;
             model.CreateUser = CurrAccount.UserName;
@@ -54,14 +58,14 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
             List<MK_Info_PowerAllot> listSp = new List<MK_Info_PowerAllot>();
             MK_Info_PowerAllot newObj = new MK_Info_PowerAllot()
             {
-                ID= Guid.NewGuid().ToString().ToUpper(),
+                ID = Guid.NewGuid().ToString().ToUpper(),
                 Status = Status,
-                CreateUser= CurrAccount.UserName,
-                CreateDate= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                CreateUser = CurrAccount.UserName,
+                CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
             listSp.Add(newObj);
             var BoolResult = ServiceContent<MK_Info_PowerAllot>.SelectSIDU(model, "MK_Info_PowerAllot", "UpdateStatus");
-            return BoolResult? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
+            return BoolResult ? Json(AjaxResultModel.CreateMessage((!BoolResult), "ssuccess", 1, BoolResult))
                     : Json(AjaxResultModel.CreateMessage((!BoolResult), "error", -1, BoolResult));
         }
 
@@ -84,7 +88,8 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
-        public JsonResult SelectAccredit(MK_Info_PowerAllot model) {
+        public JsonResult SelectAccredit(MK_Info_PowerAllot model)
+        {
             var jsonResult = ServiceContent<MK_Info_PowerAllot>.Select(model, "MK_Info_PowerAllot", "SelectAccredit");
             return Json(jsonResult);
         }
@@ -93,7 +98,7 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         public JsonResult InsertGroupInfo(MK_Info_PowerGroup model)
         {
             model.CreateUser = CurrAccount.UserName;
-            var  jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectData(model, "MK_Info_PowerGroup","InsertGroupInfo");
+            var jsonResult = ServiceContent<MK_Info_PowerGroup>.SelectData(model, "MK_Info_PowerGroup", "InsertGroupInfo");
             return Json(new
             {
                 result = jsonResult.Rows[0]["Result"].ToString().Trim(),
@@ -115,7 +120,7 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         [HttpPost]
         public JsonResult EditGroupInfo(MK_Info_PowerGroup model)
         {
-            var selectGroupRowCount = ServiceContent<MK_Info_PowerGroup>.SelectData(model,"MK_Info_PowerGroup","selectGroupNameRow");
+            var selectGroupRowCount = ServiceContent<MK_Info_PowerGroup>.SelectData(model, "MK_Info_PowerGroup", "selectGroupNameRow");
             int number = (int)selectGroupRowCount.Rows[0]["Number"];
             if (number > 0)
             {
@@ -134,7 +139,120 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
                 else
                     return Json(new { result = "修改失败", bl = false });
             }
-           
+
+        }
+        [HttpPost]
+        public JsonResult SelectFunctionList(MK_Type_FunctionList model)
+        {
+            var jsonResult = ServiceContent<MK_Type_FunctionList>.Select(model, "MK_Type_FunctionList", "SelectFunctionList");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateFunctionListStatus(MK_Type_FunctionList model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Type_FunctionList>.AjaxSIDU(model, "MK_Type_FunctionList", "UpdateFunctionListStatus");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult SelectNavigation(MK_Info_Navigationbar model)
+        {
+            var jsonTable = ServiceContent<MK_Info_Navigationbar>.SelectData(model, "MK_Info_Navigationbar", "SelectNavigation");
+            NavigationbarTree textTree = new NavigationbarTree();
+            var jsonResult = textTree.Navigation(jsonTable);
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult SelectPower(MK_Type_Power model)
+        {
+            var jsonResult = ServiceContent<MK_Type_Power>.Select(model, "MK_Type_Power", "SelectPower");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult InsertPower(MK_Type_Power model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Type_Power>.SelectData(model, "MK_Type_Power", "InsertPower");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+
+        [HttpPost]
+        public JsonResult UpdatePower(MK_Type_Power model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Type_Power>.SelectData(model, "MK_Type_Power", "UpdatePower");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+
+        [HttpPost]
+        public JsonResult DelPower(MK_Type_Power model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Type_Power>.SelectData(model, "MK_Type_Power", "DelPower");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+
+        [HttpPost]
+        public JsonResult SelectFeatures(MK_Info_Features model)
+        {
+            var jsonResult = ServiceContent<MK_Info_Features>.Select(model, "MK_Info_Features", "SelectFeatures");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult InsertFunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "InsertFunction");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
+        }
+
+        [HttpPost]
+        public JsonResult VerificationFeaturesName(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "VerificationFeaturesName");
+            return Json(new { number = Convert.ToInt32(jsonResult.Rows[0]["Number"].ToString().Trim()) });
+        }
+
+        [HttpPost]
+        public JsonResult Updateunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.AjaxSIDU(model, "MK_Info_Features", "Updateunction");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult DelFunction(MK_Info_Features model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Features>.SelectData(model, "MK_Info_Features", "DelFunction");
+            return Json(new
+            {
+                result = jsonResult.Rows[0]["Result"].ToString().Trim(),
+                number = jsonResult.Rows[0]["Number"].ToString().Trim()
+            });
         }
     }
 }

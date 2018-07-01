@@ -9,12 +9,12 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Grouping</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
 </head>
 <body>
     <div>
         <fieldset class="layui-elem-field layui-field-title">
             <legend>分组管理</legend>
-            <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
         </fieldset>
         <div class="layui-row">
             <div class="layui-col-lg2">
@@ -214,6 +214,7 @@
                 })
                 return false;
             });
+
             function jiazaiTree() {
                 $("#treeTest").empty();
                 layui.tree({

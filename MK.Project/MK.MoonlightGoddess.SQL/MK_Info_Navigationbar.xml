@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_Navigationbar>
+  <sql name="SelectNavigation">
+    SELECT ID AS id,NavigationName AS name FROM dbo.MK_Info_Navigationbar WHERE ShowMark='Y' ORDER BY CreateDate DESC
+  </sql>
+</MK_Info_Navigationbar>

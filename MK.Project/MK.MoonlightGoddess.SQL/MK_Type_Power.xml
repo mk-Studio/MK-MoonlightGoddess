@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<MK_Type_Power>
+  <sql name="SelectPower">
+    SELECT * FROM dbo.MK_Type_Power WHERE NavigationID=@id AND ShowMark='Y' ORDER BY CreateDate DESC
+  </sql>
+
+  <!--新增菜单-->
+  <sql name="InsertPower">
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_insertPower @NavigationID,@PowerName, @MenuAddress,@CreateUser,@Notes,@Prompt output
+    select @Prompt AS Result,@Number AS Number
+  </sql>
+
+  <!--编辑菜单-->
+  <sql name="UpdatePower">
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_UpdatePower @ID,@PowerName, @MenuAddress,@CreateUser,@Notes,@Prompt output
+    select @Prompt AS Result,@Number AS Number
+  </sql>
+
+  <!--删除菜单-->
+  <sql name="DelPower">
+    DECLARE @Prompt NVARCHAR(30)
+    DECLARE @Number INT
+    EXEC @Number=PR_DelPower @ID,@Prompt output
+    select @Prompt AS Result,@Number AS Number
+  </sql>
+</MK_Type_Power>

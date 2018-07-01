@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace MK.MoonlightGoddess.Models.EntityModels
 {
-    public class MK_Type_Power:BaseModel
+    public class MK_Type_FunctionList : BaseModel
     {
         /// <summary>
-        /// 导航ID
+        /// 菜单功能ID 
         /// </summary>
-        public string NavigationID { get; set; }
+        public string FeaturesID { get; set; }
 
         /// <summary>
-        /// 菜单名称
+        /// 权限分配ID
         /// </summary>
-        public string PowerName { get; set; }
+        public string PowerAllotID { get; set; }
 
         /// <summary>
-        /// 菜单地址
+        /// 功能名称
         /// </summary>
-        public string MenuAddress { get; set; }
+        public string FeaturesName { get; set; }
 
         /// <summary>
-        /// 备注
+        /// 权限标识:0-无权限，1-有权限
         /// </summary>
-        public string Notes { get; set; }
+        public string Status { get; set; }
     }
 }

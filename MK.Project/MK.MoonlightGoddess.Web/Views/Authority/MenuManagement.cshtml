@@ -1,0 +1,402 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MenuManagement</title>
+    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>菜单管理</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-lg2">
+                <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+                    <ul id="treeMenu"></ul>
+                </div>
+            </div>
+            <div class="layui-col-lg10">
+                <div class="layui-btn-group">
+                    <button class="layui-btn layui-btn-sm " data-type="add">
+                        <i class="layui-icon">&#xe654;</i>新增菜单
+                    </button>
+                </div>
+                <hr />
+                <table class="layui-hide" id="tbPower" lay-filter="tbPower"></table>
+                <script type="text/html" id="barDemo">
+                    <a class="layui-btn layui-btn-xs" lay-event="gnedit">功能设置</a>
+                </script>
+                <script type="text/html" id="barCz">
+                    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+                </script>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        layui.use(['table', 'form', 'tree', 'upload','jquery'], function () {
+            var table,  //表格
+                form,  //表单
+                tree, //树形对象
+                SelectData, //表格选中的行对象
+                SelectFunctionData, //表格选中的行对象(功能)
+                SelectTreeNode, //选中的树节点对象
+                active//表上面的按钮事件管理对象
+
+            var table = layui.table
+                , form = layui.form
+                , tree = layui.tree
+                , upload = layui.upload
+                , $ = layui.$;
+
+            var getTableByTable = function (id) {
+                table.render({
+                    elem: '#tbPower'
+                    , url: '/Authority/SelectPower' //数据接口
+                    , where: { model: { id: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { title: '序号', type: 'numbers' }
+                        , { field: 'PowerName', title: '菜单名称', width: 150, align: 'center', sort: true }
+                        , { field: 'MenuAddress', title: '地址', width: 240, align: 'center' }
+                        , { field: 'Notes', title: '备注', align: 'center', width: 180 }
+                        , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
+                        , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
+                    ]]
+                });
+            };
+
+            //功能操作
+            function getFunction(id) {
+                table.render({
+                    elem: '#tbFunctionOperation'
+                    , url: '/Authority/SelectFeatures' //数据接口
+                    , where: { model: { PowerID: id } }
+                    , method: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { title: '序号', type: 'numbers' }
+                        , { field: 'FeaturesName', title: '功能名称', width: 160, sort: true, align: 'center', }
+                        , { field: 'DataType', title: '功能类型', width: 160, align: 'center', }
+                        , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
+                    ]]
+                });
+            };
+            
+            function initTree() {
+                var result;
+                $.ajax({
+                    url: "/Authority/SelectNavigation",
+                    type: "post",
+                    async: false,
+                    dataType: "json",
+                    success: function (r) {
+                        result = r;
+                    }
+                });
+                return result
+            }
+            layui.tree({
+                elem: '#treeMenu' //指定元素
+                , click: function (item) { //点击节点回调
+                    SelectTreeNode = item;
+                    getTableByTable(SelectTreeNode.id);
+                }
+                , nodes: initTree()
+            });
+            active = {
+                add: function () {
+                    var title = 'Insert';
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectTreeNode && SelectTreeNode.id != '00000000-0000-0000-0000-000000000000') {
+                        $.post('/PowerInfoManage/AddPower', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '添加菜单',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg("请选择左边分组进行添加");
+                        layer.close(index);
+                    }
+                }
+            };
+
+            $('.layui-btn-group .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //监听新增提交
+            form.on('submit(powerAdd)', function (data) {
+                $.post('/Authority/InsertPower',
+                    {
+                        NavigationID: SelectTreeNode.id,
+                        PowerName: data.field.AddPowerName,
+                        MenuAddress: data.field.AddPowerMenuAddress,
+                        Notes: data.field.AddNotes
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.closeAll();
+                            layer.msg(r.result, { icon: 1 });
+                            getTableByTable(SelectTreeNode.id);
+                        }
+                    }
+                );
+                return false;
+            });
+
+            //操作监听工具条
+            table.on('tool(tbPower)', function (obj) {
+                SelectData = obj.data //获得当前行数据
+                var layEvent = obj.event //获得 lay-event 对应的值
+                if (layEvent === 'edit') {
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectData) {
+                        $.post('/PowerInfoManage/EditPower', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '编辑',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    $('#editPowerName').val(SelectData.PowerName);
+                                    $('#editPowerMenuAddress').val(SelectData.MenuAddress);
+                                    $('#editNotes').val(SelectData.Notes);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
+                } else if (layEvent === 'del') {
+                    layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
+                        $.post('/Authority/DelPower',
+                            { ID: SelectData.ID },
+                            function (r) {
+                                if (r.number === '0') {
+                                    layer.closeAll();
+                                    layer.msg(r.result, { icon: 1 });
+                                    getTableByTable(SelectTreeNode.id);
+                                } else if (r.number = '1') {
+                                    layer.msg(r.result, { icon: 5 });
+                                }
+                            }
+                        );
+                    });
+                } else if (layEvent === 'gnedit') {
+                    var title = this;
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectData) {
+                        $.post('/PowerInfoManage/FunctionOperation', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '功能操作【' + SelectData.PowerName + '】',
+                                area: ['731px', '400px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                btn: ['添加功能', '关闭'] //只是为了演示
+                                , yes: function () {
+                                    $(function () {
+                                        var title = 'InsertFunction';
+                                        var index = layer.load(1, { shade: false });//加载
+                                        if (SelectData) {
+                                            $.post('/PowerInfoManage/AddFunction', {}, function (str) {
+                                                layer.open({
+                                                    type: 1,
+                                                    title: '添加功能',
+                                                    area: ['731px', '360px'],
+                                                    content: str, //注意，如果str是object，那么需要字符拼接。
+                                                    cancel: function () {
+                                                        layer.close(layer.index); 
+                                                    }
+                                                });
+                                                layer.close(index);
+                                                //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                                                form.render();
+                                            });
+                                        } else {
+                                            layer.msg("请先选择菜单");
+                                            layer.close(index);
+                                        }
+                                    });
+                                },
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    getFunction(SelectData.ID);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
+                }
+            });
+
+            //监听编辑提交
+            form.on('submit(powerEdit)', function (data) {
+                $.post('/Authority/UpdatePower',
+                    {
+                        ID: SelectData.ID,
+                        PowerName: data.field.EditPowerName,
+                        MenuAddress: data.field.EditPowerMenuAddress,
+                        Notes: data.field.EditNotes
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.closeAll();
+                            layer.msg(r.result, { icon: 1 });
+                            getTableByTable(SelectTreeNode.id);
+                        }
+                    }
+                );
+                return false;
+            });
+
+            //监听新增提交(功能)
+            form.on('submit(FunctionAdd)', function (data) {
+                $.post('/Authority/InsertFunction',
+                    {
+                        PowerID: SelectData.ID,
+                        FeaturesName: data.field.AddFunctionName,
+                        DataType: data.field.AddFunctionDataType,
+                    },
+                    function (r) {
+                        if (r.number === '1') {
+                            layer.msg(r.result, { icon: 5 });
+                        } else if (r.number === '0') {
+                            layer.close(layer.index); 
+                            layer.msg(r.result, { icon: 1 });
+                            getFunction(SelectData.ID);
+                        }
+                    }
+                );
+                return false;
+            });
+
+            //操作监听工具条(功能)
+            table.on('tool(tbFunctionOperation)', function (obj) {
+                SelectFunctionData = obj.data //获得当前行数据
+                var layEvent = obj.event //获得 lay-event 对应的值
+                if (layEvent === 'edit') {
+                    var index = layer.load(1, { shade: false });//加载
+                    if (SelectFunctionData) {
+                        $.post('/PowerInfoManage/EditFunction', {}, function (str) {
+                            layer.open({
+                                type: 1,
+                                title: '编辑',
+                                area: ['731px', '360px'],
+                                content: str, //注意，如果str是object，那么需要字符拼接。
+                                cancel: function () {
+                                    //右上角关闭回调
+                                    //layer.msg("关闭啦~");
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                },
+                                success: function () {
+                                    $('#editFunctionName').val(SelectFunctionData.FeaturesName);
+                                    $('#editFunctionDataType').val(SelectFunctionData.DataType);
+                                }
+                            });
+                            layer.close(index);
+                            //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
+                            form.render();
+                        });
+                    } else {
+                        layer.msg('请选择数据进行编辑');
+                        layer.close(index);
+                    }
+                } else if (layEvent === 'del') {
+                    layer.confirm('确认删除？', { icon: 3, title: '提示' }, function (index, layero) {
+                        $.post('/Authority/DelFunction',
+                            { ID: SelectFunctionData.ID },
+                            function (r) {
+                                if (r.number === '0') {
+                                    layer.msg(r.result, { icon: 1 });
+                                    getFunction(SelectData.ID);
+                                } else if (r.number = '1') {
+                                    layer.msg(r.result, { icon: 5 });
+                                }
+                            }
+                        );
+                    });
+                } 
+            });
+
+            //监听编辑提交验证（功能）
+            form.on('submit(FunctionEdit)', function (data) {
+                var ID = SelectFunctionData.ID
+                    , FeaturesName = data.field.EditFunctionName
+                    , DataType = data.field.EditFunctionDataType;
+                $.post('/Authority/VerificationFeaturesName',
+                    { FeaturesName },
+                    function (r) {
+                        if (r.number > 0) {
+                            layer.msg('功能名称已存在！', { icon: 5 });
+                        } else if (r.number === 0) {
+                            updateFunction(ID, FeaturesName, DataType);
+                        }
+                    }
+                );
+                return false;
+            });
+
+             //监听编辑提交（功能）
+            function updateFunction(ID, FeaturesName, DataType) {
+                $.post('/Authority/Updateunction',
+                    { ID, FeaturesName, DataType },
+                    function (r) {
+                        if (!r.IsError) {
+                            layer.close(layer.index);
+                            layer.msg('编辑成功！', { icon: 1 });
+                            getFunction(SelectData.ID);
+                        } else if (r.IsError)  {
+                            layer.msg('编辑失败！', { icon: 5 });
+                        }
+                    }
+                );
+            }
+        });
+    </script>
+</body>
+</html>

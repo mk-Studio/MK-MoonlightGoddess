@@ -59,6 +59,8 @@
     </Content>
     <Content Include="DB-Create.sql" />
     <Content Include="MK_Info_Authority.xml" />
+    <Content Include="MK_Info_Features.xml" />
+    <Content Include="MK_Info_Navigationbar.xml" />
     <Content Include="MK_Info_PowerAllot.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -68,6 +70,8 @@
     </Content>
     <Content Include="MK_Info_User.xml" />
     <Content Include="MK_Info_WuLiao.xml" />
+    <Content Include="MK_Type_FunctionList.xml" />
+    <Content Include="MK_Type_Power.xml" />
     <Content Include="MK_Type_WuLiao.xml" />
     <Content Include="VerifyDbData.xml">
       <SubType>Designer</SubType>

@@ -8,6 +8,7 @@
     JOIN dbo.MK_Type_Power AS pr ON pt.PowerID=pr.ID AND pr.ShowMark='Y'
     WHERE pt.PowerGroupID=@PowerGroupID
     AND pt.ShowMark='Y'
+    ORDER BY pt.CreateDate DESC
   </sql>
 
   <sql name="UpdateStatus">
