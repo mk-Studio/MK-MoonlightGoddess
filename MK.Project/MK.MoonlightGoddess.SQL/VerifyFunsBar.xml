@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VerifyFunsBar>
+
+  <sql name="VerifyFunsBar">
+    SELECT a.DataType,a.FeaturesName
+    FROM MK_Info_Features AS a
+    INNER JOIN MK_Type_FunctionList AS b
+    ON b.FeaturesID=a.ID
+    WHERE b.PowerAllotID=(SELECT ID FROM MK_Info_PowerAllot p WHERE p.PowerGroupID = (SELECT PowerGroupID FROM MK_Info_User WHERE UserName = @UserName)AND p.PowerID = @PowerID)
+    AND b.ShowMark='Y' AND a.ShowMark = 'Y' AND b.Status = '1'
+    ORDER BY a.DataType
+  </sql>
+
+</VerifyFunsBar>

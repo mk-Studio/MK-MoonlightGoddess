@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>MKTypeWuLiao</title>
     <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/formSelects-v4.css" rel="stylesheet" />
 </head>
 <body>
     <div id="Content"></div>
@@ -19,6 +20,14 @@
             <label class="layui-form-label">搜索选择框</label>
             <div class="layui-input-inline">
                 <select id="wuliaoType" name="modules" lay-verify="required" lay-search="" lay-filter="wuliaoType"></select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">多选择框</label>
+            <div class="layui-input-inline">
+                <select id="wuliaoType2" name="city" xm-select="selectId" xm-select-height="34px" xm-select-search="">
+                    
+                </select>
             </div>
         </div>
     </form>
@@ -36,6 +45,12 @@
     </fieldset>
     <table class="layui-hide" id="tbWuliaoType" lay-filter="tbWuliaoType"></table>
 
+    <!-- 操作列 -->
+    <script type="text/html" id="auth-state">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Js/MKCom.js"></script>
@@ -44,32 +59,100 @@
 
 
         })
+        layui.config({
+            base: '../Js/'
+        }).extend({
+            formSelects: 'formSelects-v4'
+        })
+        layui.config({
+            base: '../Js/'
+        }).extend({
+            treetable: 'treetable'
+        })
         var
             table,  //表格
             form,  //表单
-            tree //树形对象
-        layui.use(['table', 'form', 'tree'], function () {
+            tree, //树形对象
+            formSelects
+        layui.use(['table', 'form', 'tree', 'treetable','formSelects'], function () {
             table = layui.table; //表格
             form = layui.form;
             tree = layui.tree;
-
-            //执行一个 table 实例
-            table.render({
-                elem: '#tbWuliaoType'
-                , height: 332
-                , url: '/MKTypeWuLiao/Select' //数据接口
-                , method: 'post'
-                , page: true //开启分页
-                , cols: [[ //表头
-                    { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
-                    , { field: 'WuLiaoTypeName', title: '物料类型名称', width: 150 }
-                    , { field: 'ShowMark', title: '显示标识', width: 80, sort: true }
-                    , { field: 'CreateUser', title: '创建人', width: 120 }
-                    , { field: 'CreateDate', title: '创建时间', width: 140 }
-                ]]
+            treetable = layui.treetable;
+            formSelects = layui.formSelects;
+            ////执行一个 table 实例
+            //table.render({
+            //    elem: '#tbWuliaoType'
+            //    , height: 332
+            //    , url: '/MKTypeWuLiao/Select' //数据接口
+            //    , method: 'post'
+            //    , page: true //开启分页
+            //    , cols: [[ //表头
+            //        { field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
+            //        , { field: 'WuLiaoTypeName', title: '物料类型名称', width: 150 }
+            //        , { field: 'ShowMark', title: '显示标识', width: 80, sort: true }
+            //        , { field: 'CreateUser', title: '创建人', width: 120 }
+            //        , { field: 'CreateDate', title: '创建时间', width: 140 }
+            //    ]]
+            //});
+            formSelects.render();
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: -1,
+                treeIdName: 'authorityId',
+                treePidName: 'parentId',
+                elem: '#tbWuliaoType',
+                url: '/Models/menu.json',
+                page: false,
+                cols: [[
+                    { type: 'numbers' },
+                    { field: 'authorityName', minWidth: 200, title: '权限名称' },
+                    { field: 'authority', title: '权限标识' },
+                    { field: 'menuUrl', title: '菜单url' },
+                    { field: 'orderNumber', width: 80, align: 'center', title: '排序号' },
+                    {
+                        field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+                            if (d.isMenu == 1) {
+                                return '<span class="layui-badge layui-bg-gray">按钮</span>';
+                            }
+                            if (d.parentId == -1) {
+                                return '<span class="layui-badge layui-bg-blue">目录</span>';
+                            } else {
+                                return '<span class="layui-badge-rim">菜单</span>';
+                            }
+                        }, title: '类型'
+                    },
+                    { templet: '#auth-state', width: 120, align: 'center', title: '操作' }
+                ]],
+                done: function () {
+                    layer.closeAll('loading');
+                }
             });
 
+            //监听工具条
+            table.on('tool(tbWuliaoType)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值
+                switch (layEvent) {
+                    case "del":
+                        layer.confirm('真的删除行么', function (index) {
+                            console.warn(data);
+                            layer.close(index);
+                            //向服务端发送删除指令
+                        });
+                        break; 
+                    case "edit":
+                        console.info(data);
+                        layer.msg('编辑操作');
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+
             InitCombobox("#wuliaoType", "WuLiaoType", form); //绑定下拉框
+            InitCombobox("#wuliaoType2", "WuLiaoType", formSelects,false); //绑定下拉框
 
             //form
             //监听指定开关
@@ -111,9 +194,9 @@
 
             layui.tree({
                 elem: '#treeTest' //指定元素
-                
+
                 , click: function (item) { //点击节点回调
-                    layer.msg('当前节名称：' + item.name + ' id = ' + item.id+'<br>全部参数：' + JSON.stringify(item));
+                    layer.msg('当前节名称：' + item.name + ' id = ' + item.id + '<br>全部参数：' + JSON.stringify(item));
                     console.log(item);
                 }
                 , nodes: createTree()

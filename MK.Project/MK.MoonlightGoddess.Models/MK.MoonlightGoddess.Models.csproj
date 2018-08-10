@@ -63,6 +63,7 @@
     <Compile Include="ResultModels\LayuiTreeResultModel.cs" />
     <Compile Include="ResultModels\LayuiUploadResultModel.cs" />
     <Compile Include="ResultModels\SelectOptionsResultModel.cs" />
+    <Compile Include="ResultModels\WebSiteMenusResultModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

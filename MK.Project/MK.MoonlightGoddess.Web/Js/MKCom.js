@@ -2,7 +2,7 @@
 //id：指定下拉框的id属性，也可以为class
 //name：sqlname名称
 //调用示列：InitCombobox("#id","GetUserType")
-function InitCombobox(id, name, form) {
+function InitCombobox(id, name, form, isSelects) {
     $.ajax({
         url: "/api/SeletcOptions/GetSelectOptions?name=" + name,
         type: "get",
@@ -16,12 +16,17 @@ function InitCombobox(id, name, form) {
                 }
                 jQuery("<option value='" + r[i].Value + "'>" + r[i].Text + "</option>").appendTo(id);
             }
-            form.render('select');
+            if (isSelects) {
+                form.render('select');
+            }
+            else {
+                form.render();
+            }
         }
     })
 }
 
-function InitNewCombobox(id, name, form, hasAll) {
+function InitNewCombobox(id, name, form, hasAll,isSelects) {
     $.ajax({
         url: "/api/SeletcOptions/GetSelectOptions?name=" + name,
         type: "get",
@@ -35,10 +40,38 @@ function InitNewCombobox(id, name, form, hasAll) {
                 }
                 jQuery("<option value='" + r[i].Value + "'>" + r[i].Text + "</option>").appendTo(id);
             }
-            form.render('select');
+            if (isSelects) {
+                form.render('select');
+            }
+            else {
+                form.render();
+            }
         }
     })
 }
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
+function getUrlParam(url, name) {
+    var pattern = new RegExp("[?&]" + name + "\=([^&]+)", "g");
+    var matcher = pattern.exec(url);
+    var items = null;
+    if (null != matcher) {
+        try {
+            items = decodeURIComponent(decodeURIComponent(matcher[1]));
+        } catch (e) {
+            try {
+                items = decodeURIComponent(matcher[1]);
+            } catch (e) {
+                items = matcher[1];
+            }
+        }
+    }
+    return items;
+}  
 
 //验证是否存在，存在返回true，不存在返回false
 var ajaxVerify = (data, notexistsCallback, callback) => {

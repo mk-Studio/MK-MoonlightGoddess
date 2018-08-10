@@ -68,10 +68,12 @@
                         </div>
                     </fieldset>
                     <div class="layui-btn-group tbTools">
-                        <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+                        @*<button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
                         <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
                         <button class="layui-btn layui-btn-sm" data-type="delete"><i class="layui-icon layui-icon-delete"></i>删除</button>
                         <button class="layui-btn layui-btn-sm" data-type="test"><i class="layui-icon">&#xe609;</i>测试</button>
+                        <button class="layui-btn layui-btn-sm" data-type="test"><i class="layui-icon">&#xe609;</i>测试</button>*@
+                        <!--按钮区域-->
                     </div>
                     <table class="layui-hide" id="tbDataDictionary" lay-filter="tbDataDictionary"></table>
                     <script type="text/html" id="switchShow">
@@ -80,7 +82,7 @@
                     </script>
                     <script type="text/html" id="tbDataDictionarybar">
                         <a class="layui-btn layui-btn-xs uploadImage" lay-event="uploadimg">上传图片</a>
-                        <a class="layui-btn layui-btn-xs layui-btn layui-btn-danger queryImage" lay-event="queryImage">查看图片</a>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger queryImage" lay-event="queryImage">查看图片</a>
                     </script>
                 </div>
             </div>
@@ -175,6 +177,17 @@
                     , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
                 ]]
             }
+
+            $.get("/FunBar/GetFuns", { PowerID : GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml += '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >'+
+                            '<i class="layui-icon"></i>' + r[i].FeaturesName + '</button > '
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
 
             layui.tree({
                 elem: '#treeDataDictionary',  //指定元素
@@ -595,10 +608,12 @@
                     //layer.photos({
                     //    photos: getLayuiPhotosJson(SelectData.WuLiaoImagePath)
                     //    , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                    //});
+                    //});sh
 
-                    homeContent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+                    //homeContent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+                    //window.location.href = "https://www.baidu.com";
 
+                    $(".tbTools").append('<button class="layui-btn layui-btn-sm" data-type="test" ><i class="layui-icon">&#xe609;</i>测试</button>');
                     //if (formSelects.value('selectSpType').length === 0) {
                     //    layer.msg("为空");
                     //} else {
@@ -608,7 +623,7 @@
             };
 
             //监听按钮点击事件
-            $('.tbTools .layui-btn').on('click', function () {
+            $('.tbTools').on('click', '.layui-btn',function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });

@@ -9,6 +9,8 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>UserManage</title>
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    @*<link href="~/CSS/formSelects-v4.css" rel="stylesheet" />*@
     <style type="text/css">
         /*table 样式修改 begin*/
         .layui-table-hover {
@@ -26,7 +28,6 @@
     <div>
         <fieldset class="layui-elem-field layui-field-title">
             <legend>用户管理</legend>
-            <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
         </fieldset>
         <div class="layui-row">
             <div class="layui-col-lg2">
@@ -129,6 +130,8 @@
                             formSelects.render({
                                 name: 'CCID'
                             });
+                            //formSelects.render('ApproveID');
+                            //formSelects.render('CCID');
                             formSelects.value('ApproveID', getFormSelectsByUserID(SelectData.ID, "Approve"))
                             formSelects.value('CCID', getFormSelectsByUserID(SelectData.ID,"CC"))
                         }

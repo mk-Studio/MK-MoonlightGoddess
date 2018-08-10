@@ -18,8 +18,9 @@
             border-top-color: #e6e6e6;
             border-right-color: #e6e6e6;
         }
+
         a:hover {
-            cursor:pointer;
+            cursor: pointer;
         }
         /*右键菜单*/
         .rightmenu {
@@ -50,26 +51,24 @@
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
+
         <div class="layui-header">
             <div class="layui-logo">Moonlight Goddess</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href=""> <i class="layui-icon layui-icon-home"></i>控制台</a></li>
-                <li class="layui-nav-item"><a href="">商品管理</a></li>
-                <li class="layui-nav-item"><a href="">用户</a></li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">其它系统</a>
+                    <a href="javascript:;">消息管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">邮件管理</a></dd>
-                        <dd><a href="">消息管理</a></dd>
-                        <dd><a href="">授权管理</a></dd>
+                        <dd><a href="">邮件消息</a></dd>
+                        <dd><a href="">授权消息</a></dd>
+                        <dd><a href="">系统消息</a></dd>
                     </dl>
                 </li>
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                        <img src="http://localhost:14588/Files/2018-06/20180604153503mingsnx-git.jpeg" class="layui-nav-img">
                         @ViewBag.UserName
                     </a>
                     <dl class="layui-nav-child">
@@ -84,76 +83,76 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <ul id="NavMenus" class="layui-nav layui-nav-tree" lay-filter="NavMenu">
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="测试模板" lay-direction="2">
-                            <i class="layui-icon layui-icon-app"></i>
-                            <cite>测试模板</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd><a name='a' url="http://www.baidu.com/" url-id="百度一下">百度一下</a></dd>
-                            <dd><a name='a' url="/MKTypeWuLiao/Index" url-id="物料类型">物料类型</a></dd>
-                        </dl>
-                    </li>
+                    @*<li class="layui-nav-item layui-nav-itemed">
+                            <a href="javascript:;" lay-tips="测试模板" lay-direction="2">
+                                <i class="layui-icon layui-icon-app"></i>
+                                <cite>测试模板</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a name='a' url="https://www.baidu.com/" url-id="百度一下">百度一下</a></dd>
+                                <dd><a name='a' url="/MKTypeWuLiao/Index" url-id="物料类型">物料类型</a></dd>
+                            </dl>
+                        </li>
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a url="javascript:;" lay-tips="外站导航" lay-direction="2">
-                            <i class="layui-icon layui-icon-template"></i>
-                            <cite>外站导航</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd><a name='a' url="https://passport.bilibili.com/" url-id="bilibili">bilibili</a></dd>
-                            <dd><a name='a' url="https://v.qq.com/" url-id="腾讯视频">腾讯视频</a></dd>
-                            <dd><a name='a' url="https://www.huya.com/" url-id="YY">YY</a></dd>
-                        </dl>
-                    </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a url="javascript:;" lay-tips="外站导航" lay-direction="2">
+                                <i class="layui-icon layui-icon-template"></i>
+                                <cite>外站导航</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a name='a' url="https://passport.bilibili.com/" url-id="bilibili">bilibili</a></dd>
+                                <dd><a name='a' url="https://v.qq.com/" url-id="腾讯视频">腾讯视频</a></dd>
+                                <dd><a name='a' url="https://www.huya.com/" url-id="YY">YY</a></dd>
+                            </dl>
+                        </li>
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="审批" lay-direction="2">
-                            <i class="layui-icon layui-icon-survey"></i>
-                            <cite>审批</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd><a name='a' url="/Approvals/InitiateApprovals" url-id="发起审批">发起审批</a></dd>
-                            <dd><a name='a' url="/Approvals/WaitingMyApprovals" url-id="待我审批的">待我审批的</a></dd>
-                            <dd><a name='a' url="/Approvals/IHaveApprovals" url-id="我已审批的">我已审批的</a></dd>
-                            <dd><a name='a' url="/Approvals/MyInitiateApprovals" url-id="我发起的">我发起的</a></dd>
-                            <dd><a name='a' url="/Approvals/CCMyApprovals" url-id="抄送我的">抄送我的</a></dd>
-                        </dl>
-                    </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a href="javascript:;" lay-tips="审批" lay-direction="2">
+                                <i class="layui-icon layui-icon-survey"></i>
+                                <cite>审批</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a name='a' url="/Approvals/InitiateApprovals" url-id="发起审批">发起审批</a></dd>
+                                <dd><a name='a' url="/Approvals/WaitingMyApprovals" url-id="待我审批的">待我审批的</a></dd>
+                                <dd><a name='a' url="/Approvals/IHaveApprovals" url-id="我已审批的">我已审批的</a></dd>
+                                <dd><a name='a' url="/Approvals/MyInitiateApprovals" url-id="我发起的">我发起的</a></dd>
+                                <dd><a name='a' url="/Approvals/CCMyApprovals" url-id="抄送我的">抄送我的</a></dd>
+                            </dl>
+                        </li>
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a url="javascript:;" lay-tips="系统" lay-direction="2">
-                            <i class="layui-icon layui-icon-component"></i>
-                            <cite>系统</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd><a name='a' url="/Authority/Index" url-id="权限管理">权限管理</a></dd>
-                            <dd><a name='a' url="/Authority/Grouping" url-id="分组管理">分组管理</a></dd>
-                            <dd><a name='a' url="/User/UserManage" url-id="用户管理">用户管理</a></dd>
-                            <dd><a name='a' url="/Authority/MenuManagement" url-id="菜单管理">菜单管理</a></dd>
-                        </dl>
-                    </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a url="javascript:;" lay-tips="系统" lay-direction="2">
+                                <i class="layui-icon layui-icon-component"></i>
+                                <cite>系统</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a name='a' url="/Authority/Index" url-id="权限管理">权限管理</a></dd>
+                                <dd><a name='a' url="/Authority/Grouping" url-id="分组管理">分组管理</a></dd>
+                                <dd><a name='a' url="/User/UserManage" url-id="用户管理">用户管理</a></dd>
+                                <dd><a name='a' url="/Authority/MenuManagement" url-id="菜单管理">菜单管理</a></dd>
+                            </dl>
+                        </li>
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a url="javascript:;" lay-tips="基础数据" lay-direction="2">
-                            <i class="layui-icon layui-icon-senior"></i>
-                            <cite>基础数据</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a name='a' url="/DataDictionary/Index" url-id="数据字典">数据字典</a>
-                            </dd>
-                        </dl>
-                    </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a url="javascript:;" lay-tips="基础数据" lay-direction="2">
+                                <i class="layui-icon layui-icon-senior"></i>
+                                <cite>基础数据</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a name='a' url="/DataDictionary/Index" url-id="数据字典">数据字典</a>
+                                </dd>
+                            </dl>
+                        </li>
 
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="暂留" lay-direction="2">
-                            <i class="layui-icon layui-icon-senior"></i>
-                            <cite>暂留</cite>
-                        </a>
-                    </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a href="javascript:;" lay-tips="暂留" lay-direction="2">
+                                <i class="layui-icon layui-icon-senior"></i>
+                                <cite>暂留</cite>
+                            </a>
+                        </li>*@
 
                 </ul>
             </div>
@@ -181,6 +180,7 @@
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
         var $, element;
 
@@ -206,21 +206,21 @@
         },
 
 
-        //激活并添加tab，供于除本页面以外的所有子页面调用
-        //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
-        activeTab = (id, title, url) => {
-            var isHas = false;
-            $.each($(".layui-tab-title li"), function () {
-                if ($(this).attr("lay-id") === title) {
-                    isHas = true;
-                    return;
+            //激活并添加tab，供于除本页面以外的所有子页面调用
+            //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
+            activeTab = (id, title, url) => {
+                var isHas = false;
+                $.each($(".layui-tab-title li"), function () {
+                    if ($(this).attr("lay-id") === title) {
+                        isHas = true;
+                        return;
+                    }
+                })
+                if (!isHas) {
+                    addTab(id, title, url);
                 }
-            })
-            if (!isHas) {
-                addTab(id, title, url);
+                element.tabChange('homeContentTabs', id);
             }
-            element.tabChange('homeContentTabs', id);
-        }
 
 
         //调整iframe高度
@@ -241,12 +241,12 @@
             $('.layui-tab-title,.layui-tab-title li').click(function () {
                 $('.rightmenu').hide();
             });
-            //桌面点击右击 
+            //桌面点击右击
             $('.layui-tab-title li').on('contextmenu', function (e) {
                 var popupmenu = $(".rightmenu");
                 popupmenu.find("li").attr("data-id", id); //在右键菜单中的标签绑定id属性
 
-                //判断右侧菜单的位置 
+                //判断右侧菜单的位置
                 l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
                 t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
                 popupmenu.css({ left: l, top: t }).show(); //进行绝对定位
@@ -260,23 +260,49 @@
         //layui.use代码区域
         layui.use(['element', 'layer'], function () {
             //Tab的切换功能，切换事件监听等，需要依赖element模块
-            $ = layui.jquery, element = layui.element; 
+            $ = layui.jquery, element = layui.element;
+            $.get("/Index/GetMenus", {}, function (r) {
+                console.log(r);
+                var navHtml = "";
+                for (var i = 0; i < r.length; i++) {
+                    navHtml +=
+                        '<li class="layui-nav-item layui-nav-itemed">' +
+                        '    <a url="javascript:;" lay-tips="' + r[i].Tips + '" lay-direction="' + r[i].Directio + '">' +
+                        '        <i class="layui-icon layui-icon-component"></i>' +
+                        '        <cite>' + r[i].NavigationName + '</cite>' +
+                        '    </a>' +
+                        '    <dl class="layui-nav-child">';
+                    for (var m = 0; m < r[i].Menus.length; m++) {
+                        navHtml +=
+                            '<dd>' +
+                            '<a name="a" url="' + r[i].Menus[m].MenuAddress + '?PowerID=' + r[i].Menus[m].ID + '" url-id="' + r[i].Menus[m].PowerName + '">' +
+                            r[i].Menus[m].PowerName +
+                            '</a>' +
+                            '</dd>'
+                    }
+                    navHtml +=
+                        '   </dl>' +
+                        '</li>';
+                }
+                $("#NavMenus").append(navHtml);
+                element.init();
+            }, "json");
             //tab触发事件
             var active = {
                 //添加指定Tab项
                 tabAdd: function (id, title, url) {
                     addTab(id, title, url);
                 },
-                 //删除指定Tab项
+                //删除指定Tab项
                 tabDelete: function (index) {
-                    element.tabDelete('homeContentTabs', index); 
+                    element.tabDelete('homeContentTabs', index);
                 },
                 //切换到指定Tab项
                 tabChange: function (index) {
-                    element.tabChange('homeContentTabs', index); 
-                }, 
-                 //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
-                tabDeleteAll : function (ids) {
+                    element.tabChange('homeContentTabs', index);
+                },
+                //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                tabDeleteAll: function (ids) {
                     $.each(ids, function (i, item) {
                         element.tabDelete("homeContentTabs", item);
                     })
@@ -301,10 +327,10 @@
                     active.tabDeleteAll(ids);
                 }
                 //最后再隐藏右键菜单
-                $('.rightmenu').hide(); 
+                $('.rightmenu').hide();
             })
 
-            
+
             // 点击空白处关闭右键弹窗
             $(document).click(function () {
                 $('.rightmenu').hide();
@@ -312,7 +338,7 @@
 
 
             //菜单栏点击事件处理
-            $("a[name='a']").on("click", function () {
+            $(".layui-nav").on("click", "a[name='a']", function () {
                 var menu = $(this);
                 var isHas = false;
                 $.each($(".layui-tab-title li"), function () {

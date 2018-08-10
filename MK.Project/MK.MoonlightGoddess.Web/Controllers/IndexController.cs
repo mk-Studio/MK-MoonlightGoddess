@@ -1,4 +1,5 @@
 ﻿using MK.MoonlightGoddess.Core;
+using MK.MoonlightGoddess.Models.ResultModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,14 @@ namespace MK.MoonlightGoddess.Web.Controllers
         public ActionResult Admin()
         {
             return View("../Index/Admin");
+        }
+
+        [HttpGet]
+        public JsonResult GetMenus()
+        {
+            var data = Service.ServiceContent<dynamic>.SelectData(new { UserName = CurrAccount.UserName},"Home", "GetMenus");
+            var result = WebSiteMenusResultModel.GetMenus(data);
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
     }
 }

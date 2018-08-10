@@ -368,16 +368,17 @@
                 var ID = SelectFunctionData.ID
                     , FeaturesName = data.field.EditFunctionName
                     , DataType = data.field.EditFunctionDataType;
-                $.post('/Authority/VerificationFeaturesName',
-                    { FeaturesName },
-                    function (r) {
-                        if (r.number > 0) {
-                            layer.msg('功能名称已存在！', { icon: 5 });
-                        } else if (r.number === 0) {
-                            updateFunction(ID, FeaturesName, DataType);
-                        }
-                    }
-                );
+                //$.post('/Authority/VerificationFeaturesName',
+                //    { FeaturesName },
+                //    function (r) {
+                //        if (r.number > 0) {
+                //            layer.msg('功能名称已存在！', { icon: 5 });
+                //        } else if (r.number === 0) {
+                //            updateFunction(ID, FeaturesName, DataType);
+                //        }
+                //    }
+                //);
+                updateFunction(ID, FeaturesName, DataType);
                 return false;
             });
 
