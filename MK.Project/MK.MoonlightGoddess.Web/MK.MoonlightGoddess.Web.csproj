@@ -484,6 +484,7 @@
     <Content Include="Views\Authority\PowerForm\FormFunctionalOperation.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormAddFunction.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormEditFunction.cshtml" />
+    <Content Include="Views\Authority\PowerForm\FormEditNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

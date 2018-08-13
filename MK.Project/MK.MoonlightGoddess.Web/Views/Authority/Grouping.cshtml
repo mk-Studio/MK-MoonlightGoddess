@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Grouping</title>
-    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
 </head>
 <body>
     <div>
@@ -23,8 +23,8 @@
                 </div>
             </div>
             <div class="layui-col-lg10">
-                <div class="layui-btn-group">
-                    <button class="layui-btn layui-btn-sm " data-type="add">
+                <div class="layui-btn-group tbTools">
+                    @*<button class="layui-btn layui-btn-sm " data-type="add">
                         <i class="layui-icon">&#xe654;</i>新增
                     </button>
                     <button class="layui-btn layui-btn-sm" data-type="edit">
@@ -32,7 +32,7 @@
                     </button>
                     <button class="layui-btn layui-btn-sm" data-type="del">
                         <i class="layui-icon">&#xe640;</i>删除
-                    </button>
+                    </button>*@
                 </div>
                 <hr />
 
@@ -41,10 +41,11 @@
         </div>
     </div>
 
-    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
     <script>
-        layui.use(['table', 'form', 'tree', 'layer','jquery'], function () {
+        layui.use(['table', 'form', 'tree', 'layer', 'jquery'], function () {
 
             var table = layui.table,
                 form = layui.form,
@@ -53,6 +54,20 @@
                 $ = layui.$;
 
             var getTreeNodesData;//选中的树节点数据
+
+            //根据权限加载操作按钮
+            $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml +=
+                        '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >' +
+                            '<i class="layui-icon"></i>' + r[i].FeaturesName +
+                        '</button >'
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
 
             layui.tree({
                 elem: '#treeTest',
@@ -69,23 +84,23 @@
                     url: "/Authority/SelectPowerGroup",
                     type: "post",
                     async: false,//ajax请求方式，默认为true异步
-                    dataType:"json",
+                    dataType: "json",
                     success: function (data) {
                         result = data;
+                        result[0]["spread"] = true;
                     }
                 });
                 return result;
             };
 
-            function displayTable(id)
-            {
+            function displayTable(id) {
                 table.render({
                     elem: '#tbPowerType',
                     url: '/Authority/SelectAccredit',
-                    where: {model:{ PowerGroupID: id }},
+                    where: { model: { PowerGroupID: id } },
                     method: 'post',
                     page: true,
-                    cols:[[
+                    cols: [[
                         { field: 'PowerName', title: '菜单名称', width: 120, align: 'center', sort: true, }
                         , { field: 'Status', title: '权限状态', width: 100, align: 'center' }
                         , { field: 'CreateUser', title: '授权人', width: 100, align: 'center', sort: true, }
@@ -120,7 +135,7 @@
                 edit: function () {
                     var that = "Update";
                     var index = layer.load(1, { shade: false });
-                    if (getTreeNodesData && getTreeNodesData.id !='00000000-0000-0000-0000-000000000000') {
+                    if (getTreeNodesData && getTreeNodesData.id != '00000000-0000-0000-0000-000000000000') {
                         $.post('/GroupInfoManage/EditGroupInfo', {}, function (str) {
                             layer.open({
                                 type: 1,
@@ -144,13 +159,14 @@
                         layer.close(index);
                     }
                 },
+                //删除
                 del: function () {
                     var that = "Delete";
                     var index = layer.load(1, { shade: false });
                     if (getTreeNodesData && getTreeNodesData.id != '00000000-0000-0000-0000-000000000000') {
                         layer.confirm('确认删除：' + getTreeNodesData.name, { icon: 3, title: '提示' }, function (index, layero) {
                             $.post('/Authority/DelGroupInfo',
-                                {ID: getTreeNodesData.id },
+                                { ID: getTreeNodesData.id },
                                 function (r) {
                                     if (r.number === '0') {
                                         jiazaiTree();
@@ -163,15 +179,14 @@
                             );
                         });
                         layer.close(index);
-                    } else
-                    {
+                    } else {
                         layer.close(index);
                         layer.msg("请先选中左边分组");
                     }
                 }
             }
-
-            $('.layui-btn-group .layui-btn').on('click', function () {
+            //绑定事件
+            $('.tbTools').on('click', '.layui-btn', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
@@ -182,7 +197,7 @@
                     { PowerGroupName: data.field.AddGroupName },
                     function (r) {
                         if (r.number === '1') {
-                            layer.msg(r.result, { icon:  5});
+                            layer.msg(r.result, { icon: 5 });
                         } else if (r.number === '0') {
                             jiazaiTree();
                             layer.closeAll();
@@ -192,14 +207,14 @@
                 );
                 return false;
             });
-            
+
             form.on('submit(groupEdit)', function (data) {
                 layer.confirm('确认修改', { icon: 3, title: '提示' }, function () {
                     $.ajax({
-                        url:"/Authority/EditGroupInfo",
+                        url: "/Authority/EditGroupInfo",
                         data: { ID: getTreeNodesData.id, PowerGroupName: data.field.EditGroupName },
                         type: "post",
-                        dataType:"json",
+                        dataType: "json",
                         success: function (r) {
                             if (r.bl === true) {
                                 getTreeNodesData.name = data.field.EditGroupName;

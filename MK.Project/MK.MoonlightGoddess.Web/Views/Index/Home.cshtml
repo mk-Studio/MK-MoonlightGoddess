@@ -266,7 +266,7 @@
                 var navHtml = "";
                 for (var i = 0; i < r.length; i++) {
                     navHtml +=
-                        '<li class="layui-nav-item layui-nav-itemed">' +
+                        '<li class="layui-nav-item ' + ( r[i].Directio === '1' ? " layui-nav-itemed":"")+'">' +
                         '    <a url="javascript:;" lay-tips="' + r[i].Tips + '" lay-direction="' + r[i].Directio + '">' +
                         '        <i class="layui-icon layui-icon-component"></i>' +
                         '        <cite>' + r[i].NavigationName + '</cite>' +

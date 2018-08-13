@@ -173,6 +173,13 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
         }
 
         [HttpPost]
+        public JsonResult QueryNavigation(MK_Info_Navigationbar model)
+        {
+            var jsonResult = ServiceContent<MK_Info_Navigationbar>.Query(model, "MK_Info_Navigationbar", "QueryNavigation");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
         public JsonResult InsertPower(MK_Type_Power model)
         {
             model.CreateUser = CurrAccount.UserName;
@@ -253,6 +260,37 @@ namespace MK.MoonlightGoddess.Web.Controllers.AuthorityInfo
                 result = jsonResult.Rows[0]["Result"].ToString().Trim(),
                 number = jsonResult.Rows[0]["Number"].ToString().Trim()
             });
+        }
+
+
+        /**/
+        public JsonResult UpdateShowMark(string ID, string ShowMark, string name)
+        {
+            var jsonResult = ServiceContent<dynamic>.AjaxSIDU(new { ID, ShowMark, name }, "MK_Info_Navigationbar", name);
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult AddNavigationInfo(MK_Info_Navigationbar model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Navigationbar>.AjaxSIDU(model, "MK_Info_Navigationbar", "AddNavigationInfo");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateNavigationInfo(MK_Info_Navigationbar model)
+        {
+            model.CreateUser = CurrAccount.UserName;
+            var jsonResult = ServiceContent<MK_Info_Navigationbar>.AjaxSIDU(model, "MK_Info_Navigationbar", "UpdateNavigationInfo");
+            return Json(jsonResult);
+        }
+
+        [HttpPost]
+        public JsonResult DelNavigation(string ID)
+        {
+            var jsonResult = ServiceContent<dynamic>.AjaxSingle(new { ID}, "MK_Info_Navigationbar", "DelNavigation");
+            return Json(jsonResult);
         }
     }
 }

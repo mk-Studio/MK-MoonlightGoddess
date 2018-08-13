@@ -3,4 +3,44 @@
   <sql name="SelectNavigation">
     SELECT ID AS id,NavigationName AS name FROM dbo.MK_Info_Navigationbar WHERE ShowMark='Y' ORDER BY CreateDate DESC
   </sql>
+
+  <sql name="QueryNavigation">
+    SELECT ID ,NavigationName ,Tips ,Directio ,ShowMark ,CreateUser ,CreateDate FROM dbo.MK_Info_Navigationbar ORDER BY CreateDate DESC
+
+    SELECT a.row_count AS rows
+    FROM sys.dm_db_partition_stats a
+    INNER JOIN sys.tables b ON b.object_id = a.object_id
+    WHERE b.name='MK_Info_Navigationbar' ORDER BY row_count
+  </sql>
+
+  
+  <sql name="UpdateNavigationInfo">
+    UPDATE MK_Info_Navigationbar SET NavigationName = @NavigationName ,
+    Tips = @Tips 
+    WHERE ID = @ID
+  </sql>
+  
+  <sql name="UpdateNavShowMark">
+    UPDATE MK_Info_Navigationbar SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="AddNavigationInfo">
+    INSERT INTO MK_Info_Navigationbar( ID ,NavigationName ,Tips ,Directio ,ShowMark ,CreateUser ,CreateDate)
+    VALUES  ( NEWID() , @NavigationName , @Tips ,  N'1' ,  'Y' ,@CreateUser, GETDATE())
+  </sql>
+
+  <sql name="UpdateNavExpandDirection">
+    UPDATE MK_Info_Navigationbar SET Directio = @ShowMark WHERE ID = @ID
+  </sql>
+
+  <sql name="DelNavigation">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_Power WHERE NavigationID = @ID)
+    BEGIN
+    DELETE FROM MK_Info_Navigationbar WHERE ID = @ID
+    SELECT 'OK'
+    END
+    ELSE BEGIN
+    SELECT '无法删除。当前导航有包含菜单' + (SELECT '[ '+PowerName+' ]' FROM MK_Type_Power WHERE NavigationID = @ID FOR XML PATH(''))
+    END
+  </sql>
 </MK_Info_Navigationbar>

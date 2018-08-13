@@ -36,15 +36,15 @@
                 </div>
             </div>
             <div class="layui-col-lg10">
-                <div class="layui-btn-group">
-                    <button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
-                    <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>
+                <div class="layui-btn-group tbTools">
+                    @*<button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+                    <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>*@
                 </div>
                 <hr />
 
                 <table class="layui-hide" id="tbUsers" lay-filter="tbUsers"></table>
                 <script type="text/html" id="switchShow">
-                    <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+                    <input type="checkbox" layui-disabled name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
                 </script>
                 <script type="text/html" id="switchApprove">
                     <input type="checkbox" name="ApproveChangeMark" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="Approve_ChangeMark" {{ d.Approve_ChangeMark == 'Y' ? 'checked' : '' }}>
@@ -77,6 +77,18 @@
         layui.use(['table', 'form', 'tree', 'formSelects', 'jquery'], function () {
 
             var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery, formSelects = layui.formSelects;//多选下拉框
+
+            $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml += '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >' +
+                            '<i class="layui-icon"></i>' +  r[i].FeaturesName + '</button > '
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
+
             var getTreeNodesData,//选中的树节点数据
                 commandName,//执行命令名称
                 SelectData,//table选中的数据
@@ -224,7 +236,7 @@
                 }
             }
 
-            $('.layui-btn-group .layui-btn').on('click', function () {
+            $('.tbTools').on('click', '.layui-btn', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
@@ -238,6 +250,7 @@
                     dataType: "json",
                     success: function (data) {
                         result = data;
+                        result[0]["spread"] = true;
                     }
                 });
                 return result;

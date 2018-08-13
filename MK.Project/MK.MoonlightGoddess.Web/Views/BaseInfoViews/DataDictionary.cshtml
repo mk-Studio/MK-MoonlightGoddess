@@ -527,7 +527,7 @@
                     activeName = "Insert";
                     if (SelectTreeNode) {
                         var index = layer.load(0, { shade: false });
-                        $.post(SelectTreeNode.formUrl, {}, function (str) {
+                        $.get(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
                                 title: "添加信息",
                                 area: ['731px', '386px'],
@@ -554,7 +554,7 @@
                     activeName = "Update";
                     if (SelectData) {
                         var index = layer.load(0, { shade: false });
-                        $.post(SelectTreeNode.formUrl, {}, function (str) {
+                        $.get(SelectTreeNode.formUrl, {}, function (str) {
                             layer.open({
                                 title: "修改信息",
                                 area: ['731px', '386px'],

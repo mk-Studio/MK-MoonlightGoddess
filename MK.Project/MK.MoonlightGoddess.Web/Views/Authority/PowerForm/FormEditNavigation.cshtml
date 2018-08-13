@@ -1,0 +1,25 @@
+﻿
+@{
+    Layout = null;
+}
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formEditNav" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">导航名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="NavigationName" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input" id="NavigationName">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">导航提示</label>
+        <div class="layui-input-block">
+            <input type="text" name="Tips" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" id="Tips">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="navEdit">保存</button>
+        </div>
+    </div>
+</form>

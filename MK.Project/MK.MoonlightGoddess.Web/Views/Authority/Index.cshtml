@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>AuthorityManagement</title>
-    <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
 </head>
 <body>
     <fieldset class="layui-elem-field layui-field-title">
@@ -24,8 +24,8 @@
         </div>
         <div class="layui-col-lg10">
             <div id="dataContent">
-                <div class="layui-btn-group">
-                    <button class="layui-btn" data-type="edit">一键授权</button>
+                <div class="layui-btn-group tbTools">
+                    @*<button class="layui-btn" data-type="edit">一键授权</button>*@
                 </div>
                 <a id="title" style="float:right;font-size:18px"></a>
                 <table class="layui-hide" id="tbPowerType" lay-filter="tbPowerType"></table>
@@ -39,8 +39,9 @@
         </div>
     </div>
 
-    <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
     <script>
         layui.use(['table', 'form', 'tree', 'upload'], function () {
             var table,  //表格
@@ -56,7 +57,21 @@
                 , tree = layui.tree
                 , upload = layui.upload;
 
-            form.render('select'); 
+            form.render('select');
+
+            //根据权限加载操作按钮
+            $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml +=
+                            '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >' +
+                            '<i class="layui-icon"></i>' + r[i].FeaturesName +
+                            '</button >'
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
 
             var getTableByTable = function (id) {
                 table.render({
@@ -64,15 +79,14 @@
                     , url: '/Authority/SelectPowerAllot' //数据接口
                     , where: { model: { PowerGroupID: id } }
                     , method: 'post'
-                    , page: true //开启分页
                     , cols: [[ //表头
                         //{ field: 'ID', title: 'ID', width: 240, sort: true, fixed: 'left' }
-                        { field: 'PowerName', title: '菜单名称', width: 150, align: 'center',sort: true }
+                        { field: 'PowerName', title: '菜单名称', width: 150, align: 'center', sort: true }
                         //, { field: 'MenuAddress', title: '地址', width: 150 }
                         //, { field: 'ShowMark', title: '显示标识', width: 80, }
                         //, { field: 'CreateUser', title: '创建人', width: 120 }
                         //, { field: 'CreateDate', title: '创建时间', width: 140, sort: true }
-                        , { field: 'Notes', title: '备注', width: 140 ,align: 'center' }
+                        , { field: 'Notes', title: '备注', width: 140, align: 'center' }
                         , { field: 'Status', title: '权限', width: 100, align: 'center' }
                         , { field: 'ck', title: '权限', width: 100, align: 'center', toolbar: '#switchNO' }
                         , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
@@ -89,6 +103,7 @@
                     dataType: "json",
                     success: function (r) {
                         result = r;
+                        result[0]["spread"] = true;
                     }
                 });
                 return result
@@ -105,18 +120,16 @@
             });
 
             //功能权限
-            function setupFunction(id)
-            {
+            function setupFunction(id) {
                 table.render({
                     elem: '#tbFunction'
                     , url: '/Authority/SelectFunctionList' //数据接口
                     , where: { model: { PowerAllotID: id } }
                     , method: 'post'
-                    , page: true //开启分页
                     , cols: [[ //表头
-                        { title: '序号', type: 'numbers' }
-                        , { field: 'FeaturesName', title: '功能名称',width: 160, sort: true, align: 'center',}
-                        , { field: 'Status', title: '状态', width: 165, templet: '#switchTpl', align: 'center', unresize: true }
+                        { title: '序号', type: 'numbers',width: '8%', }
+                        , { field: 'FeaturesName', title: '功能名称', width: '65%', sort: true, align: 'center', }
+                        , { field: 'Status', title: '状态', width: '27%', templet: '#switchTpl', align: 'center', unresize: true }
                     ]]
                 });
             };
@@ -132,7 +145,7 @@
                 }
                 $.ajax({
                     url: url,
-                    data:data,
+                    data: data,
                     type: 'post',
                     dataType: 'json',
                     success: function (r) {
@@ -144,7 +157,7 @@
                     }
                 });
             });
-            
+
             //操作监听工具条
             table.on('tool(tbPowerType)', function (obj) {
                 var TakeData = obj.data //获得当前行数据
@@ -175,11 +188,11 @@
                         });
                     }
                 } else if (layEvent === 'gnedit') {
-                    $.post('/GroupInfoManage/FunctionInfo', {}, function (str) {
+                    $.get('/GroupInfoManage/FunctionInfo', {}, function (str) {
                         layer.open({
                             type: 1,
                             title: '功能',
-                            area: ['731px', '386px'],
+                            area: ['731px', '426px'],
                             content: str, //注意，如果str是object，那么需要字符拼接。
                             cancel: function () {
                                 //右上角关闭回调
@@ -188,10 +201,9 @@
                             },
                             success: function () {
                                 setupFunction(TakeData.ID);
-                                
+
                             }
                         });
-                        layer.close(index);
                         //如果是动态生成的HTML，自动渲染就会失效，需要执行 form.render() 方法来手动渲染
                         form.render();
                     });
@@ -224,7 +236,7 @@
                 }
             }
             //监听按钮点击事件
-            $('.layui-btn-group .layui-btn').on('click', function () {
+            $('.tbTools').on('click', '.layui-btn', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
