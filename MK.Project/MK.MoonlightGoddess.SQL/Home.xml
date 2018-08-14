@@ -8,12 +8,12 @@
     FROM
     dbo.MK_Info_PowerAllot pa
     JOIN MK_Type_Power p ON pa.PowerID = p.ID AND p.NavigationID = A.ID
-    WHERE PowerGroupID = (SELECT PowerGroupID FROM dbo.MK_Info_User WHERE UserName = @UserName) 
+    WHERE PowerGroupID = (SELECT PowerGroupID FROM dbo.MK_Info_User WHERE UserName = @UserName)
     AND pa.Status = '1' AND pa.ShowMark = 'Y' AND p.ShowMark = 'Y'
-    ORDER BY p.NavigationID
+    ORDER BY p.Sort
     FOR XML PATH('')
     ) AS Menus,
-    Tips,Directio FROM dbo.MK_Info_Navigationbar A WHERE A.ShowMark = 'Y'
+    Tips,Directio FROM dbo.MK_Info_Navigationbar A WHERE A.ShowMark = 'Y'  ORDER BY A.Sort
   </sql>
 
   

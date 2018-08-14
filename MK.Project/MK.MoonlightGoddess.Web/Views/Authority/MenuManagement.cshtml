@@ -88,6 +88,7 @@
                             { title: '序号', type: 'numbers' }
                             , { field: 'NavigationName', title: '导航名称', width: 150, align: 'center', sort: true }
                             , { field: 'Tips', title: '提示', width: 150, align: 'center' }
+                            , { field: 'Sort', title: '排序位', align: 'center', width: 150, sort: true }
                             , { field: 'Directio', title: '是否展开', align: 'center', width: 150, sort: true, templet: '#switchExpand' }
                             , { field: 'ShowMark', title: '显示状态', width: 150, align: 'center', sort: true, templet: '#switchShow' }
                             , { field: 'cz', title: '操作', width: 150, align: 'center', toolbar: '#barCz' }
@@ -104,6 +105,7 @@
                             { title: '序号', type: 'numbers' }
                             , { field: 'PowerName', title: '菜单名称', width: 150, align: 'center', sort: true }
                             , { field: 'MenuAddress', title: '地址', width: 240, align: 'center' }
+                            , { field: 'Sort', title: '排序位', align: 'center', width: 150, sort: true }
                             , { field: 'Notes', title: '备注', align: 'center', width: 180 }
                             , { field: 'edit', title: '功能', width: 165, align: 'center', toolbar: '#barDemo' }
                             , { field: 'cz', title: '操作', width: 165, align: 'center', toolbar: '#barCz' }
@@ -122,9 +124,10 @@
                     , method: 'post'
                     , cols: [[ //表头
                         { title: '序号', type: 'numbers', width: "7%" }
-                        , { field: 'FeaturesName', title: '功能名称', width: "31%", sort: true, align: 'center', }
-                        , { field: 'DataType', title: '功能类型', width: "31%", align: 'center', }
-                        , { field: 'cz', title: '操作', width: "31%", align: 'center', toolbar: '#barCz' }
+                        , { field: 'FeaturesName', title: '功能名称', width: "26%", sort: true, align: 'center', }
+                        , { field: 'DataType', title: '功能类型', width: "26%", align: 'center', }
+                        , { field: 'Sort', title: '排序位', width: "15%", align: 'center', }
+                        , { field: 'cz', title: '操作', width: "26%", align: 'center', toolbar: '#barCz' }
                     ]]
                 });
             };
@@ -173,7 +176,7 @@
                             layer.open({
                                 type: 1,
                                 title: '添加菜单',
-                                area: ['731px', '400px'],
+                                area: ['731px', '463px'],
                                 content: str, //注意，如果str是object，那么需要字符拼接。
                                 cancel: function () {
                                     //右上角关闭回调
@@ -189,7 +192,7 @@
                         //layer.msg("请选择左边分组进行添加");
                         activeName = 'InsertNavigation';
                         $.post('/PowerInfoManage/EditNavigation', {}, function (str) {
-                            layer.open({type: 1, title: '添加导航', area: ['731px', '400px'], content: str, 
+                            layer.open({type: 1, title: '添加导航', area: ['731px', '334px'], content: str, 
                                 cancel: function () {
                                     //右上角关闭回调
                                 }
@@ -216,7 +219,8 @@
                         NavigationID: SelectTreeNode.id,
                         PowerName: data.field.AddPowerName,
                         MenuAddress: data.field.AddPowerMenuAddress,
-                        Notes: data.field.AddNotes
+                        Notes: data.field.AddNotes,
+                        Sort: data.field.Sort
                     },
                     function (r) {
                         if (r.number === '1') {
@@ -242,18 +246,22 @@
                         layer.open({
                             type: 1,
                             title: '编辑',
-                            area: ['731px', '400px'],
+                            area: ['731px', (t_action === 'Power' ? '463px' : '334px')],
                             content: str, //注意，如果str是object，那么需要字符拼接。
                             cancel: function () { },
                             success: function () {
                                 if (SelectTreeNode.type === "Menu") {
-                                    $('#editPowerName').val(SelectData.PowerName);
-                                    $('#editPowerMenuAddress').val(SelectData.MenuAddress);
-                                    $('#editNotes').val(SelectData.Notes);
+                                    form.val('formeditPower', {
+                                        "EditPowerName": SelectData.PowerName
+                                        , "EditPowerMenuAddress": SelectData.MenuAddress
+                                        , "EditNotes": SelectData.Notes
+                                        , "Sort": SelectData.Sort
+                                    })
                                 } else {
                                     form.val('formEditNav', {
                                         "NavigationName": SelectData.NavigationName
                                         , "Tips": SelectData.Tips
+                                        , "Sort": SelectData.Sort
                                     })
                                 }
                             }
@@ -363,7 +371,8 @@
                         ID: SelectData.ID,
                         PowerName: data.field.EditPowerName,
                         MenuAddress: data.field.EditPowerMenuAddress,
-                        Notes: data.field.EditNotes
+                        Notes: data.field.EditNotes,
+                        Sort: data.field.Sort
                     },
                     function (r) {
                         if (r.number === '1') {
@@ -384,6 +393,7 @@
                 var hasID = activeName === "InsertNavigation" ? false : true,
                     postdata = {
                         NavigationName: data.field.NavigationName,
+                        Sort: data.field.Sort,
                         Tips: data.field.Tips
                     };
                 if (hasID) {
@@ -412,6 +422,7 @@
                         PowerID: SelectData.ID,
                         FeaturesName: data.field.AddFunctionName,
                         DataType: data.field.AddFunctionDataType,
+                        Sort: data.field.Sort,
                     },
                     function (r) {
                         if (r.number === '1') {
@@ -445,8 +456,11 @@
                                     //return false 开启该代码可禁止点击该按钮关闭
                                 },
                                 success: function () {
-                                    $('#editFunctionName').val(SelectFunctionData.FeaturesName);
-                                    $('#editFunctionDataType').val(SelectFunctionData.DataType);
+                                    form.val('formEditFunction', {
+                                        "EditFunctionName": SelectFunctionData.FeaturesName
+                                        , "EditFunctionDataType": SelectFunctionData.DataType
+                                        , "Sort": SelectFunctionData.Sort
+                                    })
                                 }
                             });
                             layer.close(index);
@@ -478,7 +492,8 @@
             form.on('submit(FunctionEdit)', function (data) {
                 var ID = SelectFunctionData.ID
                     , FeaturesName = data.field.EditFunctionName
-                    , DataType = data.field.EditFunctionDataType;
+                    , DataType = data.field.EditFunctionDataType
+                    , Sort = data.field.Sort
                 //$.post('/Authority/VerificationFeaturesName',
                 //    { FeaturesName },
                 //    function (r) {
@@ -489,14 +504,8 @@
                 //        }
                 //    }
                 //);
-                updateFunction(ID, FeaturesName, DataType);
-                return false;
-            });
-
-            //监听编辑提交（功能）
-            function updateFunction(ID, FeaturesName, DataType) {
                 $.post('/Authority/Updateunction',
-                    { ID, FeaturesName, DataType },
+                     { ID, FeaturesName, DataType, Sort},
                     function (r) {
                         if (!r.IsError) {
                             layer.close(layer.index);
@@ -507,7 +516,9 @@
                         }
                     }
                 );
-            }
+                return false;
+            });
+
 
             //监听显示状态操作
             form.on('switch(ShowMark)', function (obj) {

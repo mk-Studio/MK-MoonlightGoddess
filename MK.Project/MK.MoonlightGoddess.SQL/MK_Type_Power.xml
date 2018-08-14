@@ -2,14 +2,14 @@
 
 <MK_Type_Power>
   <sql name="SelectPower">
-    SELECT * FROM dbo.MK_Type_Power WHERE NavigationID=@id AND ShowMark='Y' ORDER BY CreateDate DESC
+    SELECT * FROM dbo.MK_Type_Power WHERE NavigationID=@id AND ShowMark='Y' ORDER BY Sort
   </sql>
 
   <!--新增菜单-->
   <sql name="InsertPower">
     DECLARE @Prompt NVARCHAR(30)
     DECLARE @Number INT
-    EXEC @Number=PR_insertPower @NavigationID,@PowerName, @MenuAddress,@CreateUser,@Notes,@Prompt output
+    EXEC @Number=PR_insertPower @NavigationID,@PowerName, @MenuAddress,@CreateUser,@Notes, @Sort, @Prompt output
     select @Prompt AS Result,@Number AS Number
   </sql>
 
@@ -17,7 +17,7 @@
   <sql name="UpdatePower">
     DECLARE @Prompt NVARCHAR(30)
     DECLARE @Number INT
-    EXEC @Number=PR_UpdatePower @ID,@PowerName, @MenuAddress,@CreateUser,@Notes,@Prompt output
+    EXEC @Number=PR_UpdatePower @ID,@PowerName, @MenuAddress,@CreateUser,@Notes, @Sort, @Prompt output
     select @Prompt AS Result,@Number AS Number
   </sql>
 

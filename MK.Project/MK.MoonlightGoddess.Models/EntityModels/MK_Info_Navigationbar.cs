@@ -17,6 +17,11 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// 提示
         /// </summary>
         public string Tips { get; set; }
+        
+        /// <summary>
+        /// 排序字段
+        /// </summary>
+        public int Sort { get; set; }
 
         /// <summary>
         /// 导航级

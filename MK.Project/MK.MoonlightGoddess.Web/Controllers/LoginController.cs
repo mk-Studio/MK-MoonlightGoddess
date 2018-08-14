@@ -19,6 +19,11 @@ namespace MK.MoonlightGoddess.Web.Controllers
             return View();
         }
 
+        public ActionResult UnitestLogin()
+        {
+            return View("../Login/UnitestLogin");
+        }
+
         [HttpPost]
         public JsonResult OnLogin(MK_Info_User model)
         {

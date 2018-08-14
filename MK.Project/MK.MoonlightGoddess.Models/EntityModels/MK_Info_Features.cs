@@ -22,5 +22,10 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// 数据类型
         /// </summary>
         public string DataType { get; set; }
+
+        /// <summary>
+        /// 排序字段
+        /// </summary>
+        public int Sort { get; set; }
     }
 }

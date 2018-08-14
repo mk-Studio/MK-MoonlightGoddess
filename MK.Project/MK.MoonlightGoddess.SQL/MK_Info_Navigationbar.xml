@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MK_Info_Navigationbar>
   <sql name="SelectNavigation">
-    SELECT ID AS id,NavigationName AS name FROM dbo.MK_Info_Navigationbar WHERE ShowMark='Y' ORDER BY CreateDate DESC
+    SELECT ID AS id,NavigationName AS name FROM dbo.MK_Info_Navigationbar  ORDER BY Sort 
   </sql>
 
   <sql name="QueryNavigation">
-    SELECT ID ,NavigationName ,Tips ,Directio ,ShowMark ,CreateUser ,CreateDate FROM dbo.MK_Info_Navigationbar ORDER BY CreateDate DESC
+    SELECT ID ,NavigationName ,Tips ,Directio ,ShowMark ,Sort ,CreateUser ,CreateDate FROM dbo.MK_Info_Navigationbar ORDER BY Sort
 
     SELECT a.row_count AS rows
     FROM sys.dm_db_partition_stats a
@@ -16,7 +16,7 @@
   
   <sql name="UpdateNavigationInfo">
     UPDATE MK_Info_Navigationbar SET NavigationName = @NavigationName ,
-    Tips = @Tips 
+    Tips = @Tips ,Sort = @Sort 
     WHERE ID = @ID
   </sql>
   
@@ -25,8 +25,8 @@
   </sql>
 
   <sql name="AddNavigationInfo">
-    INSERT INTO MK_Info_Navigationbar( ID ,NavigationName ,Tips ,Directio ,ShowMark ,CreateUser ,CreateDate)
-    VALUES  ( NEWID() , @NavigationName , @Tips ,  N'1' ,  'Y' ,@CreateUser, GETDATE())
+    INSERT INTO MK_Info_Navigationbar( ID ,NavigationName ,Tips ,Directio ,ShowMark ,Sort,CreateUser ,CreateDate)
+    VALUES  ( NEWID() , @NavigationName , @Tips ,  N'1' ,  'Y', @Sort ,@CreateUser, GETDATE())
   </sql>
 
   <sql name="UpdateNavExpandDirection">

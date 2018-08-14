@@ -359,6 +359,7 @@ CREATE TABLE MK_Type_Power(
 	PowerName  NVARCHAR(30),
 	MenuAddress NVARCHAR(255),
 	ShowMark CHAR(1) DEFAULT 'Y',
+	Sort INT NOT NULL DEFAULT 0,
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
 	Notes NVARCHAR(100),
@@ -433,6 +434,7 @@ CREATE TABLE MK_Info_Features(
 	FeaturesName NVARCHAR(36),
 	DataType  NVARCHAR(36),
 	ShowMark CHAR(1) DEFAULT 'Y',
+	Sort INT NOT NULL DEFAULT 0,
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
 )
@@ -483,11 +485,12 @@ GO
 
 --µ¼º½À¸
 CREATE TABLE MK_Info_Navigationbar(
-	ID NVARCHAR(36),
+	ID NVARCHAR(36)  PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	NavigationName NVARCHAR(36),
 	Tips NVARCHAR(36),
-	Directio NVARCHAR(2) DEFAULT '2',
+	Directio NVARCHAR(2) DEFAULT '1',
 	ShowMark CHAR(1) DEFAULT 'Y',
+	Sort INT NOT NULL DEFAULT 0,
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
 )

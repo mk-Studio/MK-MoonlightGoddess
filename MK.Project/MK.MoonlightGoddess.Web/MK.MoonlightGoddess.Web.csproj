@@ -188,7 +188,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\login-bg-img.jpg" />
     <Content Include="images\loginbeijing.jpg" />
+    <Content Include="images\moonlightx16.ico" />
+    <Content Include="images\moonlightx32.ico" />
+    <Content Include="images\moonlightx48.ico" />
     <Content Include="Js\formSelects-v3.js" />
     <Content Include="Js\formSelects-v4.js" />
     <Content Include="Js\formSelects-v4.min.js" />
@@ -485,13 +489,10 @@
     <Content Include="Views\Authority\PowerForm\FormAddFunction.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormEditFunction.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormEditNavigation.cshtml" />
+    <Content Include="Views\Login\UnitestLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DataDictionary\" />
-    <Folder Include="Views\GroupInfoManage\" />
-    <Folder Include="Views\PowerInfoManage\" />
-    <Folder Include="Views\VerifyLogin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -546,6 +547,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties Models_4menu_1json__JSONSchema="http://json.schemastore.org/bower" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
