@@ -17,14 +17,16 @@ namespace MK.MoonlightGoddess.Models.ResultModels
             DataRowCollection rows = data.Rows;
             for (int i = 0; i < rows.Count; i++)
             {
+                var menuString = rows[i]["Menus"].ToString();
+                List<Menus> menuList = SerializableMenus(menuString);
+                if (menuList.Count == 0)
+                    continue;
                 Navigation navigation = new Navigation();
                 navigation.ID = rows[i]["ID"].ToString();
                 navigation.NavigationName = rows[i]["NavigationName"].ToString();
                 navigation.Tips = rows[i]["Tips"].ToString();
                 navigation.Directio = rows[i]["Directio"].ToString();
-
-                var menuString = rows[i]["Menus"].ToString();
-                navigation.Menus = SerializableMenus(menuString);
+                navigation.Menus = menuList;
                 Navigations.Add(navigation);
             }
             return Navigations;

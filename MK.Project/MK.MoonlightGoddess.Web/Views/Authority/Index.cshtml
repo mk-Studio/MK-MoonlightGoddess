@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>AuthorityManagement</title>
     <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/ultree.css" rel="stylesheet" />
 </head>
 <body>
     <fieldset class="layui-elem-field layui-field-title">
@@ -19,7 +20,7 @@
     <div class="layui-row">
         <div class="layui-col-lg2">
             <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
-                <ul id="treeTest"></ul>
+                <ul id="treeTest" class="ultree"></ul>
             </div>
         </div>
         <div class="layui-col-lg10">
@@ -113,10 +114,17 @@
                 , click: function (item) { //点击节点回调
                     var id = item.id;
                     SelectTreeNode = item;
-                    getTableByTable(id);
-                    $('#title').html(item.name);
+                    if (id !== "00000000-0000-0000-0000-000000000000") {
+                        getTableByTable(id);
+                        $('#title').html(item.name);
+                    }
                 }
                 , nodes: initTree()
+            });
+
+            $('.ultree li a').on('click', function () {
+                $(this).addClass('ultree-on');
+                $('.ultree li a').not($(this)).removeClass('ultree-on');
             });
 
             //功能权限

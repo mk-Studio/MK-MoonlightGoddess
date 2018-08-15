@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>MenuManagement</title>
     <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/ultree.css" rel="stylesheet" />
 </head>
 <body>
     <div>
@@ -19,7 +20,7 @@
         <div class="layui-row">
             <div class="layui-col-lg2">
                 <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
-                    <ul id="treeMenu"></ul>
+                    <ul id="treeMenu" class="ultree"></ul>
                 </div>
             </div>
             <div class="layui-col-lg10">
@@ -90,7 +91,7 @@
                             , { field: 'Tips', title: '提示', width: 150, align: 'center' }
                             , { field: 'Sort', title: '排序位', align: 'center', width: 150, sort: true }
                             , { field: 'Directio', title: '是否展开', align: 'center', width: 150, sort: true, templet: '#switchExpand' }
-                            , { field: 'ShowMark', title: '显示状态', width: 150, align: 'center', sort: true, templet: '#switchShow' }
+                            //, { field: 'ShowMark', title: '显示状态', width: 150, align: 'center', sort: true, templet: '#switchShow' }
                             , { field: 'cz', title: '操作', width: 150, align: 'center', toolbar: '#barCz' }
                         ]]
                     });
@@ -166,6 +167,11 @@
                 });
             }
             loadTree();
+            $('.ultree li a').on('click', function () {
+                $(this).addClass('ultree-on');
+                $('.ultree li a').not($(this)).removeClass('ultree-on');
+            });
+
             active = {
                 add: function () {
                     

@@ -9,7 +9,8 @@ namespace MK.MoonlightGoddess.Web.Controllers.Approved
     public class ApprovalsController : VerifyLoginController
     {
         // GET: Approvals
-        
+
+        #region ViewPage
         // 发起审批
         public ActionResult InitiateApprovals()
         {
@@ -39,5 +40,7 @@ namespace MK.MoonlightGoddess.Web.Controllers.Approved
         {
             return View();
         }
+        #endregion
+
     }
 }
