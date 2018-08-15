@@ -10,118 +10,9 @@
     <meta name="viewport" content="width=device-width" />
     <title>Moonlight Goddess</title>
     <link href="~/Scripts/layui-v2.2.6/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/login.css" rel="stylesheet" />
+    <link href="~/CSS/drag.css" rel="stylesheet" />
     <style type="text/css">
-        * {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        .name {
-            /*background-image: -webkit-linear-gradient(bottom, rgb(201, 115, 255), rgb(20, 11, 255));*/
-            background-image: -webkit-linear-gradient(right, rgb(201, 115, 255), #26A69A);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .loginBox {
-            position: absolute;
-            height: 710px;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            margin-top: -355px;
-            /*background-color: aquamarine;*/
-        }
-
-        .headerBox {
-            margin: 0 auto;
-            width: 957px;
-            height: 66px;
-        }
-
-        .header h1 {
-            float: left;
-            margin-top: 17px;
-            font-size: 2em;
-            font-weight: bold;
-            color: #5c5c5c;
-        }
-
-        .contentBox {
-            min-width: 1000px;
-            background: url(../../images/login-bg-img.jpg) no-repeat center top;
-            background-size: cover
-        }
-
-        .conter {
-            position: relative;
-            margin: 0 auto;
-            height: 600px;
-        }
-
-        .positionBox {
-            position: relative;
-            width: 408px;
-            height: 308px;
-            top: 20%;
-            margin: 0 auto;
-            background-color: #fff;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            border-top: 4px solid #26A69A;
-            -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
-            -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
-            box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .footerBox {
-            width: 100%;
-            height: 40px;
-        }
-
-        .footer {
-            margin: 0 auto;
-            width: 936px;
-            height: 40px;
-            line-height: 40px;
-            text-align: right;
-            color: #5c5c5c;
-        }
-
-        .avatar {
-            width: 66px;
-            height: 66px;
-            margin: 22px auto;
-            background: url(../../Files/2018-05/20180530192331mingsnx-git.jpeg) no-repeat;
-            background-size: cover;
-            -webkit-box-shadow: 0 0 15px #26A69A;
-            -moz-box-shadow: 0 0 15px #26A69A;
-            box-shadow: 0 0 15px #26A69A;
-            cursor: pointer;
-        }
-
-            .avatar:hover {
-                -webkit-box-shadow: 0 0 15px rgb(201, 115, 255);
-                -moz-box-shadow: 0 0 15px rgb(201, 115, 255);
-                box-shadow: 0 0 15px rgb(201, 115, 255);
-            }
-
-        .row {
-            margin: 22px 2px;
-        }
-
-        .inputBox {
-            width: 66%;
-        }
-
-        .layui-input {
-            color: #00695C;
-        }
-
-            .layui-input:hover {
-                border-color: #26A69A !important;
-                box-shadow: 0 0 6px #26A69A;
-            }
     </style>
 </head>
 <body>
@@ -138,12 +29,23 @@
                     <form class="layui-form" action="" style="text-align: center;">
                         <div class="row">
                             <div class="layui-input-inline inputBox">
-                                <input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                <input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input user">
                             </div>
                         </div>
                         <div class="row">
                             <div class="layui-input-inline inputBox">
-                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input pwd">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="layui-input-inline inputBox">
+                                <div id="drag">
+                                    <div class="drag_bg"></div>
+                                    <div class="drag_text slidetounlock" onselectstart="return false;" unselectable="on">
+                                        请按住滑块，拖动到最右边
+                                    </div>
+                                    <div class="handler handler_bg"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -160,22 +62,23 @@
         </div>
     </div>
 
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/drag.js"></script>
     <script src="~/Scripts/layui-v2.2.6/layui/layui.js"></script>
     <script>
-        layui.use(['element', 'form'], function () {
-            var $ = layui.jquery
-                , element = layui.element;
-            var layid = location.hash.replace(/^#test=/, '');
+        layui.use('form', function () {
             var form = layui.form;
-
-            element.tabChange('test', layid);
-
-            element.on('tab(test)', function (elem) {
-                location.hash = 'test=' + $(this).attr('lay-id');
-            });
+            $('#drag').drag();
 
             //监听提交
             form.on('submit(onLogin)', function (data) {
+                if ($(".drag_text").text().indexOf("验证通过") < 0) {
+                    layer.tips('请完成滑动验证', '#drag', {
+                        tips: [2, '#26A69A'],
+                        time: 3000
+                    });
+                    return false;
+                }
                 var index = layer.load(0, { shade: false, time: 15 * 1000 });
                 $(".onLogin").text("正在登录，请稍后");
                 $.ajax({
@@ -184,17 +87,35 @@
                     data: { UserName: data.field.title, password: data.field.password },
                     dataType: "json",
                     success: function (r) {
-                        if (r.result === "Y") {
-                            $(".onLogin").text("登录成功");
-                            window.location.href = '../Index/Home';
-                        } else {
-                            layer.alert("登陆失败，账号或密码不正确", {
-                                title: '返回结果'
-                            })
+                        layer.close(index);
+                        switch (r.code) {
+                            case 200:
+                                $(".onLogin").text("登录成功");
+                                window.location.href = r.message;
+                                break;
+                            case 101:
+                                layer.tips(r.message, '.pwd', {
+                                    tips: [2, '#E53935'],
+                                    time: 3000
+                                });
+                                break;
+                            case 301:
+                                layer.alert(r.message, {
+                                    icon: 0,
+                                    skin: 'layui-layer-molv',
+                                    title: '失效账号'
+                                })
+                                break;
+                            case -1:
+                                layer.tips(r.message, '.user', {
+                                    tips: [2, '#FFAB00'],
+                                    time: 3000
+                                });
+                                break;
                         }
                     },
-                    complete: function () {
-                        $(".onLogin").text("登录");
+                    complete: function (xhc, o) {
+                        $(".onLogin").text(xhc.responseJSON.code === 200 ? "登录成功" : "登录");
                         layer.close(index);
                     }
                 });

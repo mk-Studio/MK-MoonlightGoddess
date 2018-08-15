@@ -176,7 +176,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="CSS\drag.css" />
     <Content Include="CSS\formSelects-v4.css" />
+    <Content Include="CSS\login.css" />
     <Content Include="CSS\logintext.css" />
     <Content Include="favicon.ico" />
     <Content Include="Files\2018-05\20180530192331mingsnx-git.jpeg" />
@@ -188,11 +190,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\complet.png" />
     <Content Include="images\login-bg-img.jpg" />
     <Content Include="images\loginbeijing.jpg" />
     <Content Include="images\moonlightx16.ico" />
     <Content Include="images\moonlightx32.ico" />
     <Content Include="images\moonlightx48.ico" />
+    <Content Include="images\slider.png" />
+    <Content Include="Js\drag.js" />
     <Content Include="Js\formSelects-v3.js" />
     <Content Include="Js\formSelects-v4.js" />
     <Content Include="Js\formSelects-v4.min.js" />

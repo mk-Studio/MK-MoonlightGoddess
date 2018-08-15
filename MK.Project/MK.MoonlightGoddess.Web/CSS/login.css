@@ -1,0 +1,111 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.name {
+    /*background-image: -webkit-linear-gradient(bottom, rgb(201, 115, 255), rgb(20, 11, 255));*/
+    background-image: -webkit-linear-gradient(right, rgb(201, 115, 255), #26A69A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.loginBox {
+    position: absolute;
+    height: 710px;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    margin-top: -355px;
+    /*background-color: aquamarine;*/
+}
+
+.headerBox {
+    margin: 0 auto;
+    width: 957px;
+    height: 66px;
+}
+
+.header h1 {
+    float: left;
+    margin-top: 27px;
+    font-size: 2em;
+    font-weight: bold;
+    color: #5c5c5c;
+}
+
+.contentBox {
+    min-width: 1000px;
+    background: url(../../images/login-bg-img.jpg) no-repeat center top;
+    background-size: cover
+}
+
+.conter {
+    position: relative;
+    margin: 0 auto;
+    height: 600px;
+}
+
+.positionBox {
+    position: relative;
+    width: 408px;
+    height: 308px;
+    top: 20%;
+    margin: 0 auto;
+    background-color: #fff;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top: 4px solid #26A69A;
+    -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+}
+
+.footerBox {
+    width: 100%;
+    height: 40px;
+}
+
+.footer {
+    margin: 0 auto;
+    width: 936px;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    color: #5c5c5c;
+}
+
+.avatar {
+    width: 66px;
+    height: 66px;
+    margin: 10px auto;
+    background: url(../../Files/2018-05/20180530192331mingsnx-git.jpeg) no-repeat;
+    background-size: cover;
+    -webkit-box-shadow: 0 0 15px #26A69A;
+    -moz-box-shadow: 0 0 15px #26A69A;
+    box-shadow: 0 0 15px #26A69A;
+    cursor: pointer;
+}
+
+    .avatar:hover {
+        -webkit-box-shadow: 0 0 15px rgb(201, 115, 255);
+        -moz-box-shadow: 0 0 15px rgb(201, 115, 255);
+        box-shadow: 0 0 15px rgb(201, 115, 255);
+    }
+
+.row {
+    margin-bottom: 13px;
+}
+
+.inputBox {
+    width: 66%;
+}
+
+.layui-input {
+    color: #00695C;
+}
+
+    .layui-input:hover {
+        border-color: #26A69A !important;
+        box-shadow: 0 0 6px #26A69A;
+    }

@@ -2,7 +2,27 @@
 <MK_Info_User>
 
   <sql name="ValidateLogin">
-    select count(UserName) from MK_Info_User where UserName = @UserName and Password = @Password and ShowMark = 'Y'
+    DECLARE @HasUser NVARCHAR(36) = '',@HasShow CHAR(1) = ''
+    SELECT @HasUser = ID FROM dbo.MK_Info_User WHERE UserName = @UserName
+    IF @HasUser = ''
+    BEGIN
+        SELECT -1 AS Code, '当前账号不存在' AS Message
+    END
+    ELSE BEGIN
+      SELECT @HasShow = ShowMark FROM dbo.MK_Info_User WHERE ID=@HasUser AND Password = @Password
+      IF @HasShow = ''
+      BEGIN
+          SELECT 101 AS Code, '输入的密码有误' AS Message
+      END
+      ELSE IF @HasShow = 'N'
+      BEGIN
+          SELECT  301 AS Code,  '改账号未被授权，请联系管理员' AS Message
+      END
+      ELSE IF @HasShow = 'Y'
+      BEGIN
+          SELECT 200 AS Code,  'SUCCESS' AS Message
+      END
+    END
   </sql>
 
   <sql name="QueryTest">

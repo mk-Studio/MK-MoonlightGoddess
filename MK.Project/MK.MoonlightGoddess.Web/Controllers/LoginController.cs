@@ -28,18 +28,17 @@ namespace MK.MoonlightGoddess.Web.Controllers
         public JsonResult OnLogin(MK_Info_User model)
         {
             model.Password = EncryptHelper.GetMD5_16(model.Password);
-            var user = ServiceContent<MK_Info_User>.SelectSingle(model, "MK_Info_User", "ValidateLogin");
-            if (Convert.ToInt32(user) > 0)
-            {
-                var userName = EncryptHelper.AES_Encrypt(model.UserName);
-                CookieHelper.SetCookie("MoonlightGoddess", userName);
-                //EncryptHelper.AES_Encrypt("");
-                return Json(new { result = "Y" });
-            }
-            else
-            {
-                return Json(new { result = "N" });
-            }
+            var data = ServiceContent<MK_Info_User>.SelectData(model, "MK_Info_User", "ValidateLogin");
+            var userName = EncryptHelper.AES_Encrypt(model.UserName);
+            CookieHelper.SetCookie("MoonlightGoddess", userName);
+            //EncryptHelper.AES_Encrypt("");
+            var result = new {
+                code = Convert.ToInt32(data.Rows[0]["Code"]),
+                message = data.Rows[0]["Message"].ToString() == "SUCCESS" 
+                ? "../Index/Home"
+                : data.Rows[0]["Message"].ToString()
+            };
+            return Json(result);
         }
     }
 }
