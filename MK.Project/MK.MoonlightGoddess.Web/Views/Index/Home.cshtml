@@ -277,7 +277,8 @@
             })
             
             //菜单栏点击事件处理
-            $(".layui-nav").on("click", "a[name='a']", function () {
+            $(".layui-nav").on("click", "a[name='a']", function () {//显示加载动画
+                var index = layer.load(0, { shade: false });
                 var menu = $(this);
                 var isHas = false;
                 $.each($(".layui-tab-title li"), function () {
@@ -291,6 +292,7 @@
                     active.tabAdd(menu.text(), menu.text(), menu.attr("url"));
                 }
                 active.tabChange(menu.text());
+                layer.close(index);
             });
             
             //退出系统

@@ -77,5 +77,15 @@
     FROM MK_Info_User WHERE UserName = @UserName
     END
   </sql>
-  
+
+  <sql name="VerifyExistsDictionaryLabel">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_DictionaryLabel WHERE ID = @ID AND DataLabelName = @DataLabelName)
+    BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该数据类型已存在' ELSE 'OK' END
+    FROM MK_Type_DictionaryLabel WHERE DataLabelName = @DataLabelName
+    END
+    ELSE BEGIN
+    SELECT 'OK'
+    END
+  </sql>
 </VerifyDbData>

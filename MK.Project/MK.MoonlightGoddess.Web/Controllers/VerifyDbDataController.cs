@@ -69,6 +69,10 @@ namespace MK.MoonlightGoddess.Web.Controllers
             /// </summary>
             public string CurrencyCode { get; set; }
 
+            /// <summary>
+            /// 数据标签名称
+            /// </summary>
+            public string DataLabelName { get; set; }
             
         }
         //Verify

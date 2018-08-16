@@ -158,6 +158,7 @@
     <Compile Include="Controllers\AuthorityInfo\From\GroupInfoManageController.cs" />
     <Compile Include="Controllers\AuthorityInfo\PowerForm\PowerInfoManageController.cs" />
     <Compile Include="Controllers\BaseInfo\DataDictionaryController.cs" />
+    <Compile Include="Controllers\BaseInfo\DictionaryManageController.cs" />
     <Compile Include="Controllers\BaseInfo\Form\FormDataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
     <Compile Include="Controllers\FunBarController.cs" />
@@ -496,6 +497,9 @@
     <Content Include="Views\Authority\PowerForm\FormEditFunction.cshtml" />
     <Content Include="Views\Authority\PowerForm\FormEditNavigation.cshtml" />
     <Content Include="Views\Login\UnitestLogin.cshtml" />
+    <Content Include="Views\BaseInfoViews\DictionaryManage.cshtml" />
+    <Content Include="Views\BaseInfoViews\Form\FormTypeDictionaryLabel.cshtml" />
+    <Content Include="Views\BaseInfoViews\Form\FormTypeDataDictionary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

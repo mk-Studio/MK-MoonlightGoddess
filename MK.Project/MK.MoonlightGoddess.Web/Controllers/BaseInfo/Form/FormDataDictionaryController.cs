@@ -39,7 +39,19 @@ namespace MK.MoonlightGoddess.Web.Controllers.BaseInfo.Form
             return View("../BaseInfoViews/Form/FormInfoCurrency");
         }
 
-        //以下为查询区域
+        //...
+        public ActionResult FormTypeDictionaryLabel()
+        {
+            return View("../BaseInfoViews/Form/FormTypeDictionaryLabel");
+        }
+
+        public ActionResult FormTypeDataDictionary()
+        {
+            return View("../BaseInfoViews/Form/FormTypeDataDictionary");
+        }
+
+
+        //查询区域
 
         public ActionResult QueryFormInfoWuLiao()
         {

@@ -1,0 +1,349 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DictionaryManage</title>
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <style type="text/css">
+        /*table 样式修改 begin*/
+        .layui-table-hover {
+            background-color: #c2c2c2 !important;
+        }
+
+        .layui-table-click {
+            background-color: #393D49 !important;
+            color: white;
+        }
+        /*table 样式修改 end*/
+    </style>
+</head>
+<body>
+
+
+    <div class="layui-tab layui-tab-brief" lay-filter="tabDictionary">
+        <ul class="layui-tab-title">
+            <li class="layui-this">数据类型管理</li>
+            <li>数据管理</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-btn-group tbTools"></div>
+                <table class="layui-hide" id="tbDictionaryLabel" lay-filter="tbDictionaryLabel"></table>
+            </div>
+            <div class="layui-tab-item">
+                <ul id="treeDataDictionary"></ul>
+                <div class="layui-btn-group tbTools"></div>
+                <table class="layui-hide" id="tbDataDictionary" lay-filter="tbDataDictionary"></table>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="switchShow">
+        <!-- 显示状态 -->
+        <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="ShowMark" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+    </script>
+
+    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
+    <script type="text/javascript">
+        layui.use(['element', 'table', 'form', 'tree'], function () {
+            var
+                table = layui.table,
+                tree = layui.tree,
+                form = layui.form,
+                element = layui.element,
+                SelectData,           //表格选中的行对象
+                activeName,        //执行的sqlName
+                active,
+                tabIndex = 0,
+                formUrl = "/FormDataDictionary/FormTypeDictionaryLabel",
+                formFilter = "formTypeDictionaryLabel",
+                formVal = { "DataLabelName": SelectData || null },
+                area = ['521px', '201px'],
+                verifyName = "VerifyExistsDictionaryLabel",
+                postUrl = "/DictionaryManage/ExecuteDictionaryLabel";
+                
+
+            $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml += '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >' +
+                            '<i class="layui-icon"></i>' + r[i].FeaturesName + '</button > '
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
+
+            element.on('tab(tabDictionary)', function (data) {
+                //console.log(data);
+                tabIndex = data.index;
+                switch (data.index) {
+                    case 0:
+                        formUrl = "/FormDataDictionary/FormTypeDictionaryLabel";
+                        formFilter = "formTypeDictionaryLabel";
+                        area = ['521px', '201px'];
+                        verifyName = "VerifyExistsDictionaryLabel";
+                        postUrl = "/DictionaryManage/ExecuteDictionaryLabel";
+                        break;
+                    case 1:
+                        formUrl = "/FormDataDictionary/FormTypeDataDictionary";
+                        formFilter = "formTypeDataDictionary";
+                        area = ['731px', '386px'];
+                        verifyName = "VerifyExistsDataDictionary";
+                        postUrl = "/DictionaryManage/ExecuteDataDictionary";
+                        break;
+                    default:
+                        throw new Error("active index invalid");
+                }
+            });
+
+            //按钮激活
+            active = {
+                //添加
+                add: function () { //添加
+                    activeName = "Insert";
+                    var index = layer.load(0, { shade: false });
+                    $.get(formUrl, {}, function (html) {
+                        layer.open({
+                            title: "添加",
+                            area: area,
+                            skin: 'layui-layer-molv',
+                            type: 1,
+                            content: html,
+                            cancel: function () {}
+                        });
+                        form.render();
+                        if (tabIndex === 1) {
+                            InitNewCombobox("#DataLabelID", "DictionaryLabelType", form, false);
+                        }
+                        layer.close(index);
+                    });
+                },
+                //修改
+                edit: function () {
+                    activeName = "Update";
+                    if (SelectData) {
+                        var index = layer.load(0, { shade: false });
+                        $.get(formUrl, {}, function (html) {
+                            layer.open({
+                                title: "修改",
+                                area: area,
+                                skin: 'layui-layer-molv',
+                                type: 1,
+                                content: html,
+                                cancel: function () {}
+                            });
+                            if (tabIndex === 1) {
+                                InitNewCombobox("#DataLabelID", "DictionaryLabelType", form, false);
+                            }
+                            form.render();
+                            switch (tabIndex) {
+                                case 0:
+                                    formVal = { "DataLabelName": SelectData.DataLabelName };
+                                    break;
+                                case 1:
+                                    formVal = {
+                                        "DataLabelID": SelectData.DataLabelID,
+                                        "DataTypeName": SelectData.DataTypeName,
+                                        "DataDesc": SelectData.DataDesc,
+                                        "DataPlaceholder": SelectData.DataPlaceholder,
+                                    }
+                                    break;
+                                default:
+                            }
+                            form.val(formFilter, formVal);
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg("请选择要修改的数据");
+                    }
+                },
+                //删除
+                del: function () {
+                    activeName = "Delete";
+                    if (SelectData) {
+                        layer.confirm('确定是否要彻底删除该信息？', {
+                            title: "删除信息",
+                            btn: ['确定', '算了']
+                        }, function (index, layero) {
+                            var index = layer.load(0, { shade: false });
+                            $.post(postUrl,
+                                { model: { ID: SelectData.ID }, name: activeName },
+                                function (r) {
+                                    if (!r.IsError) {
+                                        if (r.Data === "删除成功") {
+                                            layer.msg(r.Data, { icon: 1, time: 1500 });
+                                            active.refresh();
+                                        } else {
+                                            layer.msg(r.Data, { icon: 0, time: 3000 });
+                                        }
+                                    } else {
+                                        layer.msg('删除异常！' + r.Data, { icon: 5 });
+                                    }
+                                }
+                            );
+                            layer.close(index);
+                        }, function (index) {
+                            //算了
+                        });
+
+                    } else {
+                        layer.msg("请选择要删除的数据");
+                    }
+                },
+                //刷新
+                refresh: function () {
+                    switch (tabIndex) {
+                        case 0:
+                            tb_type.reload();
+                            break;
+                        case 1:
+                            tb_data.reload();
+                            break;
+                    }
+                }
+            };
+
+            //监听按钮点击事件
+            $('.tbTools').on('click', '.layui-btn', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //数据类型管理
+            var tb_type = table.render({
+                elem: '#tbDictionaryLabel'
+                , skin: "line"
+                , height: 520 - 40
+                , url: "/DictionaryManage/GetQueryDictionaryLabel"
+                , method: 'post'
+                //, page: true //开启分页
+                , text: { none: '暂无相关数据' }
+                , cols: [[
+                    { field: 'DataLabelName', title: '数据类型名称', width: 150, sort: true, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 107, sort: true, event: 'select', templet: '#switchShow' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
+            })
+
+            //数据管理
+            var tb_data = table.render({
+                elem: '#tbDataDictionary'
+                , skin: "line"
+                , height: 520 - 40
+                , url: "/DictionaryManage/GetQueryDataDictionary"
+                , method: 'post'
+                , page: true //开启分页
+                , text: { none: '暂无相关数据' }
+                , cols: [[
+                    { field: 'DataLabelName', title: '数据类型名称', width: 150, sort: true, event: 'select' }
+                    , { field: 'DataTypeName', title: '数据名称', width: 150, event: 'select' }
+                    , { field: 'DataDesc', title: '数据说明', width: 150, event: 'select' }
+                    , { field: 'DataPlaceholder', title: '其他', width: 150, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 107, sort: true, event: 'select', templet: '#switchShow' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
+            })
+
+            //tbDictionaryLabel监听选择事件
+            table.on('tool(tbDictionaryLabel)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (layEvent === 'select') {
+                    SelectData = data;
+                }
+            });
+
+            //tbDataDictionary监听选择事件
+            table.on('tool(tbDataDictionary)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (layEvent === 'select') {
+                    SelectData = data;
+                }
+            });
+
+            form.on('submit(labelSave)', function (data) {
+                var index = layer.load(0, { shade: false });
+                var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
+                ajaxVerify(
+                    $.extend(model, { SqlName: verifyName }),
+                    (r) => {
+                        layer.msg(r.Data, { icon: 5 });
+                        layer.close(index);
+                        return false;
+                    },
+                    (r) => {
+                        $.post(
+                            postUrl,
+                            { model: model, name: activeName },
+                            function (r) {
+                                if (!r.IsError) {
+                                    layer.closeAll();
+                                    layer.msg("保存成功", { icon: 1, time: 1500});
+                                    tb_type.reload();
+                                } else {
+                                    layer.closeAll();
+                                    layer.msg('保存异常！' + r.Msg, { icon: 5 });
+                                }
+                            }
+                        );
+                    }
+                );
+                return false;
+            });
+
+            form.on('submit(dictionarySave)', function (data) {
+                var index = layer.load(0, { shade: false });
+                var model = activeName == "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID })
+                $.post(
+                    postUrl,
+                    { model: model, name: activeName },
+                    function (r) {
+                        if (!r.IsError) {
+                            layer.closeAll();
+                            layer.msg("保存成功", { icon: 1, time: 1500});
+                            tb_data.reload();
+                        } else {
+                            layer.closeAll();
+                            layer.msg('保存异常！' + r.Msg, { icon: 5 });
+                        }
+                    }
+                );
+                return false;
+            });
+            
+            //监听显示标记操作
+            form.on('switch(ShowMark)', function (obj) {
+                var url = "/DataDictionary/UpdateShowMark",
+                    name = tabIndex === 0 ? "UpdateTypeDictionaryLabelShowMark" : "UpdateTypeDataDictionaryShowMark",
+                    data = { ID: this.value, ShowMark: (obj.elem.checked ? "Y" : "N"), name: name }
+                updateShowMark(url, data);
+            });
+            //更新显示标记
+            function updateShowMark(url, data) {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: "post",
+                    dataType: "json",
+                    success: function (r) {
+                        if (!r.IsError) {
+                            layer.msg('更新成功', { icon: 1 });
+                        } else {
+                            layer.msg('更新失败！请稍后再试。' + r.Msg, { icon: 5 });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

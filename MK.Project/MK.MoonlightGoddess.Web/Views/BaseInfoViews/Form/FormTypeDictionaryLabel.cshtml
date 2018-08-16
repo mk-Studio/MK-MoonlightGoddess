@@ -1,0 +1,20 @@
+﻿
+@{
+    Layout = null;
+}
+<!--FormTypeDictionaryLabel-->
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formTypeDictionaryLabel" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="DataLabelName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="labelSave">保存</button>
+        </div>
+    </div>
+</form>

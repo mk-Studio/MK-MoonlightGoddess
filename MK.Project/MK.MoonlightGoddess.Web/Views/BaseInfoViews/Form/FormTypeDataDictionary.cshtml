@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = null;
+}
+<!--FormTypeDataDictionary-->
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formTypeDataDictionary" style="padding:20px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签类型</label>
+        <div class="layui-input-inline">
+            <select id="DataLabelID" name="DataLabelID" lay-verify="required" lay-search="" lay-filter="DataLabelID"></select>
+        </div>
+        <div class="layui-form-mid layui-word-aux">下拉框数据名称</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DataTypeName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">下拉框显示名称</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">说明</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DataDesc" autocomplete="off" class="layui-input">
+        </div>
+        @*<div class="layui-form-mid layui-word-aux">辅助文字</div>*@
+
+        <label class="layui-form-label">其他</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DataPlaceholder"   autocomplete="off" class="layui-input">
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="dictionarySave">保存</button>
+        </div>
+    </div>
+</form>

@@ -137,6 +137,28 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
+
+  <sql name="GetQueryDictionaryLabel">
+    SELECT ID,DataLabelName,ShowMark,CreateUser,CreateDate FROM dbo.MK_Type_DictionaryLabel
+  </sql>
+  
+  <sql name="GetQueryDataDictionary">
+    SELECT TOP (@limit)
+    t.RowID ,t.ID ,t.DataLabelID ,t.DataLabelName ,t.DataTypeName ,
+    t.DataDesc ,t.DataPlaceholder ,t.ShowMark , t.CreateUser ,t.CreateDate
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY dd.CreateDate DESC ) AS RowID,
+    dd.ID,dl.ID AS DataLabelID,DataLabelName,DataTypeName,DataDesc,DataPlaceholder,dd.ShowMark,dd.CreateUser,dd.CreateDate
+    FROM dbo.MK_Type_DataDictionary dd
+    JOIN dbo.MK_Type_DictionaryLabel dl ON dl.ID = dd.DataLabelID
+    ) as t
+    WHERE t.RowID > (@limit*(@page-1))
+    ORDER BY t.RowID
+    SELECT * FROM #TableResult
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
   <!--查询到layui-table的数据 end-->
   
 
@@ -196,6 +218,18 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
     INSERT MK_Info_Currency(CurrencyName,CurrencyCode,Remark,CreateUser,CreateDate)
     VALUES(@CurrencyName,@CurrencyCode,@Remark,@CreateUser,@CreateDate)
   </sql>
+
+  <sql name="InsertTypeDictionaryLabel">
+    INSERT dbo.MK_Type_DictionaryLabel( ID ,DataLabelName ,ShowMark ,CreateUser ,CreateDate)
+    VALUES  ( NEWID() ,@DataLabelName , 'Y' , @CreateUser , GETDATE())
+    SELECT '保存成功'
+  </sql>
+  
+  <sql name="InsertTypeDataDictionary">
+    INSERT dbo.MK_Type_DataDictionary( ID ,DataLabelID ,DataTypeName ,DataDesc , DataPlaceholder ,ShowMark ,CreateUser ,CreateDate)
+    VALUES  ( NEWID(),@DataLabelID,@DataTypeName,@DataDesc,@DataPlaceholder,'Y',@CreateUser,GETDATE())
+    SELECT '保存成功'
+  </sql>
   <!--添加数据 end-->
 
   
@@ -234,6 +268,18 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
     CurrencyName=@CurrencyName,CurrencyCode=@CurrencyCode,Remark=@Remark,CreateUser=@CreateUser,CreateDate=@CreateDate
     WHERE ID = @ID
   </sql>
+
+  <sql name="UpdateTypeDictionaryLabel">
+    UPDATE MK_Type_DictionaryLabel SET DataLabelName = @DataLabelName WHERE ID = @ID
+    SELECT '保存成功'
+  </sql>
+
+  <sql name="UpdateTypeDataDictionary">
+    UPDATE dbo.MK_Type_DataDictionary SET DataLabelID = @DataLabelID,DataTypeName = @DataTypeName,
+    DataDesc = @DataDesc , DataPlaceholder = @DataPlaceholder
+    WHERE ID = @ID
+    SELECT '保存成功'
+  </sql>
   <!--更新数据 end-->
   
 
@@ -261,6 +307,22 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
   
   <sql name="DeleteInfoCurrency">
     DELETE FROM MK_Info_Currency WHERE ID = @ID
+  </sql>
+
+  <sql name="DeleteTypeDictionaryLabel">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_DataDictionary WHERE DataLabelID = @ID)
+    BEGIN
+    DELETE FROM MK_Type_DictionaryLabel WHERE ID = @ID
+    SELECT '删除成功'
+    END
+    BEGIN
+    SELECT '无法删除。当前类型下有包含数据 ' + (SELECT '[ '+DataTypeName+' ] ' FROM MK_Type_DataDictionary WHERE DataLabelID = @ID FOR XML PATH(''))
+    END
+  </sql>
+
+  <sql name="DeleteTypeDataDictionary">
+    DELETE FROM MK_Type_DataDictionary WHERE ID = @ID
+    SELECT '删除成功'
   </sql>
   <!--删除数据 end-->
 
@@ -307,7 +369,14 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
   <sql name="UpdateInfoCurrencyShowMark">
     UPDATE MK_Info_Currency SET ShowMark = @ShowMark WHERE ID = @ID
   </sql>
-  <!--更新“ShowMark”显示标记 end-->
+
+  <sql name="UpdateTypeDictionaryLabelShowMark">
+    UPDATE MK_Type_DictionaryLabel SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
   
+  <sql name="UpdateTypeDataDictionaryShowMark">
+    UPDATE MK_Type_DataDictionary SET ShowMark = @ShowMark WHERE ID = @ID
+  </sql>
+  <!--更新“ShowMark”显示标记 end-->
 
 </DataDictionary>

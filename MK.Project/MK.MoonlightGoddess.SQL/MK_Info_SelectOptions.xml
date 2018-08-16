@@ -38,4 +38,8 @@
     SELECT 'English' AS Value,'英语' AS Text 
   </sql>
 
+  <sql name="DictionaryLabelType">
+    SELECT ID AS Value,DataLabelName AS Text FROM dbo.MK_Type_DictionaryLabel WHERE ShowMark = 'Y'
+  </sql>
+
 </MK_Info_SelectOptions>
