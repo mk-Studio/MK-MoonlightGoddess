@@ -7,8 +7,7 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
   
   <!--查询到layui-table的数据 begin-->
   <sql name="QueryInfoWuLiao">
-    SELECT TOP (@limit)
-    ID,WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,ShowMark,CreateUser,CreateDate INTO #TableResult
+    SELECT * INTO #TableResult
     FROM (
     SELECT ROW_NUMBER() OVER (ORDER BY wlinfo.CreateDate DESC ) AS RowID,
     wlinfo.ID,wltype.WuLiaoTypeName AS WuLiaoTypeID,ShangPinName,GuiGe,HaiGuanNo,WuLiaoImagePath,wlinfo.ShowMark,wlinfo.CreateUser,wlinfo.CreateDate
@@ -20,17 +19,16 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
     AND wlinfo.ShowMark = ISNULL(@ShowMark,wlinfo.ShowMark)
     AND wlinfo.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
 
-    SELECT * FROM #TableResult
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
   
   <sql name="QueryTypeWuLiao">
-    SELECT TOP (@limit)
-    ID,WuLiaoTypeName,ShowMark,CreateUser,CreateDate
+    SELECT
+    RowID, ID,WuLiaoTypeName,ShowMark,CreateUser,CreateDate
     INTO #TableResult
     FROM (
     SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,* FROM MK_Type_WuLiao
@@ -38,89 +36,90 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
     AND ShowMark = ISNULL(@ShowMark,ShowMark)
     AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
-    order by t.RowID
+    ORDER BY t.RowID
 
-    SELECT ID,WuLiaoTypeName,ShowMark,CreateUser, CreateDate FROM #TableResult
+    SELECT TOP (@limit) RowID, ID,WuLiaoTypeName,ShowMark,CreateUser, CreateDate
+    FROM #TableResult
+    WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
   
   <sql name="QueryInfoSupplier">
-    SELECT TOP (@limit)
-    ID,SupplierName,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate,t.WuLiaoDetail
+    SELECT
+    RowID, ID,SupplierName,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate,t.WuLiaoDetail
     INTO #TableResult
     FROM (
-          SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,a.*,(
-              SELECT '['+twl.WuLiaoTypeName+']'
-              FROM dbo.MK_Info_Supplier_WuLiao swl
-              JOIN dbo.MK_Type_WuLiao twl ON twl.ID = swl.ShangPinID
-              WHERE swl.SupplierID = a.ID
-              FOR XML PATH('')
-      ) AS WuLiaoDetail
-      FROM dbo.MK_Info_Supplier a
-      JOIN dbo.MK_Info_Supplier_WuLiao b ON b.SupplierID = a.ID
-      WHERE SupplierName = ISNULL(@SupplierName,SupplierName)
-      AND LianXiRen = ISNULL(@LianXiRen,LianXiRen)
-      AND LianXiFangShi = ISNULL(@LianXiFangShi,LianXiFangShi)
-      AND Address = ISNULL(@Address,Address)
-      AND a.ShowMark = ISNULL(@ShowMark,a.ShowMark)
-      AND b.ShangPinID #SQL#
-      AND a.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
-      GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
+    SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,a.*,(
+    SELECT '['+twl.WuLiaoTypeName+']'
+    FROM dbo.MK_Info_Supplier_WuLiao swl
+    JOIN dbo.MK_Type_WuLiao twl ON twl.ID = swl.ShangPinID
+    WHERE swl.SupplierID = a.ID
+    FOR XML PATH('')
+    ) AS WuLiaoDetail
+    FROM dbo.MK_Info_Supplier a
+    JOIN dbo.MK_Info_Supplier_WuLiao b ON b.SupplierID = a.ID
+    WHERE SupplierName = ISNULL(@SupplierName,SupplierName)
+    AND LianXiRen = ISNULL(@LianXiRen,LianXiRen)
+    AND LianXiFangShi = ISNULL(@LianXiFangShi,LianXiFangShi)
+    AND Address = ISNULL(@Address,Address)
+    AND a.ShowMark = ISNULL(@ShowMark,a.ShowMark)
+    AND b.ShangPinID #SQL#
+    AND a.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
+    GROUP BY a.ID,SupplierName, [LianXiRen], [LianXiFangShi], [Address], a.[ShowMark], a.[CreateUser], a.[CreateDate]
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
+
     ORDER BY t.RowID
 
-    SELECT * FROM #TableResult
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryTypeWuLiuYeWu">
-    SELECT TOP (@limit)
-    ID,YeWuType,ShowMark,CreateUser,CreateDate INTO #TableResult
+    SELECT
+    RowID, ID,YeWuType,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
-        SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
-        ID,YeWuType,ShowMark,CreateUser,CreateDate
-        FROM MK_Type_WuLiuYeWu
-        WHERE YeWuType = ISNULL(@YeWuType,YeWuType)
-        AND ShowMark = ISNULL(@ShowMark,ShowMark)
-        AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
+    SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
+    ID,YeWuType,ShowMark,CreateUser,CreateDate
+    FROM MK_Type_WuLiuYeWu
+    WHERE YeWuType = ISNULL(@YeWuType,YeWuType)
+    AND ShowMark = ISNULL(@ShowMark,ShowMark)
+    AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
+
     ORDER BY t.RowID
 
-    SELECT * FROM #TableResult
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryInfoWuLiuCompany">
-    SELECT TOP (@limit)
-    ID,YeWuID,YeWuName,Name,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate INTO #TableResult
+    SELECT
+    RowID, ID,YeWuID,YeWuName,Name,LianXiRen,LianXiFangShi,Address,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
-        SELECT ROW_NUMBER() OVER (ORDER BY wlc.CreateDate DESC ) AS RowID,
-        wlc.ID,YeWuID,wlt.YeWuType AS YeWuName,Name,LianXiRen,LianXiFangShi,Address,wlc.ShowMark,wlc.CreateUser,wlc.CreateDate
-        FROM dbo.MK_Info_WuLiuCompany wlc JOIN dbo.MK_Type_WuLiuYeWu wlt ON wlt.ID = wlc.YeWuID
-        WHERE wlc.YeWuID = ISNULL(@YeWuID,wlc.YeWuID)
-        AND wlc.Name = ISNULL(@Name,wlc.Name)
-        AND wlc.LianXiRen = ISNULL(@LianXiRen,wlc.LianXiRen)
-        AND wlc.LianXiFangShi = ISNULL(@LianXiFangShi,wlc.LianXiFangShi)
-        AND wlc.Address = ISNULL(@Address,wlc.Address)
-        AND wlc.ShowMark = ISNULL(@ShowMark,wlc.ShowMark)
-        AND wlc.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
+    SELECT ROW_NUMBER() OVER (ORDER BY wlc.CreateDate DESC ) AS RowID,
+    wlc.ID,YeWuID,wlt.YeWuType AS YeWuName,Name,LianXiRen,LianXiFangShi,Address,wlc.ShowMark,wlc.CreateUser,wlc.CreateDate
+    FROM dbo.MK_Info_WuLiuCompany wlc JOIN dbo.MK_Type_WuLiuYeWu wlt ON wlt.ID = wlc.YeWuID
+    WHERE wlc.YeWuID = ISNULL(@YeWuID,wlc.YeWuID)
+    AND wlc.Name = ISNULL(@Name,wlc.Name)
+    AND wlc.LianXiRen = ISNULL(@LianXiRen,wlc.LianXiRen)
+    AND wlc.LianXiFangShi = ISNULL(@LianXiFangShi,wlc.LianXiFangShi)
+    AND wlc.Address = ISNULL(@Address,wlc.Address)
+    AND wlc.ShowMark = ISNULL(@ShowMark,wlc.ShowMark)
+    AND wlc.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
-    SELECT * FROM #TableResult
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
 
   <sql name="QueryInfoCurrency">
-    SELECT TOP (@limit)
-    ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate INTO #TableResult
+    SELECT
+    RowID, ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate INTO #TableResult
     FROM (
         SELECT ROW_NUMBER() OVER (ORDER BY CreateDate DESC ) AS RowID,
         ID,CurrencyName,CurrencyCode,Remark,ShowMark,CreateUser,CreateDate
@@ -131,9 +130,9 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
         AND ShowMark = ISNULL(@ShowMark,ShowMark)
         AND CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(@EndDate,DATEADD(HH,1,GETDATE()))
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
+    
     ORDER BY t.RowID
-    SELECT * FROM #TableResult
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>
@@ -143,19 +142,20 @@ sql name 均已 [行为] + [表名简化] + [特殊情况的尾缀] 组成
   </sql>
   
   <sql name="GetQueryDataDictionary">
-    SELECT TOP (@limit)
+    SELECT
     t.RowID ,t.ID ,t.DataLabelID ,t.DataLabelName ,t.DataTypeName ,
-    t.DataDesc ,t.DataPlaceholder ,t.ShowMark , t.CreateUser ,t.CreateDate
+    t.DataDesc ,t.DataPlaceholder ,t.ShowMark , t.CreateUser ,t.CreateDate,IsBaseType
     INTO #TableResult
     FROM (
-    SELECT ROW_NUMBER() OVER (ORDER BY dd.CreateDate DESC ) AS RowID,
-    dd.ID,dl.ID AS DataLabelID,DataLabelName,DataTypeName,DataDesc,DataPlaceholder,dd.ShowMark,dd.CreateUser,dd.CreateDate
+    SELECT ROW_NUMBER() OVER (ORDER BY dd.CreateDate DESC ) AS RowID,dd.ID,dl.ID AS DataLabelID,
+    DataLabelName,DataTypeName,DataDesc,DataPlaceholder,dd.ShowMark,dd.CreateUser,dd.CreateDate,dl.IsBaseType
     FROM dbo.MK_Type_DataDictionary dd
     JOIN dbo.MK_Type_DictionaryLabel dl ON dl.ID = dd.DataLabelID
+    WHERE dd.DataLabelID = ISNULL(@DataLabelID,dd.DataLabelID)
     ) as t
-    WHERE t.RowID > (@limit*(@page-1))
     ORDER BY t.RowID
-    SELECT * FROM #TableResult
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
     SELECT COUNT(ID) AS rows FROM #TableResult
     DROP TABLE #TableResult
   </sql>

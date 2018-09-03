@@ -41,5 +41,30 @@
   <sql name="DictionaryLabelType">
     SELECT ID AS Value,DataLabelName AS Text FROM dbo.MK_Type_DictionaryLabel WHERE ShowMark = 'Y'
   </sql>
+  
+  <sql name="DictionaryLabelNoBaseType">
+    SELECT ID AS Value,DataLabelName AS Text FROM dbo.MK_Type_DictionaryLabel WHERE ShowMark = 'Y' AND IsBaseType = 'N'
+  </sql>
 
+  <sql name="ApprovalsGroup">
+    SELECT ID AS Value,ApprovedGroupName AS Text FROM dbo.MK_Type_ApprovedGroup WHERE ShowMark = 'Y'
+  </sql>
+
+  <sql name="ApprovalsType">
+    SELECT ID AS Value,ApprovedTypeName AS Text FROM dbo.MK_Type_ApprovedType WHERE ShowMark = 'Y'
+  </sql>
+
+  <sql name="ApprovalsTypeByTemplate">
+    SELECT S.Value,S.Text FROM (
+        SELECT a.ID AS Value,ApprovedTypeName AS Text ,ISNULL(b.ID,'mkos') ID
+        FROM dbo.MK_Type_ApprovedType a LEFT JOIN MK_Type_ApprovedTemplate b ON b.ApprovedTypeID = a.ID
+        WHERE a.ShowMark = 'Y'
+    ) S
+    WHERE S.ID = 'mkos'
+  </sql>
+
+  <sql name="GetDataByLabelType">
+    SELECT ID AS Value ,DataTypeName AS Text FROM dbo.MK_Type_DataDictionary
+    WHERE DataLabelID = @p1 AND ShowMark = 'Y'
+  </sql>
 </MK_Info_SelectOptions>

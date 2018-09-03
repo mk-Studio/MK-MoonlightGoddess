@@ -72,6 +72,16 @@ namespace MK.MoonlightGoddess.Models.EntityModels
         /// 抄送人
         /// </summary>
         public string CCName { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string Tel { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string FilterValue { get; set; }
         
     }
 

@@ -69,6 +69,7 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="ConverterHelper.cs" />
     <Compile Include="CookieHelper.cs" />
+    <Compile Include="DataTableToDBColumnsAttribute.cs" />
     <Compile Include="EncryptHelper.cs" />
     <Compile Include="ConvertHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,12 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MK.MoonlightGoddess.Models\MK.MoonlightGoddess.Models.csproj">
-      <Project>{8F9FB3C5-78D5-417B-BF45-BFF3ED19A728}</Project>
-      <Name>MK.MoonlightGoddess.Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

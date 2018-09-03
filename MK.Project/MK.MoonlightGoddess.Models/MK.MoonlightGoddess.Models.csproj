@@ -41,7 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
-    <Compile Include="DataTableToDBColumnsAttribute.cs" />
+    <Compile Include="EntityModels\MK_Info_ApprovedTask.cs" />
+    <Compile Include="EntityModels\MK_Info_ApprovedTaskCC.cs" />
+    <Compile Include="EntityModels\MK_Info_ApprovedTaskDetail.cs" />
+    <Compile Include="EntityModels\MK_Info_ApprovedTaskImages.cs" />
     <Compile Include="EntityModels\MK_Info_Currency.cs" />
     <Compile Include="EntityModels\MK_Info_Features.cs" />
     <Compile Include="EntityModels\MK_Info_Navigationbar.cs" />
@@ -52,12 +55,16 @@
     <Compile Include="EntityModels\MK_Info_User.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Info_WuLiuCompany.cs" />
+    <Compile Include="EntityModels\MK_Type_ApprovedGroup.cs" />
+    <Compile Include="EntityModels\MK_Type_ApprovedTemplate.cs" />
+    <Compile Include="EntityModels\MK_Type_ApprovedType.cs" />
     <Compile Include="EntityModels\MK_Type_DataDictionary.cs" />
     <Compile Include="EntityModels\MK_Type_DictionaryLabel.cs" />
     <Compile Include="EntityModels\MK_Type_FunctionList.cs" />
     <Compile Include="EntityModels\MK_Type_Power.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiao.cs" />
     <Compile Include="EntityModels\MK_Type_WuLiuYeWu.cs" />
+    <Compile Include="ResultModels\ApprovalsCollaResultModel.cs" />
     <Compile Include="ResultModels\LayuiPhotosResultModel.cs" />
     <Compile Include="ResultModels\LayuiTableResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +73,14 @@
     <Compile Include="ResultModels\LayuiUploadResultModel.cs" />
     <Compile Include="ResultModels\SelectOptionsResultModel.cs" />
     <Compile Include="ResultModels\WebSiteMenusResultModel.cs" />
+    <Compile Include="SerializableModels\ApprovalsSerializableModel.cs" />
+    <Compile Include="SerializableModels\IApprovalsSerializableModelResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MK.MoonlightGoddess.Core\MK.MoonlightGoddess.Core.csproj">
+      <Project>{ce5aa296-8a98-4201-98d4-7c79ed3a1c4b}</Project>
+      <Name>MK.MoonlightGoddess.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

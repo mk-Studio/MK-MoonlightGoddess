@@ -88,4 +88,37 @@
     SELECT 'OK'
     END
   </sql>
+
+  <sql name="VerifyExistsDataDictionary">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_DataDictionary WHERE ID = @ID AND DataTypeName = @DataTypeName)
+    BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该数据[ '+@DataTypeName+' ]已存在' ELSE 'OK' END
+    FROM MK_Type_DataDictionary WHERE DataTypeName = @DataTypeName
+    END
+    ELSE BEGIN
+    SELECT 'OK'
+    END
+  </sql>
+
+  <sql name="VerifyExistsApprovedGroup">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_ApprovedGroup WHERE ID = @ID AND ApprovedGroupName = @ApprovedGroupName)
+    BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该审批组已存在' ELSE 'OK' END
+    FROM MK_Type_ApprovedGroup WHERE ApprovedGroupName = @ApprovedGroupName
+    END
+    ELSE BEGIN
+    SELECT 'OK'
+    END
+  </sql>
+
+  <sql name="VerifyExistsApprovedType">
+    IF NOT EXISTS(SELECT ID FROM MK_Type_ApprovedType WHERE ID = @ID AND ApprovedTypeName = @ApprovedTypeName)
+    BEGIN
+    SELECT  CASE WHEN COUNT(ID) = 1 THEN '该审批类型已存在' ELSE 'OK' END
+    FROM MK_Type_ApprovedType WHERE ApprovedTypeName = @ApprovedTypeName
+    END
+    ELSE BEGIN
+    SELECT 'OK'
+    END
+  </sql>
 </VerifyDbData>

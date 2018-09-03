@@ -1,0 +1,513 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ApprovedManage</title>
+    <link href="~/Scripts/layui-v2.4.2/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/mk-icon-hub/iconfont.css" rel="stylesheet" />
+    <style type="text/css">
+        /*table 样式修改 begin*/
+        .layui-table-hover {
+            background-color: #c2c2c2 !important;
+        }
+
+        .layui-table-click {
+            background-color: #393D49 !important;
+            color: white;
+        }
+        /*table 样式修改 end*/
+        .icon_lists li {
+            cursor: pointer;
+            margin-bottom:4px;
+            box-shadow: 0px 1px 3px #393D49;
+            overflow:hidden;
+            white-space:nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-tab layui-tab-brief" lay-filter="tabManage">
+        <ul class="layui-tab-title">
+            <li class="layui-this">审批组管理</li>
+            <li>审批类型管理</li>
+            <li>审批类型模板管理</li>
+        </ul>
+        <div class="layui-tab-content">
+            <!--审批组管理-->
+            <div class="layui-tab-item layui-show">
+                <div class="layui-btn-group tbTools"></div>
+                <table class="layui-hide" id="tbGroup" lay-filter="tbGroup"></table>
+            </div>
+            <!--审批类型管理-->
+            <div class="layui-tab-item">
+                <div class="layui-btn-group tbTools"></div>
+                <table class="layui-hide" id="tbType" lay-filter="tbType"></table>
+            </div>
+            <!--审批类型模板管理-->
+            <div class="layui-tab-item">
+                <div class="layui-btn-group tbTools"></div>
+                <table class="layui-hide" id="tbTemplate" lay-filter="tbTemplate"></table>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="switchShowByGroup">
+        <!-- 显示状态 -->
+        <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="showGroup" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+    </script>
+
+    <script type="text/html" id="switchShowByType">
+        <!-- 显示状态 -->
+        <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="showType" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+    </script>
+
+    <script type="text/html" id="switchShowByTemplate">
+        <!-- 显示状态 -->
+        <input type="checkbox" name="Show" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="showTemplate" {{ d.ShowMark == 'Y' ? 'checked' : '' }}>
+    </script>
+
+    <script type="text/html" id="hasTemplate">
+        {{#  if(d.HasTemplate === "Y"){ }}
+        <span style="color: #5FB878;"><i class="layui-icon layui-icon-ok"></i></span>
+        {{#  } else { }}
+        <span style="color: #C62828;"><i class="layui-icon layui-icon-close"></i></span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="iconTemplate">
+        <i class="mk-iconfont {{d.ClassIconfont}}" style="font-size: 34px !important"></i>
+    </script>
+    <script type="text/html" id="bgColorTemplate">
+        <div style="width:66%;height:100%;background-color:{{d.BackgroundColor}}"></div>
+    </script>
+
+    <script src="~/Scripts/layui-v2.4.2/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
+    <script type="text/javascript">
+        layui.use(['element', 'form', 'table', 'colorpicker'], function () {
+            var element = layui.element,
+                form = layui.form,
+                table = layui.table,
+                colorpicker = layui.colorpicker,
+                tabIndex = 0,
+                active,
+                selectData = null,           //表格选中的行对象
+                activeName = "",           //执行的sqlName
+                POSTURL = "/ApprovalsManage/ExecuteCommand",
+                formObj = [
+                    {
+                        name: "Group",
+                        area: ['521px', '230px'],
+                        pageUrl: "/ApprovalsManage/FormApprovedGroup",
+                        filter: "formApprovedGroup",
+                        val: function (isVal) {
+                            if (isVal === true) {
+                                /*赋值...*/
+                                form.val(this.filter, {
+                                    "ApprovedGroupName": selectData.ApprovedGroupName
+                                });
+                            }
+                        },
+                        verifyName: "VerifyExistsApprovedGroup"
+                    },
+                    {
+                        name: "Type",
+                        area: ['521px', '396px'],
+                        pageUrl: "/ApprovalsManage/FormApprovedType",
+                        filter: "formApprovedType",
+                        val: function (isVal) {
+                            InitNewCombobox("#ApprovedGroupID", "ApprovalsGroup", form, false);
+                            if (isVal === true) {
+                                /*赋值...*/
+                                form.val(this.filter, {
+                                    "ApprovedGroupID": selectData.ApprovedGroupID
+                                    , "ApprovedTypeName": selectData.ApprovedTypeName
+                                    , "ClassIconfont": selectData.ClassIconfont
+                                    , "BackgroundColor": selectData.BackgroundColor
+                                    , "Sort": selectData.Sort
+                                });
+                            }
+                        },
+                        verifyName: "VerifyExistsApprovedType"
+                    },
+                    {
+                        name: "Template",
+                        area: ['731px', '426px'],
+                        pageUrl: "/ApprovalsManage/FormApprovedTemplate",
+                        filter: "formApprovedTemplate",
+                        val: function (isVal) {
+                            InitNewCombobox("#DataLabelID", "DictionaryLabelType", form, false);
+                            if (isVal === false) {
+                                OnCombobox("#ApprovedTypeID", "ApprovalsTypeByTemplate", form, false);
+                            }
+                            if (isVal === true) {
+                                var cmbArray = [{ Value: selectData.ApprovedTypeID, Text: selectData.ApprovedTypeName }];
+                                OnCombobox("#ApprovedTypeID", "ApprovalsTypeByTemplate", form, cmbArray);
+                                /*赋值...*/
+                                form.val(this.filter, {
+                                    "ApprovedTypeID": selectData.ApprovedTypeID
+                                    , "ApprovedTemplateName": selectData.ApprovedTemplateName
+                                    , "TitleLabel": selectData.TitleLabel
+                                    , "DataLabeName": selectData.DataLabeName
+                                    , "DataLabelID": selectData.DataLabelID
+                                    , "DataParameter": selectData.DataParameter
+                                    , "DescLabel": selectData.DescLabel
+                                    , "ImageMinNum": selectData.ImageMinNum
+                                    , "ImageMaxNum": selectData.ImageMaxNum
+                                });
+                            }
+                        },
+                        verifyName: "VerifyExistsApprovedTemplate"
+                    }
+                ];
+
+            $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
+                for (var i = 0; i < r.length; i++) {
+                    var barHtml = "";
+                    if (r && r.length > 0) {
+                        barHtml += '<button class="layui-btn layui-btn-sm" data-type="' + r[i].DataType + '" >' +
+                            '<i class="layui-icon"></i>' + r[i].FeaturesName + '</button > ';
+                    }
+                    $(".tbTools").append(barHtml);
+                }
+            }, "json");
+
+            var tbGroup = table.render({
+                elem: '#tbGroup'
+                , skin: "line"
+                , url: "/ApprovalsManage/GetQueryGroup"
+                , method: 'get'
+                , toolbar: true
+                , text: { none: '暂无相关数据' }
+                , cols: [[
+                    { field: 'ApprovedGroupName', title: '审批组', width: 150, sort: true, event: 'select' }
+                    , { field: 'Sort', title: '排列顺序', align: "center", width: 120, sort: true, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 107, sort: true, event: 'select', templet: '#switchShowByGroup' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
+            });
+            var tbType = table.render({
+                elem: '#tbType'
+                , skin: "line"
+                , url: "/ApprovalsManage/GetQueryType"
+                , method: 'get'
+                , toolbar: true
+                , page: true
+                , text: { none: '暂无相关数据' }
+                , cols: [[
+                    { field: 'ApprovedTypeName', title: '审批类型名称', width: 150, event: 'select' }
+                    , { field: 'ApprovedGroupName', title: '审批组', width: 150, sort: true, event: 'select' }
+                    , { field: 'ClassIconfont', title: '类型图标', align: "center", width: 150, event: 'select', templet: '#iconTemplate' }
+                    , { field: 'BackgroundColor', title: '类型背景色', align: "center", width: 150, event: 'select', templet: '#bgColorTemplate' }
+                    , { field: 'Sort', title: '排列顺序', align: "center", width: 120, sort: true,  event: 'select' }
+                    , { field: 'HasTemplate', title: '是否有模板', align: "center", width: 150, sort: true, event: 'select', templet: '#hasTemplate' }
+                    , { field: 'ShowMark', title: '显示标识', width: 107, sort: true, event: 'select', templet: '#switchShowByType' }
+                    , { field: 'CreateUser', title: '创建人', width: 140, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
+            });
+            var tbTemplate = table.render({
+                elem: '#tbTemplate'
+                , skin: "line"
+                , url: "/ApprovalsManage/GetQueryTemplate"
+                , method: 'get'
+                , toolbar: true
+                , page: true
+                , text: { none: '暂无相关数据' }
+                , cols: [[
+                    { field: 'ApprovedTemplateName', title: '模板名', width: 150, event: 'select' }
+                    , { field: 'ApprovedTypeName', title: '审批类型', width: 150, sort: true, event: 'select' }
+                    , { field: 'ApprovedGroupName', title: '审批组', width: 150, sort: true, event: 'select' }
+                    , { field: 'TitleLabel', title: '审批标题名', width: 145, event: 'select' }
+                    , { field: 'DataLabeName', title: '明细类型名', width: 145, sort: true, event: 'select' }
+                    , { field: 'DataParameter', title: '明细参数名', width: 145, sort: true, event: 'select' }
+                    , { field: 'DescLabel', title: '详情描述名', width: 145, sort: true, event: 'select' }
+                    , { field: 'ImageMinNum', title: '上传最小图片数', width: 128, event: 'select' }
+                    , { field: 'ImageMaxNum', title: '上传最大图片数', width: 128, event: 'select' }
+                    , { field: 'ShowMark', title: '显示标识', width: 107, sort: true, event: 'select', templet: '#switchShowByTemplate' }
+                    , { field: 'CreateUser', title: '创建人', width: 100, sort: true, event: 'select' }
+                    , { field: 'CreateDate', title: '创建时间', width: 190, sort: true, event: 'select' }
+                ]]
+            });
+
+            //监听tab选项卡的变化
+            element.on('tab(tabManage)', function (data) {
+                tabIndex = data.index;
+                selectData = null;
+                active.refresh();
+            });
+
+            //按钮激活
+            active = {
+                //添加
+                add: function () { //添加
+                    activeName = "Add";
+                    var index = layer.load(0, { shade: false });
+                    $.get(formObj[tabIndex].pageUrl, {}, function (html) {
+                        layer.open({
+                            title: "添加",
+                            area: formObj[tabIndex].area,
+                            skin: 'layui-layer-molv',
+                            type: 1,
+                            content: html,
+                            cancel: function () { }
+                        });
+                        formObj[tabIndex].val(false);
+                        form.render();
+                        if (tabIndex === 1) {
+                            bindSeletIcon();
+                            renderColorComplate();
+                        }
+                        layer.close(index);
+                    });
+                },
+                //修改
+                edit: function () {
+                    activeName = "Edit";
+                    if (selectData) {
+                        var index = layer.load(0, { shade: false });
+                        $.get(formObj[tabIndex].pageUrl, {}, function (html) {
+                            layer.open({
+                                title: "修改",
+                                area: formObj[tabIndex].area,
+                                skin: 'layui-layer-molv',
+                                type: 1,
+                                content: html,
+                                cancel: function () { }
+                            });
+                            formObj[tabIndex].val(true);
+                            form.render();
+                            if (tabIndex === 1) {
+                                bindSeletIcon();
+                                renderColorComplate(selectData.BackgroundColor);
+                            }
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg("请选择要修改的数据");
+                    }
+                },
+                //删除
+                del: function () {
+                    activeName = "Del";
+                    if (selectData) {
+                        layer.confirm('确定是否要彻底删除该信息？', {
+                            title: "删除信息",
+                            btn: ['确定', '算了']
+                        }, function (index, layero) {
+                            var _index = layer.load(0, { shade: false });
+                            $.post(POSTURL,
+                                { model: { ID: selectData.ID }, name: activeName + formObj[tabIndex].name },
+                                function (r) {
+                                    if (!r.IsError) {
+                                        if (r.Data === "OK") {
+                                            layer.msg("删除成功", { icon: 1, time: 1500 });
+                                            active.refresh();
+                                        } else {
+                                            layer.msg(r.Data, { icon: 0, time: 3000 });
+                                        }
+                                    } else {
+                                        layer.msg('删除异常！' + r.Msg, { icon: 5 });
+                                    }
+                                }
+                            );
+                            layer.close(_index);
+                        }, function (index) {
+                            //算了
+                        }
+                        );
+                    } else {
+                        layer.msg("请选择要删除的数据");
+                    }
+                },
+                //刷新
+                refresh: function () {
+                    switch (tabIndex) {
+                        case 0:
+                            tbGroup.reload();
+                            break;
+                        case 1:
+                            tbType.reload();
+                            break;
+                        case 2:
+                            tbTemplate.reload();
+                            break;
+                    }
+                }
+            };
+
+            //监听按钮点击事件
+            $('.tbTools').on('click', '.layui-btn', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //监听按钮点击事件
+            var bindSeletIcon = function () {
+                $('.selete-icon').on('click', function () {
+                    var _index = layer.load(0, { shade: false });
+                    $.get("/ComView/SelectedIcon", {}, function (html) {
+                        var iconSelectView = layer.open({
+                            title: "选择审批类型的Icon图标",
+                            area: ['100%', '100%'],
+                            skin: 'layui-layer-molv',
+                            type: 1,
+                            content: html,
+                            success: function () {
+                                layer.close(_index);
+                                $('.icon_lists>li').on('click', function (e) {
+                                    var iconclass = $(e.currentTarget.children.item(2)).html();
+                                    $("#ClassIconfont").val(iconclass);
+                                    layer.close(iconSelectView);
+                                });
+                            },
+                            cancel: function () { }
+                        });
+                    }, "html");
+                });
+            };
+
+            var renderColorComplate = function (colorValue) {
+                colorpicker.render({
+                    elem: '#bgColor-form'
+                    , color: colorValue || '#009688'
+                    , predefine: true
+                    , done: function (color) {
+                        $('#BackgroundColor').val(color);
+                        color || this.change(color);
+                    }
+                });
+            };
+
+            var onShowMark = function (that,obj,name) {
+                var url = "/ApprovalsManage/ExecuteCommand",
+                    data = { ID: that.value, ShowMark: obj.elem.checked ? "Y" : "N", name: name };
+                $.post(url, data, function (r) {
+                    if (!r.IsError) {
+                        layer.msg('更新成功', { icon: 1 ,time:1500});
+                    } else {
+                        layer.msg('更新失败！请稍后再试。' + r.Msg, { icon: 5, time: 4500});
+                    }
+                }, "json");
+            };
+
+            //组监听选择事件
+            table.on('tool(tbGroup)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (layEvent === 'select') {
+                    selectData = data;
+                }
+            });
+
+            //类型监听选择事件
+            table.on('tool(tbType)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (layEvent === 'select') {
+                    selectData = data;
+                }
+            });
+
+            //模板监听选择事件
+            table.on('tool(tbTemplate)', function (obj) {
+                var data = obj.data, layEvent = obj.event;
+                if (layEvent === 'select') {
+                    selectData = data;
+                }
+            });
+
+            //监听显示标记操作
+            form.on('switch(showGroup)', function (obj) {
+                var that = this;
+                onShowMark(that, obj, "UpdateGroupShow");
+            });
+
+            //监听显示标记操作
+            form.on('switch(showType)', function (obj) {
+                var that = this;
+                onShowMark(that, obj, "UpdateTypeShow");
+            });
+
+            //监听显示标记操作
+            form.on('switch(showTemplate)', function (obj) {
+                var that = this;
+                onShowMark(that, obj, "UpdateTemplateShow");
+            });
+
+            //[组]监听提交事件
+            form.on('submit(GroupSave)', function (data) {
+                submitData(data.field);
+                return false;
+            });
+
+            //[类型]监听提交事件
+            form.on('submit(TypeSave)', function (data) {
+                submitData(data.field);
+                return false;
+            });
+
+            //[模板]监听提交事件
+            form.on('submit(TemplateSave)', function (data) {
+                var index = layer.load(0, { shade: false });
+                var model = activeName === "Add" ? $.extend(data.field, { ID: "Add" }) : $.extend(data.field, { ID: selectData.ID });
+                if (data.field.ImageMinNum <= data.field.ImageMaxNum) {
+                    $.post(
+                        POSTURL,
+                        { model: model, name: activeName + formObj[tabIndex].name },
+                        function (r) {
+                            if (!r.IsError) {
+                                layer.closeAll();
+                                layer.msg("保存成功", { icon: 1 });
+                                active.refresh();
+                            } else {
+                                layer.closeAll();
+                                layer.msg('保存异常！' + r.Msg, { icon: 5 });
+                            }
+                        }
+                    );
+                }
+                else {
+                    laymsgwr("最小图片数不能大于最大图片数", "无效图片参数");
+                    layer.close(index);
+                }
+                return false;
+            });
+
+            function submitData(formdata) {
+                var index = layer.load(0, { shade: false });
+                var model = activeName === "Add" ? $.extend(formdata, { ID: "Add" }) : $.extend(formdata, { ID: selectData.ID });
+                ajaxVerify(
+                    $.extend(model, { SqlName: formObj[tabIndex].verifyName }),
+                    function (r) {
+                        layer.msg(r.Data, { icon: 5 });
+                        layer.close(index);
+                        return false;
+                    },
+                    function(r) {
+                        $.post(
+                            POSTURL,
+                            { model: model, name: activeName + formObj[tabIndex].name },
+                            function (r) {
+                                if (!r.IsError) {
+                                    layer.closeAll();
+                                    layer.msg("保存成功", { icon: 1 });
+                                    active.refresh();
+                                } else {
+                                    layer.closeAll();
+                                    layer.msg('保存异常！' + r.Msg, { icon: 5 });
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        });
+    </script>
+</body>
+</html>

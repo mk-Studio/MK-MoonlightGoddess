@@ -54,10 +54,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ComView.xml" />
     <Content Include="DataDictionary.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="DB-Create.sql" />
+    <Content Include="DB-TRIGGER-CREATE.sql" />
+    <Content Include="MK_ApprovedManage.xml" />
+    <Content Include="MK_Info_Approve.xml" />
     <Content Include="MK_Info_Authority.xml" />
     <Content Include="MK_Info_Features.xml" />
     <Content Include="MK_Info_Navigationbar.xml" />

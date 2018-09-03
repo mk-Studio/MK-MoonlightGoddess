@@ -9,7 +9,8 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>UserManage</title>
-    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.4.2/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/CSS/ultree.css" rel="stylesheet" />
     @*<link href="~/CSS/formSelects-v4.css" rel="stylesheet" />*@
     <style type="text/css">
         /*table 样式修改 begin*/
@@ -26,19 +27,58 @@
 </head>
 <body>
     <div>
-        <fieldset class="layui-elem-field layui-field-title">
-            <legend>用户管理</legend>
-        </fieldset>
+        <div class="layui-collapse">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">查询</h2>
+                <div class="layui-colla-content">
+                    <form id="queryForm" class="layui-form layui-form-pane" action="" lay-filter="queryForm">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="UserName" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+
+                            <label class="layui-form-label">昵称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="NickName" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+
+                            <label class="layui-form-label">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="Tel" l placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">业务类型</label>
+                            <div class="layui-input-inline">
+                                <select id="qWuLiuYeWuID" name="WuLiuYeWuID" lay-search="" lay-filter="qWuLiuYeWuID"></select>
+                            </div>
+
+                            <label class="layui-form-label">角色群组</label>
+                            <div class="layui-input-inline">
+                                <select id="qPowerGroupID" name="PowerGroupID"  lay-search="" lay-filter="qPowerGroupID"></select>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn" lay-submit lay-filter="query">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br />
         <div class="layui-row">
             <div class="layui-col-lg2">
-                <div id="dataList" style="display: inline-block; width: 85%; height: 666px; padding: 10px; border: 1px solid #ddd; overflow: auto;">
-                    <ul id="treeGroup"></ul>
+                <div id="dataList" style="display: inline-block; width: 85%; padding: 10px; border: 1px solid #ddd; overflow: auto;">
+                    <ul id="treeGroup" class="ultree"></ul>
                 </div>
             </div>
             <div class="layui-col-lg10">
                 <div class="layui-btn-group tbTools">
                     @*<button class="layui-btn layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
-                    <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>*@
+            <button class="layui-btn layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i>修改</button>*@
                 </div>
                 <hr />
 
@@ -52,8 +92,8 @@
                 <script type="text/html" id="switchCC">
                     <input type="checkbox" name="CCChangeMark" value="{{d.ID}}" lay-skin="switch" lay-text="ON|OFF" lay-event="select" lay-filter="CC_ChangeMark" {{ d.CC_ChangeMark == 'Y' ? 'checked' : '' }}>
                 </script>
-                
-                
+
+
                 <script type="text/html" id="sexStyle">
                     {{#  if(d.Sex === 1){ }}
                     <span style="color: #F581B1;"><i class="layui-icon layui-icon-female"></i></span>
@@ -65,7 +105,8 @@
         </div>
     </div>
 
-    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Js/ie8MapObject.js"></script>
+    <script src="~/Scripts/layui-v2.4.2/layui/layui.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
@@ -74,8 +115,8 @@
         }).extend({
             formSelects: 'formSelects-v3'
         })
-        layui.use(['table', 'form', 'tree', 'formSelects', 'jquery'], function () {
-
+        layui.use(['element','table', 'form', 'tree', 'formSelects'], function () {
+            
             var table = layui.table, form = layui.form, tree = layui.tree, $ = layui.jquery, formSelects = layui.formSelects;//多选下拉框
 
             $.get("/FunBar/GetFuns", { PowerID: GetQueryString("PowerID") }, function (r) {
@@ -89,12 +130,14 @@
                 }
             }, "json");
 
+            //绑定业务下拉框
+            InitNewCombobox("#qWuLiuYeWuID", "YeWuType", form, true);
+            //绑定群组下拉框
+            InitNewCombobox("#qPowerGroupID", "PowerGroupType", form, true);
+            $("#dataList").css("height", (window.innerHeight -30) + 'px');
             var getTreeNodesData,//选中的树节点数据
                 commandName,//执行命令名称
                 SelectData,//table选中的数据
-                layuiTableWhere = {
-                    //layui table 查询条件
-                },
                 configParams = {
                     formUrl: '/User/FormInfoUser',
                     postUrl: '/User/ExceInfoUser',
@@ -150,47 +193,58 @@
                     }
                 }
 
-            layui.tree({
+            tree({
                 elem: '#treeGroup',
                 nodes: getByTree(),
                 click: function (node) {//node即为当前点击的节点数据
                     //缓存选中树节点
                     getTreeNodesData = node;
                     //显示table数据
-                    displayTable(getTreeNodesData.id);
+                    tbUserReload(getTreeNodesData.id);
                     //清空选中数据缓存
-                    SelectData = undefined;
+                    SelectData = null;
                 }
             });
 
+            $('.ultree li a').on('click', function () {
+                $(this).addClass('ultree-on');
+                $('.ultree li a').not($(this)).removeClass('ultree-on');
+            });
 
-            function displayTable(id) {
-                layuiTableWhere = { PowerGroupID: id }
-                table.render({
-                    elem: '#tbUsers',
-                    height: 520,
-                    url: '/User/GetUsersInfo',
-                    where: layuiTableWhere,
-                    page: true,
-                    cols: [[
-                        { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true, fixed: 'left'}
-                        , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true}
-                        , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true, templet: '#sexStyle'}
-                        , { field: 'PowerGroupName', title: '群组角色', width: 170, event: 'select', align: 'center' }
-                        , { field: 'YeWuType', title: '业务类型', width: 170, event: 'select', align: 'center' }
-                        , { field: 'DefaultLanguage', title: '默认语言', width: 160, event: 'select', align: 'center', sort: true }
-                        , { field: 'ApproveName', title: '审批人', width: 120, event: 'select', align: 'center', sort: true }
-                        , { field: 'Approve_ChangeMark', title: '审批人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchApprove' }
-                        , { field: 'CCName', title: '抄送人', width: 120, event: 'select', align: 'center', sort: true }
-                        , { field: 'CC_ChangeMark', title: '抄送人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchCC'}
-                        , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select', sort: true, templet: '#switchShow', fixed: 'right'}
-                    ]],
-                    done: function (res, curr, count) {
-                        SelectData = undefined;
+            var tb_user = table.render({
+                elem: '#tbUsers',
+                height: 520,
+                url: '/User/GetUsersInfo',
+                where: { PowerGroupID: "All", UserName: "", NickName: "", Tel: "", WuLiuYeWuID: "" },
+                toolbar: true,
+                page: true,
+                cols: [[
+                    { field: 'UserName', title: '用户名', width: 120, event: 'select', align: 'center', sort: true, fixed: 'left' }
+                    , { field: 'NickName', title: '昵称', width: 150, event: 'select', align: 'center', sort: true }
+                    , { field: 'Sex', title: '性别', width: 87, align: 'center', event: 'select', sort: true, templet: '#sexStyle' }
+                    , { field: 'Tel', title: '联系电话', width: 170, event: 'select', align: 'center', sort: true }
+                    , { field: 'PowerGroupName', title: '群组角色', width: 170, event: 'select', align: 'center' }
+                    , { field: 'YeWuType', title: '业务类型', width: 170, event: 'select', align: 'center' }
+                    , { field: 'DefaultLanguage', title: '默认语言', width: 160, event: 'select', align: 'center', sort: true }
+                    , { field: 'ApproveName', title: '审批人', width: 120, event: 'select', align: 'center', sort: true }
+                    , { field: 'Approve_ChangeMark', title: '审批人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchApprove' }
+                    , { field: 'CCName', title: '抄送人', width: 120, event: 'select', align: 'center', sort: true }
+                    , { field: 'CC_ChangeMark', title: '抄送人更改标识', width: 160, event: 'select', align: 'center', sort: true, templet: '#switchCC' }
+                    , { field: 'ShowMark', title: '是否有效', width: 110, event: 'select', sort: true, templet: '#switchShow', fixed: 'right' }
+                ]],
+                done: function (res, curr, count) {
+                    SelectData = null;
+                }
+            });
+
+            function tbUserReload(gpID) {
+                tb_user.reload({
+                    where: { PowerGroupID: gpID }
+                    , page: {
+                        curr: 1 //重新从第 1 页开始
                     }
                 });
             }
-
             var active = {
                 //新增
                 add: function () {
@@ -201,7 +255,8 @@
                     $.post(configParams.formUrl, {}, function (formElem) {
                         layer.open({
                             title: "添加信息",
-                            area: ['731px', '386px'],
+                            area: ['731px', '461px'],
+                            skin: 'layui-layer-molv',
                             type: 1,
                             content: formElem,
                         });
@@ -215,24 +270,30 @@
                 },
                 //编辑
                 edit: function () {
-                    commandName = "Update";
-                    //显示加载动画
-                    var index = layer.load(0, { shade: false });
-                    //打开新增页面
-                    $.post(configParams.formUrl, {}, function (formElem) {
-                        layer.open({
-                            title: "添加信息",
-                            area: ['731px', '386px'],
-                            type: 1,
-                            content: formElem,
+                    if (SelectData) {
+                        commandName = "Update";
+                        //显示加载动画
+                        var index = layer.load(0, { shade: false });
+                        //打开新增页面
+                        $.post(configParams.formUrl, {}, function (formElem) {
+                            layer.open({
+                                title: "添加信息",
+                                area: ['731px', '77%'],
+                                skin: 'layui-layer-molv',
+                                type: 1,
+                                content: formElem,
+                            });
+                            //关闭加载动画
+                            layer.close(index);
+                            //渲染页面
+                            form.render();
+                            //绑定下拉框
+                            configParams.formVal(true);
                         });
-                        //关闭加载动画
-                        layer.close(index);
-                        //渲染页面
-                        form.render();
-                        //绑定下拉框
-                        configParams.formVal(true);
-                    });
+                    }
+                    else {
+                        laymsg("请先选择需要修改的人员");
+                    }
                 }
             }
 
@@ -333,6 +394,18 @@
             });
 
             //监听新增提交
+            form.on('submit(query)', function (data) {
+                console.log(data.field)
+                tb_user.reload({
+                    where: data.field
+                    , page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            });
+
+            //监听新增提交
             form.on('submit(comSave)', function (data) {
                 var model = commandName === "Insert" ? $.extend(data.field, { ID: "Insert" }) : $.extend(data.field, { ID: SelectData.ID });
                 if (formSelects.value('ApproveID').length === 0 || formSelects.value('CCID').length === 0) {    
@@ -341,12 +414,12 @@
                 }
                 ajaxVerify(
                     $.extend(model, { SqlName: configParams.verifyName }),
-                    (r) => {
+                    function (r) {
                         layer.msg(r.Data, { icon: 5 });
                         layer.close(index);
                         return false;
                     },
-                    (r) => {
+                    function (r) {
                         $.post(
                             configParams.postUrl,
                             { model: model, approve: formSelects.value('ApproveID'), cc: formSelects.value('CCID'), commandName: commandName },
@@ -362,7 +435,7 @@
                                             ? "账号添加成功！<span style='color:red;'>默认密码为：123</span>"
                                             :  "修改成功！"
                                         layer.alert(msg, { icon: 1 });
-                                        displayTable(model.PowerGroupID);
+                                        tbUserReload(model.PowerGroupID);
                                     }
                                 }
                             }
@@ -380,7 +453,7 @@
                     nodes: getByTree(),
                     click: function (node) {
                         getTreeNodesData = node;
-                        displayTable(getTreeNodesData.id);
+                        tbUserReload(getTreeNodesData.id)
                     }
                 });
             }

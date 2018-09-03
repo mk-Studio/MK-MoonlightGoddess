@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ComView>
+  <sql name="GetLikeQueryUser">
+    WITH userinfo AS(
+    SELECT ID,
+    (UserName+'')
+    +(NickName+'')
+    +[dbo].[fn_GetPy](NickName+'')
+    +[dbo].[fn_GetQuanPin](NickName+'')
+    +(Tel+'') AS Value
+    FROM dbo.MK_Info_User WHERE ShowMark='Y'
+    AND PowerGroupID = ISNULL(@PowerGroupID,PowerGroupID)
+    ),
+    filter AS (SELECT userinfo.ID FROM userinfo WHERE userinfo.Value LIKE '%'+ISNULL(@FilterValue,'')+'%')
+
+    SELECT u.ID,UserName,NickName,Tel FROM MK_Info_User u JOIN filter f ON f.ID = u.ID
+  </sql>
+
+  <sql name="GetUserGroup">
+    SELECT ID,OnID,PowerGroupName as Name
+    FROM MK_Info_PowerGroup 
+    WHERE ID != '00000000-0000-0000-0000-000000000000'
+  </sql>
+</ComView>

@@ -19,11 +19,6 @@
     <div class="layui-input-inline">
         <input type="text" name="LianXiFangShi" lay-verify="" autocomplete="off" class="layui-input">
     </div>
-
-    <label class="layui-form-label">地址</label>
-    <div class="layui-input-inline">
-        <input type="text" name="Address" lay-verify="" autocomplete="off" class="layui-input">
-    </div>
 </div>
 
 <!--Row2-->
@@ -38,12 +33,20 @@
 
 <!--Row3-->
 <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-block">
+        <input type="text" name="Address" lay-verify="" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<!--Row4-->
+<div class="layui-form-item">
 
     <label class="layui-form-label">创建时间</label>
     <div class="layui-input-inline">
         <input type="text" name="StartDate" class="layui-input queryDate" placeholder="起始日期">
     </div>
-
+    <div class="layui-form-mid">~</div>
     <div class="layui-input-inline">
         <input type="text" name="EndDate" class="layui-input queryDate2" placeholder="结束日期">
     </div>

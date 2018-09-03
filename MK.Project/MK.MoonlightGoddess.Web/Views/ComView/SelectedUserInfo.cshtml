@@ -1,0 +1,118 @@
+﻿
+@{
+    Layout = null;
+}
+<style type="text/css">
+    
+    .select-box {
+        width: 98%;
+        height: 100%;
+        /*background-color: aqua;*/
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .select-user-leftbox {
+        width: 52.5%;
+        height: 81.5%;
+        position: absolute;
+        left: 1%;
+        top: 0.5%;
+        /*background-color: #ff6a00;*/
+        overflow-y: auto;
+    }
+
+    .select-user-rightbox {
+        width: 44.5%;
+        height: 81.5%;
+        position: absolute;
+        right: 1%;
+        top: 0.5%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        /*background-color: #ffd800;*/
+    }
+
+    .select-user-centerbox {
+        width: 0.2%;
+        height: 82%;
+        position: absolute;
+        left: 53.9%;
+        right: 44.9%;
+        background-color: #dbdbdb;
+    }
+
+    .select-user-footerbox {
+        width: 98%;
+        height: 14%;
+        position: absolute;
+        left: 1%;
+        right: 1%;
+        bottom: 2%;
+        /*background-color: #0094ff;*/
+    }
+
+    .footer-centent {
+        width: 100%;
+        height: 38px;
+        position: absolute;
+        left: 2.7%;
+        top: 50%;
+        margin-left: -19px;
+        margin-top: -19px;
+    }
+
+    .layui-input-mkx {
+        border-width: 0.5px !important;
+        border-radius: 0px !important;
+    }
+
+    .layui-btn-clear:hover {
+        color: crimson;
+    }
+    .userdel:hover{
+        color:crimson;
+    }
+</style>
+<div class="select-box">
+    <div class="select-user-leftbox scroll-div">
+        <input type="text" name="title" placeholder="回车（Enter）搜索名字、拼音、手机号..." autocomplete="off" class="layui-input-mkx layui-input">
+        
+        <table class="layui-hide" id="tbQuerySelectedUser" lay-filter="tbQuerySelectedUser"></table>
+    </div>
+
+    <div class="select-user-centerbox"><!--纯属占位--></div>
+
+    <div class="select-user-rightbox">
+        <div class="layui-collapse">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title"><i class="mk-iconfont mk-icon-zuzhijiagoujiekou "></i> Moonlight Goddess</h2>
+                <div class="layui-colla-content layui-show">
+                    <ul id="userGroup" class="ultree"></ul>
+                </div>
+            </div>
+
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title"><i class="mk-iconfont mk-icon-zuzhijiagoujiekou "></i>已选择的人员</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-btn-container">
+                        <mk id="mk-selecteduser">
+                        </mk>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="select-user-footerbox">
+        <div class="footer-centent">
+            <div class="layui-btn-container">
+                <button id="btnOk" type="button" class="layui-btn layui-btn-normal">
+                    确定 (<span class="select-havenum">0</span> / <span class="select-maxnum">50</span>)
+                </button>
+                <button id="btnCancel" type="button" class="layui-btn layui-btn-primary">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,11 +10,7 @@ namespace MK.MoonlightGoddess.Web.Controllers
 {
     public class IndexController : VerifyLoginController
     {
-        // GET: Index
-        public ActionResult Index()
-        {
-            return View();
-        }
+        // GET: Home
         public ActionResult Home()
         {
             ViewBag.UserName = CurrAccount.UserName;
@@ -25,11 +21,6 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             CookieHelper.ClearCookie("MoonlightGoddess");
             return View("../Index/Home");
-        }
-
-        public ActionResult Admin()
-        {
-            return View("../Index/Admin");
         }
 
         [HttpGet]

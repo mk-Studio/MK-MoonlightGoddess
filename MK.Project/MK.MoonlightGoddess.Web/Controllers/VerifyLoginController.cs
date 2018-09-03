@@ -20,9 +20,15 @@ namespace MK.MoonlightGoddess.Web.Controllers
         {
             base.OnActionExecuting(filterContext);
             var _userName = CookieHelper.GetCookieValue("MoonlightGoddess");
+
             if (!string.IsNullOrEmpty(_userName))
             {
-                CurrAccount = new MK_Info_User() { UserName = EncryptHelper.AES_Decrypt(_userName) };
+                CurrAccount = Service.ServiceContent<MK_Info_User>
+                    .SelectSingleModel(
+                        new MK_Info_User(){ UserName = EncryptHelper.AES_Decrypt(_userName)}
+                        ,"MK_Info_User"
+                        , "GetUserInfoByAccount"
+                    );
             }
             else
             {

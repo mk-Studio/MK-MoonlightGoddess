@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = null;
+}
+<!--FormApprovalsResult-->
+<form class="layui-form layui-form-pane" action="" lay-filter="formApprovedResult" style="padding:20px 20px 0px 20px;">
+
+    <!---->
+    <div class="layui-form-item  layui-form-text">
+        <label class="layui-form-label">批准选项</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ApproveStatus" value="Y" title="通过" checked>
+            <input type="radio" name="ApproveStatus" value="X" title="不通过" >
+        </div>
+    </div>
+
+    <!--详情描述区-->
+    <div class="layui-form-item  layui-form-text">
+        <label class="layui-form-label">详细描述 (最多285个字符)</label>
+        <div class="layui-input-block">
+            <textarea name="ApprovedResultDesc" placeholder="请输入详细说明" maxlength="285" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="ResultSave">保存</button>
+        </div>
+    </div>
+</form>

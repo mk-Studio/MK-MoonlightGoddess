@@ -1,0 +1,934 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FormApproved</title>
+    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    @*<link href="~/Scripts/layui-v2.4.2/layui/css/layui.css" rel="stylesheet" />*@
+    <link href="~/Content/mk-icon-hub/iconfont.css" rel="stylesheet" />
+    <link href="~/CSS/ultree.css" rel="stylesheet" />
+    <style type="text/css">
+
+        /*table 样式修改 begin*/
+        .layui-table-hover {
+            background-color: #c2c2c2 !important;
+        }
+
+        .layui-table-click {
+            background-color: #393D49 !important;
+            color: white;
+        }
+        /*table 样式修改 end*/
+
+        .remove-icon {
+            font-size: 24px;
+            text-align: center;
+            line-height: 38px;
+            color: crimson;
+            cursor: pointer;
+        }
+
+        .layui-mk-btn {
+            display: inline-block;
+            max-width: 60px;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            margin: 4px 0;
+            background-color: #393D49;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 12px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+            .layui-mk-btn:hover {
+                opacity: .8;
+                filter: alpha(opacity=80);
+                color: #fff;
+            }
+
+        #layer-imgs {
+            box-shadow: 0 1px 6px #808080;
+        }
+
+        .layer-imgs img {
+            width: 160px;
+            height: 100px;
+            border-radius: 3px;
+            margin: 5px;
+            box-shadow: 0 1px 6px #808080;
+            cursor: pointer;
+        }
+
+            .layer-imgs img:hover {
+                border-color: #393D49 !important;
+                box-shadow: 0 1px 16px #0094ff;
+            }
+
+        .tooltip {
+            position: absolute;
+            z-index: 1030;
+            display: block;
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            visibility: visible;
+        }
+
+            .tooltip.in {
+                opacity: 0.9;
+                filter: alpha(opacity=90);
+            }
+
+            .tooltip.top {
+                padding: 5px 0;
+                margin-top: -3px;
+            }
+
+            .tooltip.right {
+                padding: 0 5px;
+                margin-left: 3px;
+            }
+
+            .tooltip.bottom {
+                padding: 5px 0;
+                margin-top: 3px;
+            }
+
+            .tooltip.left {
+                padding: 0 5px;
+                margin-left: -3px;
+            }
+
+        .tooltip-inner {
+            max-width: 200px;
+            padding: 3px 8px;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            background-color: #393D49;
+            border-radius: 4px;
+            box-shadow: 0 1px 6px #fff;
+        }
+
+        .tooltip-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+        }
+
+        .tooltip.top .tooltip-arrow {
+            bottom: 0;
+            left: 50%;
+            margin-left: -5px;
+            border-top-color: #393D49;
+            border-width: 5px 5px 0;
+        }
+
+        .tooltip.top-left .tooltip-arrow {
+            bottom: 0;
+            left: 5px;
+            border-top-color: #393D49;
+            border-width: 5px 5px 0;
+        }
+
+        .tooltip.top-right .tooltip-arrow {
+            right: 5px;
+            bottom: 0;
+            border-top-color: #393D49;
+            border-width: 5px 5px 0;
+        }
+
+        .tooltip.right .tooltip-arrow {
+            top: 50%;
+            left: 0;
+            margin-top: -5px;
+            border-right-color: #393D49;
+            border-width: 5px 5px 5px 0;
+        }
+
+        .tooltip.left .tooltip-arrow {
+            top: 50%;
+            right: 0;
+            margin-top: -5px;
+            border-left-color: #393D49;
+            border-width: 5px 0 5px 5px;
+        }
+
+        .tooltip.bottom .tooltip-arrow {
+            top: 0;
+            left: 50%;
+            margin-left: -5px;
+            border-bottom-color: #393D49;
+            border-width: 0 5px 5px;
+        }
+
+        .tooltip.bottom-left .tooltip-arrow {
+            top: 0;
+            left: 5px;
+            border-bottom-color: #393D49;
+            border-width: 0 5px 5px;
+        }
+
+        .tooltip.bottom-right .tooltip-arrow {
+            top: 0;
+            right: 5px;
+            border-bottom-color: #393D49;
+            border-width: 0 5px 5px;
+        }
+
+        .fade {
+            opacity: 0;
+            -webkit-transition: opacity 0.15s linear;
+            transition: opacity 0.15s linear;
+        }
+
+        .fade.in {
+            opacity: 1
+        }
+        .backabsolute {
+            position: absolute;
+            top: 7px;
+            left: 30px;
+        }
+        .backfixed {
+            position: fixed;
+            top: 7px;
+            left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        
+        <blockquote class="layui-elem-quote" style="text-align:center">
+            <button id="btnBack" class="layui-btn  layui-btn-normal backabsolute" onclick="back()">
+                <i class="layui-icon layui-icon-return" style="font-size: 15px; ">  返回</i>
+            </button>
+            @ViewBag.Template.Data.ApprovedTemplateName
+        </blockquote>
+        <!--隐藏值区-->
+        <div class="layui-hide">
+            <input id="ApprovalsTypeID" class="layui-hide" value="@ViewBag.ApprovalsTypeID" />
+            <input id="ID" class="layui-hide" value="@ViewBag.Template.Data.ID" />
+            <input id="ApprovedTemplateName" value="@ViewBag.Template.Data.ApprovedTemplateName" class="layui-hide" />
+            <input id="TitleLabel" class="layui-hide" value="@ViewBag.Template.Data.TitleLabel" />
+            <input id="DataLabeName" class="layui-hide" value="@ViewBag.Template.Data.DataLabeName" />
+            <input id="DataLabelID" class="layui-hide" value="@ViewBag.Template.Data.DataLabelID" />
+            <input id="DataParameter" class="layui-hide" value="@ViewBag.Template.Data.DataParameter" />
+            <input id="DescLabel" class="layui-hide" value="@ViewBag.Template.Data.DescLabel" />
+            <input type="number" id="ImageMinNum" value="@ViewBag.Template.Data.ImageMinNum" class="layui-hide" />
+            <input type="number" id="ImageMaxNum" value="@ViewBag.Template.Data.ImageMaxNum" class="layui-hide" />
+            <input type="text" id="Approve_ChangeMark" value="@ViewBag.ApprovalsorInfo.Approve_ChangeMark" class="layui-hide" />
+            <input type="text" id="CC_ChangeMark" value="@ViewBag.ApprovalsorInfo.CC_ChangeMark" class="layui-hide" />
+            <input type="text" id="ApproveInfo" value="@ViewBag.ApprovalsorInfo.ApproveInfo" class="layui-hide" />
+            <input type="text" id="CCInfo" value="@ViewBag.ApprovalsorInfo.CCInfo" class="layui-hide" />
+        </div>
+
+        <form id="formApproved" class="layui-form layui-form-pane" action="" lay-filter="formApproved" style="width:78%;margin:0px auto; padding:20px 20px 0px 0px;">
+            <!--标题区-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">@ViewBag.Template.Data.TitleLabel</label>
+                <div class="layui-input-block">
+                    <input type="text" id="TitleValue" name="TitleValue" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <!--明细区-->
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>明细（<span id="span-detail-number">1</span>）</legend>
+                <div class="layui-field-box">
+                    <div class="layui-form-item detail-default">
+                        <label class="layui-form-label">@ViewBag.Template.Data.DataLabeName</label>
+                        <div class="layui-input-inline">
+                            <select id="DataDictionaryID" name="ApprovedTaskDetail[0][DataDictionaryID]" lay-verify="required" lay-search="" lay-filter="DataDetailID"></select>
+                        </div>
+
+                        <label class="layui-form-label">@ViewBag.Template.Data.DataParameter</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="ApprovedTaskDetail[0][DataParameter]" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input type="text" name="ApprovedTaskDetail[0][DictionaryLabelID]" class="layui-hide" value="@ViewBag.Template.Data.DataLabelID">
+                        </div>
+                    </div>
+                </div>
+                <input type="button" id="addDetail" class="layui-btn layui-btn-normal" value="增加明细" />
+            </fieldset>
+
+            <!--详情描述区-->
+            <div class="layui-form-item  layui-form-text">
+                <label class="layui-form-label">@ViewBag.Template.Data.DescLabel (最多285个字符)</label>
+                <div class="layui-input-block">
+                    <textarea name="DescValue" lay-verify="required" placeholder="请输入详细说明" maxlength="285" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <!--图片上传区-->
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-label-mk">图片</label>
+                &nbsp;
+                <div class="layui-inline">
+                    <button type="button" id="SelectUploadFiles" class="layui-btn layui-btn-normal">
+                        <i class="layui-icon layui-icon-upload"></i>选择上传图片
+                    </button>
+                    <small style="color:#808080">( 最少上传 @ViewBag.Template.Data.ImageMinNum 张,最多上传 @ViewBag.Template.Data.ImageMaxNum 张 )</small>
+                </div>
+            </div>
+            <!--预览图片区-->
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div id="layer-imgs" class="layer-imgs"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-label-mk">审批人</label>
+                &nbsp;
+                <div class="layui-inline">
+                    <mk class="mk-approved"></mk>
+                    <button id="btnApd" data-toggle="tooltip" title="编辑审批人" class="layui-btn layui-btn-normal" type="button">
+                        &nbsp;<i class="layui-icon  layui-icon-friends"></i>编辑
+                    </button>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-form-label-mk">抄送人</label>
+                &nbsp;
+                <div class="layui-inline">
+                    <mk class="mk-cc"></mk>
+                    <button id="btnCC" data-toggle="tooltip" title="编辑抄送人" class="layui-btn layui-btn-normal" type="button">
+                        <i class="layui-icon  layui-icon-group"></i>编辑
+                    </button>
+                </div>
+            </div>
+
+            <!--提交保存-->
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button id="SaveApproved" type="button" class="layui-btn layui-bg-green">
+                        &nbsp;&nbsp;&nbsp;
+                        <i class="icon mk-iconfont mk-icon-jijianfasong"></i>&nbsp;发送&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                    </button>
+                </div>
+            </div>
+            <input class="layui-hide" name="ApprovalsTypeID" value="@ViewBag.ApprovalsTypeID" />
+        </form>
+        <button id="SaveUpload" type="button" class="layui-hide layui-btn layui-bg-green">Sava</button>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Js/jquery.serialize-object.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/layui-v2.4.2/layui/layui.js"></script>
+    <script src="~/Js/MKCom.js"></script>
+    <script type="text/javascript">
+        var $objTemplate = {
+            ApprovalsTypeID: $("#ApprovalsTypeID").val()
+            , ID: $("#ID").val()
+            , ApprovedTemplateName: $("#ApprovedTemplateName").val()
+            , TitleLabel: $("#TitleLabel").val()
+            , DataLabeName: $("#DataLabeName").val()
+            , DataLabelID: $("#DataLabelID").val()
+            , DataParameter: $("#DataParameter").val()
+            , DescLabel: $("#DescLabel").val()
+            , ImageMinNum: $("#ImageMinNum").val()
+            , ImageMaxNum: $("#ImageMaxNum").val()
+            , Approve_ChangeMark: $("#Approve_ChangeMark").val()
+            , CC_ChangeMark: $("#CC_ChangeMark").val()
+            , ApproveInfo: function () {
+                var apprinfoArray = $("#ApproveInfo").val().split(';');
+                var objApprInfo = [];
+                for (var i = 0; i < apprinfoArray.length; i++) {
+                    objApprInfo[i] = apprinfoArray[i].split(',');
+                }
+                return objApprInfo;
+            }
+            , CCInfo: function () {
+                var ccinfoArray = $("#CCInfo").val().split(';');
+                var objCCInfo = [];
+                for (var i = 0; i < ccinfoArray.length; i++) {
+                    objCCInfo[i] = ccinfoArray[i].split(',');
+                }
+                return objCCInfo;
+            }
+            , GlobalApprInfoCount : 0
+            , GlobalCCInfoCount : 0
+        }, ccEditArrayObj = {}, apdEditArrayObj = {}, editUserType = "";
+
+        
+        $(function () {
+            if ($objTemplate.Approve_ChangeMark !== "Y") $("#btnApd").remove();
+            if ($objTemplate.CC_ChangeMark !== "Y") $("#btnCC").remove();
+            $(window).scroll(function (event) {
+                if ($(window).scrollTop() > 51) {
+                    $("#btnBack").removeClass("backabsolute");
+                    $("#btnBack").addClass("backfixed");
+                } else {
+                    $("#btnBack").removeClass("backfixed");
+                    $("#btnBack").addClass("backabsolute");
+                }
+            });
+        });
+        layui.use(['element', 'table', 'form','tree', 'upload'], function () {
+            var element = layui.element
+                , table = layui.table
+                , form = layui.form
+                , tree = layui.tree
+                , upload = layui.upload
+                , files = null
+                , fileCount = 0
+                , detailNum = 1
+                , dynamicDetailNum = 1
+                , imgsPath = []
+                , reupload = function () { }
+                , defaultCCObj = $objTemplate.CCInfo()
+                , defaultApdObj = $objTemplate.ApproveInfo()
+                , ccEditArray = []
+                , apdEditArray = []
+                , oldOpenCCArrObj = {}
+                , oldOpenApdArrObj = {}
+                , postdata = {};
+
+            $("#span-detail-number").html(detailNum);
+            InitDataCombobox("#DataDictionaryID", "GetDataByLabelType", { p1: $objTemplate.DataLabelID }, form, false);
+
+            //处理审批人/抄送人数据
+            addApprovals(defaultApdObj);
+            addApdObjs(defaultApdObj);
+            addCC(defaultCCObj);
+            addCCObjs(defaultCCObj);
+            openToolTip();
+
+            if ($objTemplate.ImageMinNum === "0" || $objTemplate.ImageMaxNum === "0") {
+                $("#SelectUploadFiles").on("click", function (e) {
+                    laytiperr("因可上传图片参数为0，无法上传", this,"top")
+                });
+            } else {
+                //上传组件 -begin
+                upload.render({
+                    elem: '#SelectUploadFiles'
+                    , url: '/api/Upload/Upload'
+                    , auto: false
+                    , bindAction: '#SaveUpload'
+                    , multiple: true
+                    , number: $objTemplate.ImageMaxNum
+                    , acceptMime: 'image/*'
+                    , choose: function (obj) {
+                        files = obj.pushFile();
+                        var loading = layer.load(0, { shade: false });
+                        obj.preview(function (index, file, result) {
+                            /*@@index:文件索引 @@file:文件对象 @@result:文件base64编码，比如图片*/
+                            if (fileCount >= $objTemplate.ImageMaxNum) {
+                                laywarn("最多只能上传" + $objTemplate.ImageMaxNum + "张");
+                                delete files[index];
+                            }
+                            else {
+                                fileCount++;
+                                addPreviewImg("#layer-imgs", index, result, file.name);
+                                $("[data-toggle='tooltip']").tooltip();
+                            }
+                        });
+                        layer.close(loading);
+                    }
+                    , allDone: function (obj) {
+                        //当文件全部被提交后，才触发
+                        layer.closeAll('loading');
+                        if (obj.aborted > 0) {
+                            laymsgalert("图片上传失败！是否重新上传？", function () {
+                                layer.load(0, { shade: false });
+                                reupload();
+                            });
+                        }
+                        else {
+                            //laymsgok("上传成功", "成功", 1500);
+                            SaveApprovals();
+                        }
+                    }
+                    , done: function (res) {
+                        //上传完毕回调
+                        if (res.code === 0) {
+                            var obj = {
+                                ImagesPath: res.data.src
+                            };
+                            imgsPath.push(obj);
+                        }
+                    }
+                    , error: function (index, upload) {
+                        //请求异常回调
+                        console.info(index);
+                        reupload = upload;
+                        layer.msg('文件上传异常！请稍后再试', { icon: 5 });
+                    }
+                });
+            //上传组件 -end
+            }
+            
+
+            function queryUser(filterValue, id, eidtType) {
+                table.render({
+                    elem: '#tbQuerySelectedUser'
+                    , url: '/ComView/GetLikeQueryUser' //数据接口
+                    , where: { FilterValue: filterValue, PowerGroupID: id || null }
+                    , method: 'get'
+                    , size: eidtType === 'cc' ? 'sm' : null
+                    , skin: 'line'
+                    , text: { none: '暂无相关数据' }
+                    , cols: [[ //表头
+                        eidtType === "cc" ? { type: 'checkbox', fixed: 'left', width: '7%' } : { type: 'numbers',fixed: 'left', width: '7%' }
+                        , { field: 'UserName', title: '账号', width: '25%', sort: true, event: 'select' }
+                        , { field: 'NickName', title: '昵称', width: '25%', sort: true, event: 'select' }
+                        , { field: 'Tel', title: '电话/手机号', width: '43.5%', sort: true, event: 'select' }
+                    ]]
+                    , parseData: function (r) {
+                        var jObj = eidtType === 'cc' ? ccEditArrayObj : apdEditArrayObj;
+                        var t_count = 0, by_count = getSelectLength(jObj);
+                        for (var ri = 0; ri < r.data.length; ri++) {
+                            if (t_count < by_count) {
+                                
+                                for (var rj in jObj) {
+                                    if (r.data[ri].ID !== rj) {
+                                        continue;
+                                    }
+                                    r.data[ri]['LAY_CHECKED'] = true;
+                                    t_count++;
+                                    break;
+                                }
+                            }
+                        }
+                        return r;
+                    }
+                    , done: function () {
+                        
+                    }
+                });
+            }
+
+            //监听行单击事件（S击事件为：rowDouble）
+            table.on('row(tbQuerySelectedUser)', function (obj) {
+                if (editUserType === "apd") {
+                    var data = obj.data;
+                    $("#mk-selecteduser").empty();
+                    var value = [data.ID, data.NickName];
+                    addApdObj(data.ID, value);
+                    initSeletedUserHtml(apdEditArrayObj);
+                    updateCanSelelctUser(false, true);
+                }
+            });
+
+            //监听表格复选框选择
+            table.on('checkbox(tbQuerySelectedUser)', function (obj) {
+                var checkStatus = table.checkStatus('tbQuerySelectedUser');
+                if (obj.checked === true && checkStatus.isAll === false) {
+                    if (ccEditArrayObj[obj.data.ID]) {
+                        return;
+                    }
+                    var userEl = '<button class="layui-btn layui-btn-sm" title="移除" data-id="' + obj.data.ID+'">' + obj.data.NickName + '  <i class="mk-iconfont mk-icon-close userdel" style="font-size:12px !important"></i></button>';
+                    $("#mk-selecteduser").append(userEl);
+                    initSeletedUserDel(ccEditArrayObj);
+                    ccEditArrayObj[obj.data.ID] = [obj.data.ID, obj.data.NickName];
+                    //console.log(ccEditArrayObj);
+                }
+                else if (obj.checked === true && checkStatus.isAll === true) {
+                    var userEls = '', data = checkStatus.data;
+                    for (var i = 0; i < data.length; i++) {
+                        if (ccEditArrayObj[data[i].ID])
+                            continue;
+                        userEls += '<button class="layui-btn layui-btn-sm"  title="移除" data-id="' + data[i].ID + '">' + data[i].NickName + '  <i class="mk-iconfont mk-icon-close userdel" style="font-size:12px !important"></i></button>';
+                        ccEditArrayObj[data[i].ID] = [data[i].ID, data[i].NickName];
+                    }
+                    $("#mk-selecteduser").append(userEls);
+                    initSeletedUserDel(ccEditArrayObj);
+                    //console.log(ccEditArrayObj);
+                }
+                else if (obj.checked === false && checkStatus.isAll === false && obj.type === "all") {
+                    for (var item in ccEditArrayObj) {
+                        if (item.indexOf('#mk#') < 0) {
+                            delete ccEditArrayObj[item];
+                        }
+                    }
+                    initSeletedUserHtml(ccEditArrayObj);
+                }
+                else {
+                    delete ccEditArrayObj[obj.data.ID];
+                    initSeletedUserHtml(ccEditArrayObj);
+                }
+                updateCanSelelctUser(true, false);
+                //
+            });
+
+            //监听上传图片双击事件
+            $("#layer-imgs").on('dblclick', '.img-upload',function (e) {
+                var that = $(this);
+                var fileIndex = that.attr("index");
+                laymsgalert('你确定要移除该图片么？', function () {
+                    that.remove();
+                    delete files[fileIndex];
+                    fileCount--;
+                });
+            });
+
+            //监听添加审批明细项
+            $("#addDetail").on('click', function (e) {
+                dynamicDetailNum++;
+                var detail_html =
+                    '<div class="layui-form-item">' +
+                    '    <label class="layui-form-label">@ViewBag.Template.Data.DataLabeName</label>' +
+                    '    <div class="layui-input-inline">' +
+                    '        <select id="DataDictionaryID' + dynamicDetailNum + '" name="ApprovedTaskDetail[' + dynamicDetailNum + '][DataDictionaryID]" lay-verify="required" lay-search="" lay-filter="DataDetailID"></select>' +
+                    '    </div>' +
+
+                    '    <label class="layui-form-label">@ViewBag.Template.Data.DataParameter</label>' +
+                    '    <div class="layui-input-inline">' +
+                    '        <input type="text" name="ApprovedTaskDetail[' + dynamicDetailNum + '][DataParameter]" lay-verify="required" autocomplete="off" class="layui-input">' +
+                    '        <input type="text" name="ApprovedTaskDetail[' + dynamicDetailNum + '][DictionaryLabelID]" class="layui-hide" value="@ViewBag.Template.Data.DataLabelID">' +
+                    '    </div>' +
+
+                    '    <div class="layui-input-inline">' +
+                    '        <span class="detail-remove' + dynamicDetailNum + '" title="移除"><i class="layui-icon layui-icon-close-fill remove-icon"></i></span>' +
+                    '    </div>' +
+                    '</div>';
+                $(".layui-field-box").append(detail_html);
+                InitDataCombobox("#DataDictionaryID" + dynamicDetailNum, "GetDataByLabelType", { p1: $objTemplate.DataLabelID }, form, false);
+                form.render();
+                $(".layui-form-item").on('click', '.detail-remove' + dynamicDetailNum + '', function (e) {
+                    $(e.currentTarget.parentNode.parentNode).remove();
+                    $("#span-detail-number").html(--detailNum);
+                    dynamicDetailNum = detailNum === 1 ? 1 : dynamicDetailNum;
+                });
+                $("#span-detail-number").html(++detailNum); 
+            });
+
+            //编辑审批人
+            $("#btnApd").on('click', function () {
+                editUserType = "apd";
+                var apdIndex = layer.load(0, { shade: false });
+                $.get("/ComView/SelectedUserInfo", {}, function (html) {
+                    var w = ($("body").width() * 0.55).toString() + 'px';
+                    var h = ($("body").height() * 0.65).toString() + 'px';
+                    var area = [w, h];
+                    var eidtIndex = layer.open({
+                        type: 1
+                        , closeBtn:0
+                        , title: "编辑审批人"
+                        , area: area
+                        , content: html
+                        , success: function () {
+                            layer.close(apdIndex);
+                            $(".select-maxnum").html(1);
+                            oldOpenApdArrObj = copy(apdEditArrayObj);
+                            form.render();
+                            element.render('collapse');
+                            queryUser("", null, "apd");
+                            $('.layui-input-mkx').keydown(function (e) {
+                                if (e.keyCode === 13) {
+                                    queryUser($('.layui-input-mkx').val(), null, "apd");
+                                }
+                            });
+                            $("#btnOk").on("click", function () {
+                                apdEditArray = [];
+                                for (var apd in apdEditArrayObj) {
+                                    apdEditArray.push(apdEditArrayObj[apd]);
+                                }
+                                addApprovals(apdEditArray);
+                                layer.close(eidtIndex);
+                            });
+                            $("#btnCancel").on("click", function () {
+                                apdEditArrayObj = oldOpenApdArrObj;
+                                layer.close(eidtIndex);
+                            });
+                            tree({
+                                elem: '#userGroup',
+                                nodes: initGroupTree(),
+                                click: function (node) {
+                                    queryUser("", node.id, "apd");
+                                }
+                            });
+                            initSeletedUserHtml(apdEditArrayObj);
+                            updateCanSelelctUser(false, true);
+                        }
+                        , end: function () {
+                            addApprovals(toApdArray(apdEditArrayObj));
+                        }
+                    });
+                }, "html");
+            });
+
+            //编辑抄送人
+            $("#btnCC").on('click', function () {
+                editUserType = "cc";
+                var ccIndex = layer.load(0, { shade: false });
+                $.get("/ComView/SelectedUserInfo", {}, function (html) {
+                    var w = ($("body").width() * 0.55).toString() + 'px';
+                    var h = ($("body").height() * 0.65).toString() + 'px';
+                    var area = [w,h];
+                    var eidtIndex =layer.open({
+                        type: 1
+                        , closeBtn: 0
+                        , title:"编辑抄送人"
+                        , area: area
+                        , content: html
+                        , success: function () {
+                            layer.close(ccIndex);
+                            oldOpenCCArrObj = copy(ccEditArrayObj);
+                            form.render();
+                            element.render('collapse');
+                            queryUser("", null,"cc");
+                            $('.layui-input-mkx').keydown(function (e) {
+                                if (e.keyCode === 13) {
+                                    queryUser($('.layui-input-mkx').val(),null,"cc");
+                                }
+                            });
+                            $("#btnOk").on("click", function () {
+                                ccEditArray = [];
+                                for (var cc in ccEditArrayObj) {
+                                    ccEditArray.push(ccEditArrayObj[cc]);
+                                }
+                                addCC(ccEditArray);
+                                layer.close(eidtIndex);
+                            });
+                            $("#btnCancel").on("click", function () {
+                                ccEditArrayObj = oldOpenCCArrObj;
+                                layer.close(eidtIndex);
+                            });
+                            tree({
+                                elem: '#userGroup',
+                                nodes: initGroupTree(),
+                                click: function (node) {
+                                    queryUser("", node.id,"cc");
+                                }
+                            });
+                            initSeletedUserHtml(ccEditArrayObj);
+                            updateCanSelelctUser(false, false);
+                        }
+                        , end: function () {
+                            addCC(toCCArray(ccEditArrayObj));
+                        }
+                    });
+                }, "html");
+            });
+
+            //保存发送
+            $("#SaveApproved").on('click', function () {
+                layer.load(0, { shade: false });
+                var data = $("#formApproved").serializeObject();
+                if (data.TitleValue === "") {
+                    layer.closeAll();
+                    laymsgwr("@ViewBag.Template.Data.TitleLabel 不能为空");
+                    return;
+                }
+                //校验提交的数据
+                var postDataVerify = function () {
+                    postdata = $("#formApproved").serializeObject();
+                    if (postdata["ApproveorName"] === undefined && postdata["ApproveorID"] === undefined) {
+                        layer.closeAll("loading");
+                        laymsgwr("请选择审批人");
+                        return;
+                    }
+                    if (postdata["ApprovedTaskCC"] === undefined || postdata["ApprovedTaskCC"].length === 0) {
+                        layer.closeAll("loading");
+                        laymsgwr("请选择抄送人（至少一个抄送人）");
+                        return;
+                    }
+                };
+                //校验图片数
+                if (fileCount < $objTemplate.ImageMinNum) {
+                    layer.closeAll();
+                    laywarn('至少上传图片' + $objTemplate.ImageMinNum + '张');
+                } else {
+                    postDataVerify();
+                    if (fileCount > 0) {
+                        $("#SaveUpload").click();
+                    } else {
+                        SaveApprovals();
+                    }
+                }
+                
+            });
+
+            //保存发送审批信息
+            function SaveApprovals()
+            {
+                postdata["ApprovedTaskImages"] = imgsPath;
+                postdata["ApprovedTaskCC"] = delEmptyArray(postdata["ApprovedTaskCC"]);
+                postdata["ApprovedTaskDetail"] = delEmptyArray(postdata["ApprovedTaskDetail"]);
+                $.post("/Approvals/SendApprove", { formObject: postdata }, function (r) {
+                    if (r.Code === 0) {
+                        layConfirm("审批发送成功。是否跳转查看？",
+                            function () {
+                                var url = window.parent.menusObj.我发起的.url;
+                                window.parent.activeTab("我发起的", "我发起的", url);
+                                back();
+                            }, "保存成功", ["查看", "不了"],
+                            function () {
+                                back();
+                        });
+                    }
+                    else {
+                        laymsgalert("保存失败！是否重新发送？", function () {
+                            layer.load(0, { shade: false });
+                            $("#SaveApproved").click();
+                        });
+                    }
+                });
+            }
+
+            //初始化分组
+            function initGroupTree() {
+                var result;
+                $.ajax({
+                    url: "/ComView/GetUserGroup",
+                    type: "post",
+                    async: false,
+                    dataType: "json",
+                    success: function (data) {
+                        result = data;
+                    }
+                });
+                return result;
+            }
+
+            //分组样式切换
+            $('.ultree li a').on('click', function () {
+                $(this).addClass('ultree-on');
+                $('.ultree li a').not($(this)).removeClass('ultree-on');
+            });
+        });
+
+        //后退到选择发起审批类型
+        function back() {
+            window.history.back();
+        }
+
+        //获取选择的人数
+        function getSelectLength(obj) {
+            var length = 0;
+            for (var item in obj) {
+                length++;
+            }
+            return length;
+        }
+        //更新可选的人数数量
+        function updateCanSelelctUser(istip, isapd) {
+            var maxSelectnum = new Number($(".select-maxnum").html());
+            var updateObj = isapd ? apdEditArrayObj : ccEditArrayObj;
+            var selectLength = getSelectLength(updateObj);
+            if (maxSelectnum < selectLength && istip === true) {
+                laylock("不能超过" + maxSelectnum + "个上限");
+                $("#btnOk").attr("disabled", true);
+                $("#btnOk").addClass("layui-btn-disabled");
+            }
+            else {
+                $(".select-havenum").html(selectLength);
+                if (selectLength <= maxSelectnum) {  
+                    $("#btnOk").attr("disabled", false);
+                    $("#btnOk").removeClass("layui-btn-disabled");
+                }
+            }
+        }
+        //初始化已选择的用户移除事件
+        function initSeletedUserDel(obj) {
+            $('.userdel').on('click', function (e) {
+                var userid = $(e.currentTarget.parentNode).context.dataset.id;
+                delete obj[userid];
+                $(e.currentTarget.parentNode).remove();
+                updateCanSelelctUser(false, editUserType === "apd" ? true : false);
+            });
+        }
+        //初始化已选择的用户
+        function initSeletedUserHtml(obj) {
+            var h = "";
+            var id = 0, name = 1; 
+            for (var item in obj) {
+                h += '<button class="layui-btn layui-btn-sm" title="移除" data-id="' + obj[item][id] + '">' + obj[item][name] + '  <i class="mk-iconfont mk-icon-close userdel" style="font-size:12px !important"></i></button>';
+            }
+            $("#mk-selecteduser").empty();
+            $("#mk-selecteduser").append(h);
+            initSeletedUserDel(obj);
+        }
+        //添加预览的上传图片
+        function addPreviewImg(el,fileindex, imgbase64,imgalt) {
+            $(el).append('<img class="img-upload" index="' + fileindex + '" data-toggle="tooltip" title="双击图片可以移除噢" src="' + imgbase64 + '" alt="' + imgalt + '">');
+        }
+        //添加一个审批人对象
+        function addApdObj(key, value) {
+            apdEditArrayObj = {};
+            apdEditArrayObj[key] = value;
+        }
+        //添加一组审批人对象
+        function addApdObjs(arrayObj) {
+            apdEditArrayObj = {};
+            for (var i = 0; i < arrayObj.length; i++) {
+                apdEditArrayObj[arrayObj[i][0]] = arrayObj[i];
+            }
+        }
+        //转换成审批人序列化数组
+        function toApdArray(apdObj) {
+            var resultArray = [];
+            for (var apd in apdObj) {
+                resultArray.push(apdObj[apd]);
+            }
+            return resultArray;
+        }
+        //根据序列化数组添加审批人
+        function addApprovals(apprArr) {
+            $(".mk-approved").empty();
+            var id = 0, name = 1, arr = apprArr, h = '';
+            for (var i = 0; i < arr.length; i++) {
+                h = '<input class="layui-mk-btn layui-elip" name="ApproveorName" data-toggle="tooltip" title="' + arr[i][name] + '" readonly value="' + arr[i][name] + '">' +
+                    '<input class="layui-hide" name="ApproveorID" readonly value="' + arr[i][id] + '">&nbsp;';
+            }
+            $(".mk-approved").append(h);
+            $objTemplate.GlobalApprInfoCount += arr.length;
+            openToolTip();
+        }
+        //添加一个抄送人对象
+        function addCCObj(key, value) {
+            ccEditArrayObj[key] = value;
+        }
+        //添加一组抄送人对象
+        function addCCObjs(arrayObj) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                ccEditArrayObj[arrayObj[i][0]] = arrayObj[i];
+            }
+        }
+        //转换成抄送人序列化数组
+        function toCCArray(ccObj) {
+            var resultArray = []; 
+            for (var cc in ccObj) {
+                resultArray.push(ccObj[cc]);
+            }
+            return resultArray;
+        }
+        //根据序列化数组添加审批人
+        function addCC(ccArr) {
+            $(".mk-cc").empty();
+            var id = 0, name = 1, arr = ccArr;
+            var h = '';
+            for (var i = 0; i < arr.length; i++) {
+                h += '<input class="layui-mk-btn layui-elip"  name="ApprovedTaskCC[' + (i + $objTemplate.GlobalCCInfoCount) + '][CCName]" data-toggle="tooltip" title="' + arr[i][name] + '" readonly value="' + arr[i][name] + '">' +
+                    '<input class="layui-hide" name="ApprovedTaskCC[' + (i + $objTemplate.GlobalCCInfoCount) + '][CCID]" readonly value="' + arr[i][id] + '">&nbsp;';
+            }
+            $(".mk-cc").append(h);
+            $objTemplate.GlobalCCInfoCount += arr.length;
+            openToolTip();
+        }
+        //加载bootstrap的 title 提示样式
+        function openToolTip() {
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_ApprovedManage>
+  
+  <sql name="GetQueryGroup">
+    SELECT ID ,ApprovedGroupName, Sort ,ShowMark ,CreateUser ,CreateDate
+    FROM dbo.MK_Type_ApprovedGroup
+    ORDER BY Sort
+  </sql>
+
+  <sql name="GetQueryType">
+    SELECT t.RowID , t.ID ,t.ApprovedGroupID ,t.ApprovedGroupName , t.ApprovedTypeName ,
+    CASE WHEN t.HasTemplate IS NULL THEN 'N' ELSE 'Y' END AS HasTemplate ,
+    t.ClassIconfont,t.BackgroundColor, t.Sort,t.ShowMark ,t.CreateUser ,t.CreateDate
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY a.CreateDate DESC ) AS RowID,
+    a.ClassIconfont,a.BackgroundColor,a.Sort,a.ID,a.ApprovedGroupID,b.ApprovedGroupName,
+    ApprovedTypeName,t.ID AS HasTemplate, a.ShowMark ,a.CreateUser ,a.CreateDate
+    FROM MK_Type_ApprovedType a
+    JOIN MK_Type_ApprovedGroup b ON b.ID = a.ApprovedGroupID
+    LEFT JOIN dbo.MK_Type_ApprovedTemplate t ON t.ApprovedTypeID = a.ID
+    ) as t
+    ORDER BY t.RowID
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="GetQueryTemplate">
+    SELECT * INTO #TableResult FROM V_ApprovedTemplate ORDER BY RowID
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="AddGroup">
+    INSERT MK_Type_ApprovedGroup(ApprovedGroupName,Sort,CreateUser)
+    VALUES(@ApprovedGroupName,@Sort,@CreateUser)
+    SELECT 'OK'
+  </sql>
+
+  <sql name="AddType">
+    INSERT MK_Type_ApprovedType(ApprovedGroupID,ApprovedTypeName,ClassIconfont,BackgroundColor,Sort,CreateUser)
+    VALUES(@ApprovedGroupID, @ApprovedTypeName,@ClassIconfont,@BackgroundColor, @Sort, @CreateUser)
+    SELECT 'OK'
+  </sql>
+
+  <sql name="AddTemplate">
+    INSERT MK_Type_ApprovedTemplate(ApprovedTypeID,ApprovedTemplateName,TitleLabel,DataLabeName,DataLabelID,DescLabel,DataParameter,ImageMinNum,ImageMaxNum,CreateUser)
+    VALUES(@ApprovedTypeID,@ApprovedTemplateName,@TitleLabel,@DataLabeName,@DataLabelID,@DescLabel,@DataParameter,@ImageMinNum,@ImageMaxNum, @CreateUser)
+    SELECT 'OK'
+  </sql>
+
+  <sql name="EditGroup">
+    UPDATE MK_Type_ApprovedGroup SET ApprovedGroupName = @ApprovedGroupName,Sort = @Sort
+    WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="EditType">
+    UPDATE MK_Type_ApprovedType
+    SET ApprovedGroupID = @ApprovedGroupID, ApprovedTypeName = @ApprovedTypeName,
+    ClassIconfont = @ClassIconfont,BackgroundColor = @BackgroundColor,Sort = @Sort
+    WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="EditTemplate">
+    UPDATE MK_Type_ApprovedTemplate
+    SET ApprovedTypeID = @ApprovedTypeID,ApprovedTemplateName = @ApprovedTemplateName,TitleLabel = @TitleLabel,DataLabeName = @DataLabeName,
+    DataLabelID = @DataLabelID,DataParameter = @DataParameter,DescLabel = @DescLabel, ImageMinNum = @ImageMinNum, ImageMaxNum = @ImageMaxNum,
+    CreateUser = @CreateUser
+    WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+  
+  <sql name="DelGroup">
+    DELETE MK_Type_ApprovedGroup WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+  
+  <sql name="DelType">
+    DELETE MK_Type_ApprovedType WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="DelTemplate">
+    DELETE MK_Type_ApprovedTemplate WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="UpdateGroupShow">
+    UPDATE MK_Type_ApprovedGroup SET ShowMark = @ShowMark WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="UpdateTypeShow">
+    UPDATE MK_Type_ApprovedType SET ShowMark = @ShowMark WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+  <sql name="UpdateTemplateShow">
+    UPDATE MK_Type_ApprovedTemplate SET ShowMark = @ShowMark WHERE ID = @ID
+    SELECT 'OK'
+  </sql>
+
+</MK_ApprovedManage>

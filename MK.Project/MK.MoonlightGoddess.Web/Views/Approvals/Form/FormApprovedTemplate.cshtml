@@ -1,0 +1,70 @@
+﻿
+@{
+    Layout = null;
+}
+<!--FormApprovedTemplate-->
+
+<form class="layui-form layui-form-pane" action="" lay-filter="formApprovedTemplate" style="padding:20px 20px 0px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">审批类型</label>
+        <div class="layui-input-inline">
+            <select id="ApprovedTypeID" name="ApprovedTypeID" lay-verify="required" lay-search="" lay-filter="ApprovedTypeID"></select>
+        </div>
+        <div class="layui-form-mid layui-word-aux">只显示未有模板或标记为显示的类型</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ApprovedTemplateName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">标题名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="TitleLabel" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">明细标签名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DataLabeName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">明细类型</label>
+        <div class="layui-input-inline">
+            <select id="DataLabelID" name="DataLabelID" lay-verify="required" lay-search="" lay-filter="DataLabelID"></select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">明细参数名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DataParameter"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">描述标签名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DescLabel"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">最小图片数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="ImageMinNum" min="0" max="9"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">最大图片数</label>
+        <div class="layui-input-inline">
+            <input type="number" name="ImageMaxNum" min="0" max="9"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="TemplateSave">保存</button>
+        </div>
+    </div>
+</form>

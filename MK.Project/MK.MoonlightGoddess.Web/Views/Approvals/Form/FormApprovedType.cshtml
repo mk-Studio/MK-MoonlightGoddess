@@ -1,0 +1,63 @@
+﻿
+@{
+    Layout = null;
+}
+<!--FormApprovedType-->
+<style type="text/css">
+    .layui-mk-btn {
+        background-color: #009688;
+        color:white;
+        border:0px;
+        padding:0 5px;
+        width:100px;
+        height:38px;
+    }
+</style>
+<form class="layui-form layui-form-pane" action="" lay-filter="formApprovedType" style="padding:20px 20px 0px 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">审批组</label>
+        <div class="layui-input-block">
+            <select id="ApprovedGroupID" name="ApprovedGroupID" lay-verify="required" lay-search="" lay-filter="ApprovedGroupID"></select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">审批类型名</label>
+        <div class="layui-input-block">
+            <input type="text" name="ApprovedTypeName" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">icon图标</label>
+        <div class="layui-input-inline">
+            <input id="ClassIconfont" type="text" name="ClassIconfont" lay-verify="required" readonly autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-inline">
+            <span class="layui-btn selete-icon"><i class="layui-icon layui-icon-app"></i>  选择 <b>icon</b> 图标</span>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">背景色</label>
+        <div class="layui-input-inline">
+            <input type="text" name="BackgroundColor" value="" placeholder="请选择颜色" class="layui-input" id="BackgroundColor">
+        </div>
+        <div class="layui-inline" style="left: -11px;">
+            <div id="bgColor-form"></div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排列顺序</label>
+        <div class="layui-input-inline">
+            <input type="number" name="Sort" required lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="TypeSave">保存</button>
+        </div>
+    </div>
+</form>

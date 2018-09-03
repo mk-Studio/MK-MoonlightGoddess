@@ -30,7 +30,7 @@ GO
 --物料类别
 CREATE TABLE MK_Type_WuLiao(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	WuLiaoTypeName NVARCHAR(50),
+	WuLiaoTypeName NVARCHAR(50) NOT NULL,
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -62,10 +62,10 @@ CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiao_CreateDate ON dbo.MK_Type_WuLiao(Cre
 --物料具体信息
 CREATE TABLE MK_Info_WuLiao(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	WuLiaoTypeID NVARCHAR(36),
-	ShangPinName NVARCHAR(50),
-	GuiGe NVARCHAR(30),
-	HaiGuanNo NVARCHAR(50),
+	WuLiaoTypeID NVARCHAR(36)NOT NULL,
+	ShangPinName NVARCHAR(50)NOT NULL,
+	GuiGe NVARCHAR(30)DEFAULT('') NOT NULL,
+	HaiGuanNo NVARCHAR(50)DEFAULT(''),
 	WuLiaoImagePath NVARCHAR(50),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
@@ -108,10 +108,10 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiao_ShangPinName ON dbo.MK_Info_WuLiao(S
 --供应商信息
 CREATE TABLE MK_Info_Supplier(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	SupplierName NVARCHAR(50),
+	SupplierName NVARCHAR(50)NOT NULL,
 	LianXiRen NVARCHAR(30),
 	LianXiFangShi NVARCHAR(50),
-	Address NVARCHAR(255),
+	Address NVARCHAR(255)DEFAULT(''),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -145,8 +145,8 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_Supplier_ShangPinName ON dbo.MK_Info_Suppli
 --供应商所生产的物料商品信息
 CREATE TABLE MK_Info_Supplier_WuLiao(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	SupplierID NVARCHAR(36),
-	ShangPinID NVARCHAR(36),
+	SupplierID NVARCHAR(36)NOT NULL,
+	ShangPinID NVARCHAR(36)NOT NULL,
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -174,7 +174,7 @@ SELECT ID,SupplierID,ShangPinID,ShowMark,CreateUser,CreateDate FROM MK_Info_Supp
 --物流公司业务维护
 CREATE TABLE MK_Type_WuLiuYeWu(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	YeWuType NVARCHAR(36),
+	YeWuType NVARCHAR(36)NOT NULL,
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -200,11 +200,11 @@ CREATE NONCLUSTERED INDEX IX_MK_Type_WuLiuYeWu_YeWuType ON dbo.MK_Type_WuLiuYeWu
 --物流公司维护
 CREATE TABLE MK_Info_WuLiuCompany(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	YeWuID NVARCHAR(36),
-	Name NVARCHAR(50),
+	YeWuID NVARCHAR(36)NOT NULL,
+	Name NVARCHAR(50)NOT NULL,
 	LianXiRen NVARCHAR(30),
 	LianXiFangShi NVARCHAR(50),
-	Address NVARCHAR(255),
+	Address NVARCHAR(255)DEFAULT(''),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -235,9 +235,9 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_WuLiuCompany_Name ON dbo.MK_Info_WuLiuCompa
 --币别
 CREATE TABLE MK_Info_Currency(
 	ID NVARCHAR(36) PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	CurrencyName NVARCHAR(30),
-	CurrencyCode NVARCHAR(30),
-	Remark NVARCHAR(255),
+	CurrencyName NVARCHAR(30)NOT NULL,
+	CurrencyCode NVARCHAR(30)NOT NULL,
+	Remark NVARCHAR(255)DEFAULT(''),
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME
@@ -268,10 +268,15 @@ CREATE NONCLUSTERED INDEX IX_MK_Info_Currency_CurrencyName ON dbo.MK_Info_Curren
 CREATE TABLE MK_Info_User(
 	ID NVARCHAR(36)PRIMARY KEY DEFAULT NEWID() NOT NULL,
 	UserName NVARCHAR(30) NOT NULL,
-	Password NVARCHAR(30) NOT NULL,
-	WuLiuYeWuID NVARCHAR(36),
-	PowerGroupID NVARCHAR(36),
+	[Password] NVARCHAR(30) NOT NULL,
+	WuLiuYeWuID NVARCHAR(36)NOT NULL,
+	PowerGroupID NVARCHAR(36)NOT NULL,
 	DefaultLanguage NVARCHAR(30) DEFAULT 'ChineseSimplified',
+	NickName NVARCHAR(50) NULL,
+	Sex BIT DEFAULT 0 NOT NULL,
+	Approve_ChangeMark CHAR(1) DEFAULT 'N' NOT NULL,
+	CC_ChangeMark CHAR(1)DEFAULT 'N' NOT NULL,
+	Tel VARCHAR(51) NOT NULL,
 	ShowMark CHAR(1) DEFAULT 'Y',
 	CreateUser NVARCHAR(30),
 	CreateDate DATETIME,
@@ -524,3 +529,114 @@ VALUES
 (   NEWID(), N'审批', N'审批', N'2', 'Y',  N'mk', GETDATE() )
 ,(   NEWID(), N'系统', N'系统', N'2', 'Y',  N'mk', GETDATE() )
 ,(   NEWID(), N'基础数据', N'基础数据', N'2', 'Y',  N'mk', GETDATE() )
+
+
+
+--（扩展的）数据字典表
+CREATE TABLE MK_Type_DictionaryLabel(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT (NEWID()) NOT NULL,/*明细GUID*/
+	DataLabelName NVARCHAR(50) NOT NULL,											/*明细名称*/
+	IsBaseType CHAR(1) DEFAULT('N') NOT NULL,										/*明细是否为基础类型*/
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,										/*明细显示标记*/
+    CreateUser NVARCHAR (30) NOT NULL,												    /*明细创建人*/
+    CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL					/*明细创建时间*/
+)
+--（扩展的）数据字典表
+CREATE TABLE MK_Type_DataDictionary(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT (NEWID()) NOT NULL,/*明细GUID*/
+	DataLabelID VARCHAR(36) NOT NULL,											        /*明细标签*/
+	DataTypeName NVARCHAR(50) NOT NULL,											/*明细名称*/
+	DataDesc NVARCHAR(150) DEFAULT (''),												/*明细说明*/
+	DataPlaceholder NVARCHAR(150) DEFAULT (''),									    /*明细占位符*/
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,										/*明细显示标记*/
+    CreateUser NVARCHAR (30) NOT NULL,												    /*明细创建人*/
+    CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL					/*明细创建时间*/
+)
+--审批组
+CREATE TABLE MK_Type_ApprovedGroup
+(
+    ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,/*审批组GUID*/
+	ApprovedGroupName NVARCHAR(30) NOT NULL,								                          /*审批组名称*/
+	Sort INT DEFAULT(0) NOT NULL,																					  /*审批组排列顺序*/
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,										                          /*显示标记*/
+    CreateUser NVARCHAR (30) NOT NULL,												                              /*创建人*/
+    CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL					                          /*创建时间*/
+)
+--审批类型
+CREATE TABLE MK_Type_ApprovedType
+(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,   /*审批类型GUID*/
+    ApprovedGroupID VARCHAR(36) NOT NULL,																	  /*审批组GUID*/
+	ApprovedTypeName NVARCHAR(30) NOT NULL,															  /*审批类型名称*/
+	ClassIconfont VARCHAR(100) 																							  /*审批类型图标类名*/
+	DEFAULT(' icon mk-iconfont mk-icon-CodeSandbox-square-f  ') NOT NULL , 				  
+	BackgroundColor VARCHAR(20) DEFAULT(' layui-bg-green ') NOT NULL,					  /*审批类型背景颜色*/
+	Sort INT DEFAULT(0) NOT NULL,																					  /*审批类型排列顺序*/
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,										                          /*显示标记*/
+    CreateUser NVARCHAR (30) NOT NULL,												                              /*创建人*/
+    CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL					                          /*创建时间*/
+)
+--发起审批类型的模板
+CREATE TABLE MK_Type_ApprovedTemplate
+(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL, /*审批模板GUID*/
+	ApprovedTemplateName NVARCHAR(30) NOT NULL,
+	ApprovedTypeID VARCHAR(36) NOT NULL,                                                                           /*审批类型GUID*/
+    TitleLabel NVARCHAR(20) NOT NULL,																	  					/*审批表题标签名称*/
+	DataLabeName NVARCHAR(20) NOT NULL,																			/*审批明细标签名称*/
+	DataLabelID VARCHAR(36) NOT NULL,								                          							/*审批明细下拉数据绑定ID*/
+	DataParameter NVARCHAR(20) NOT NULL,																		    /*审批明细下拉数据匹配参数*/
+	DescLabel NVARCHAR(20) NOT NULL,																				    /*审批描述标签*/
+	ImageMinNum INT DEFAULT(0) NOT NULL,																		/*审批最小图片数量*/
+	ImageMaxNum INT DEFAULT (9) NOT NULL,																	    /*审批最大图片数量*/
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,										      							/*显示标记*/
+    CreateUser NVARCHAR (30) NOT NULL,												          							/*创建人*/
+    CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL					      							/*创建时间*/
+)
+CREATE NONCLUSTERED INDEX IX_MK_Type_ApprovedTemplate_CreateDate ON dbo.MK_Type_ApprovedTemplate(CreateDate DESC)
+
+/**/--发起的审批任务
+CREATE TABLE MK_Info_ApprovedTask(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,
+	ApprovedTypeID VARCHAR(36) NOT NULL,
+	TitleValue NVARCHAR(140) DEFAULT('') NOT NULL ,
+	DescValue NVARCHAR(285) DEFAULT('') NULL ,
+	ApproveorName NVARCHAR(30) NOT NULL,
+	ApproveStatus CHAR(1) DEFAULT('N') NOT NULL,
+	ApprovedResultDesc NVARCHAR(285) DEFAULT('') NULL ,
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,							
+	CreateUser NVARCHAR (30) NOT NULL,										
+	CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL		
+)
+CREATE NONCLUSTERED INDEX IX_MK_Info_ApprovedTask_CreateDate ON dbo.MK_Info_ApprovedTask(CreateDate DESC)
+
+--审批任务的明细详情
+CREATE TABLE MK_Info_ApprovedTaskDetail(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,
+	ApprovedTaskID VARCHAR(36) NOT NULL,
+	DictionaryLabelID VARCHAR(36) NOT NULL,
+	DataDictionaryID VARCHAR(36) NOT NULL,
+	DataParameter  NVARCHAR(70) DEFAULT('') NOT NULL ,
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,							
+	CreateUser NVARCHAR (30) NOT NULL,										
+	CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL		
+)
+--审批任务的上传图片
+CREATE TABLE MK_Info_ApprovedTaskImages(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,
+	ApprovedTaskID VARCHAR(36) NOT NULL,
+	ImagesPath NVARCHAR(255) DEFAULT('') NOT NULL,
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,							
+	CreateUser NVARCHAR (30) NOT NULL,										
+	CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL		
+)
+--审批任务抄送人
+CREATE TABLE MK_Info_ApprovedTaskCC(
+	ID VARCHAR(36) PRIMARY KEY DEFAULT(NEWID()) NOT NULL,
+	ApprovedTaskID VARCHAR(36) NOT NULL,
+	CCID VARCHAR(36) NOT NULL,
+	CCName NVARCHAR(30) NOT NULL,
+	ShowMark CHAR(1) DEFAULT ('Y') NOT NULL,							
+	CreateUser NVARCHAR (30) NOT NULL,										
+	CreateDate DATETIME DEFAULT (GETDATE()) NOT NULL		
+)

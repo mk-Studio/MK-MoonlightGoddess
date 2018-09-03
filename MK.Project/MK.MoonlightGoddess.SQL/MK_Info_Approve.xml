@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MK_Info_Approve>
+  <sql name="GetApprovalsColla">
+    SELECT g.ID,g.ApprovedGroupName,
+    (
+      SELECT ty.ID+','+ty.ApprovedTypeName+','+ty.ClassIconfont+','+
+      ty.BackgroundColor+','+(ISNULL(tmp.ID,'#N#')) +';'
+      FROM MK_Type_ApprovedType ty
+      LEFT JOIN MK_Type_ApprovedTemplate tmp ON tmp.ApprovedTypeID = ty.ID
+      WHERE ty.ApprovedGroupID = g.ID AND ty.ShowMark = 'Y' ORDER BY ty.Sort FOR XML PATH('')
+    ) AS ApprovedTypes
+    FROM dbo.MK_Type_ApprovedGroup g WHERE g.ShowMark = 'Y' ORDER BY g.Sort
+  </sql>
+
+  <sql name="GetApprovalsTemplate">
+    SELECT ID,ApprovedTemplateName,TitleLabel,DataLabeName,DataLabelID,DataParameter,DescLabel,ImageMinNum,ImageMaxNum
+    FROM dbo.MK_Type_ApprovedTemplate WHERE ApprovedTypeID = @ApprovedTypeID
+  </sql>
+
+  <sql name="GetApprovalsorInfo">
+    SELECT Approve_ChangeMark,CC_ChangeMark,
+    (SELECT  ApproveID+','+ApproveName+';' FROM MK_Info_Approve WHERE UserID = a.ID FOR XML PATH('')) ApproveInfo,
+    (SELECT CCID+','+CCName+';' FROM MK_Info_CC WHERE UserID = a.ID FOR XML PATH('')) CCInfo
+    FROM MK_Info_User a
+    WHERE a.UserName = @UserName
+  </sql>
+
+  <sql name="SendApprove">
+    INSERT MK_Info_ApprovedTask( ID ,ApprovedTypeID ,TitleValue ,DescValue ,ApproveorID,ApproveorName ,ApproveStatus ,ShowMark ,CreateUser ,CreateDate)
+    VALUES  (@ID, @ApprovedTypeID, @TitleValue, @DescValue, @ApproveorID, @ApproveorName, @ApproveStatus, @ShowMark, @CreateUser, @CreateDate)
+  </sql>
+
+
+  <sql name="GetQueryMyInitiate">
+    SELECT
+    *
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY task.CreateDate DESC ) AS RowID, task.ID ,
+    apdg.ApprovedGroupName, apdty.ApprovedTypeName,
+    task.TitleValue ,task.DescValue ,task.ApproveorName ,task.ApprovedResultDesc,
+    task.CreateDate ,task.ApproveStatus ,task.CreateUser ,
+    (SELECT '[ '+CCName+' ] ' FROM dbo.MK_Info_ApprovedTaskCC WHERE ApprovedTaskID = task.ID FOR XML PATH('')) AS CCName
+    FROM dbo.MK_Info_ApprovedTask task
+    JOIN dbo.MK_Type_ApprovedType apdty ON apdty.ID = task.ApprovedTypeID
+    JOIN dbo.MK_Type_ApprovedGroup apdg ON apdg.ID = apdty.ApprovedGroupID
+    WHERE task.ShowMark = 'Y' AND task.CreateUser = @CreateUser
+    AND apdg.ID = ISNULL(@ApprovedGroupID,apdg.ID)
+    AND apdty.ID = ISNULL(@ApprovedTypeID,apdty.ID)
+    AND task.ApproveStatus = ISNULL(@ApproveStatus,task.ApproveStatus)
+    AND task.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(CAST(CAST(@EndDate AS DATE) AS VARCHAR(20)) + ' 23:59:57',DATEADD(HH,1,GETDATE()))
+    ) as t
+    order by t.RowID
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="GetQueryWaitingMyApprovals">
+    SELECT
+    *
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY task.CreateDate DESC ) AS RowID, task.ID ,
+    apdg.ApprovedGroupName, apdty.ApprovedTypeName,
+    task.TitleValue ,task.DescValue ,task.ApproveorName ,task.ApprovedResultDesc,
+    task.CreateDate ,task.ApproveStatus ,task.CreateUser ,
+    (SELECT '[ '+CCName+' ] ' FROM dbo.MK_Info_ApprovedTaskCC WHERE ApprovedTaskID = task.ID FOR XML PATH('')) AS CCName
+    FROM dbo.MK_Info_ApprovedTask task
+    JOIN dbo.MK_Type_ApprovedType apdty ON apdty.ID = task.ApprovedTypeID
+    JOIN dbo.MK_Type_ApprovedGroup apdg ON apdg.ID = apdty.ApprovedGroupID
+    WHERE task.ShowMark = 'Y' AND task.ApproveorID = @ApproveorID
+    AND apdg.ID = ISNULL(@ApprovedGroupID,apdg.ID)
+    AND apdty.ID = ISNULL(@ApprovedTypeID,apdty.ID)
+    AND task.ApproveStatus = 'N'
+    AND task.CreateUser = ISNULL(@CreateUser,task.CreateUser)
+    AND task.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(CAST(CAST(@EndDate AS DATE) AS VARCHAR(20)) + ' 23:59:57',DATEADD(HH,1,GETDATE()))
+    ) as t
+    order by t.RowID
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="GetQueryCCMyApprovals">
+    SELECT
+    *
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY task.CreateDate DESC ) AS RowID, task.ID ,
+    apdg.ApprovedGroupName, apdty.ApprovedTypeName,
+    task.TitleValue ,task.DescValue ,task.ApproveorName ,task.ApprovedResultDesc,
+    task.CreateDate ,task.ApproveStatus ,task.CreateUser ,
+    (SELECT '[ '+CCName+' ] ' FROM dbo.MK_Info_ApprovedTaskCC WHERE ApprovedTaskID = task.ID FOR XML PATH('')) AS CCName
+    FROM dbo.MK_Info_ApprovedTask task
+    JOIN dbo.MK_Type_ApprovedType apdty ON apdty.ID = task.ApprovedTypeID
+    JOIN dbo.MK_Type_ApprovedGroup apdg ON apdg.ID = apdty.ApprovedGroupID
+    JOIN dbo.MK_Info_ApprovedTaskCC apdcc ON apdcc.ApprovedTaskID = task.ID
+    WHERE task.ShowMark = 'Y' AND apdcc.CCID = @ID
+    AND apdg.ID = ISNULL(@ApprovedGroupID,apdg.ID)
+    AND apdty.ID = ISNULL(@ApprovedTypeID,apdty.ID)
+    AND task.ApproveStatus = ISNULL(@ApproveStatus,ApproveStatus)
+    AND task.CreateUser = ISNULL(@CreateUser,task.CreateUser)
+    AND task.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(CAST(CAST(@EndDate AS DATE) AS VARCHAR(20)) + ' 23:59:57',DATEADD(HH,1,GETDATE()))
+    ) as t
+    order by t.RowID
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="GetQueryMyApprovals">
+    SELECT
+    *
+    INTO #TableResult
+    FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY task.CreateDate DESC ) AS RowID, task.ID ,
+    apdg.ApprovedGroupName, apdty.ApprovedTypeName,
+    task.TitleValue ,task.DescValue ,task.ApproveorName ,task.ApprovedResultDesc,
+    task.CreateDate ,task.ApproveStatus ,task.CreateUser ,
+    (SELECT '[ '+CCName+' ] ' FROM dbo.MK_Info_ApprovedTaskCC WHERE ApprovedTaskID = task.ID FOR XML PATH('')) AS CCName
+    FROM dbo.MK_Info_ApprovedTask task
+    JOIN dbo.MK_Type_ApprovedType apdty ON apdty.ID = task.ApprovedTypeID
+    JOIN dbo.MK_Type_ApprovedGroup apdg ON apdg.ID = apdty.ApprovedGroupID
+    WHERE task.ShowMark = 'Y' AND task.ApproveorID = @ApproveorID
+    AND apdg.ID = ISNULL(@ApprovedGroupID,apdg.ID)
+    AND apdty.ID = ISNULL(@ApprovedTypeID,apdty.ID)
+    AND task.ApproveStatus = ISNULL(@ApproveStatus,ApproveStatus)
+    AND task.ApproveStatus != 'N'
+    AND task.CreateUser = ISNULL(@CreateUser,task.CreateUser)
+    AND task.CreateDate BETWEEN ISNULL(@StartDate,'2018-5-20') AND ISNULL(CAST(CAST(@EndDate AS DATE) AS VARCHAR(20)) + ' 23:59:57',DATEADD(HH,1,GETDATE()))
+    ) as t
+    order by t.RowID
+
+    SELECT TOP (@limit) * FROM #TableResult WHERE RowID > (@limit*(@page-1))
+    SELECT COUNT(ID) AS rows FROM #TableResult
+    DROP TABLE #TableResult
+  </sql>
+
+  <sql name="GetQueryTaskDetail">
+    SELECT a.ID
+    ,(d.DataLabeName+ ': ' +c.DataTypeName) AS DataTypeName
+    ,(d.DataParameter + ': ' +a.DataParameter) AS DataParameter
+    FROM  dbo.MK_Info_ApprovedTaskDetail a
+    JOIN dbo.MK_Type_DictionaryLabel b ON b.ID = a.DictionaryLabelID
+    JOIN dbo.MK_Type_DataDictionary c ON c.ID = a.DataDictionaryID
+    JOIN dbo.MK_Info_ApprovedTask t ON t.ID = a.ApprovedTaskID
+    JOIN dbo.MK_Type_ApprovedTemplate d ON d.ApprovedTypeID = t.ApprovedTypeID
+    WHERE ApprovedTaskID = @ApprovedTaskID
+  </sql>
+
+  <sql name="GetApprovedImages">
+    SELECT  ID,ImagesPath FROM dbo.MK_Info_ApprovedTaskImages
+    WHERE ApprovedTaskID = @ApprovedTaskID
+  </sql>
+
+  <sql name="UpdateApproveStatus">
+    UPDATE dbo.MK_Info_ApprovedTask SET ShowMark = 'N' WHERE ID = @ID
+  </sql>
+
+  <sql name="UpdateApprovalsResult">
+    UPDATE dbo.MK_Info_ApprovedTask
+    SET ApproveStatus = @ApproveStatus,ApprovedResultDesc = @ApprovedResultDesc
+    WHERE ID = @ID
+  </sql>
+
+  <sql name="CancelApprovalsResult">
+    UPDATE dbo.MK_Info_ApprovedTask SET ApproveStatus = 'N',ApprovedResultDesc = ''
+    WHERE ID = @ID
+  </sql>
+</MK_Info_Approve>

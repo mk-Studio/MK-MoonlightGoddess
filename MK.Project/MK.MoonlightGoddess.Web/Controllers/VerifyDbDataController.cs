@@ -73,7 +73,22 @@ namespace MK.MoonlightGoddess.Web.Controllers
             /// 数据标签名称
             /// </summary>
             public string DataLabelName { get; set; }
+
+            /// <summary>
+            /// 审批组名称
+            /// </summary>
+            public string ApprovedGroupName { get; set; }
             
+            /// <summary>
+            /// 审批类型名称
+            /// </summary>
+            public string ApprovedTypeName { get; set; }
+
+            /// <summary>
+            /// 类型数据名称
+            /// </summary>
+            public string DataTypeName { get; set; }
+
         }
         //Verify
         [HttpPost]

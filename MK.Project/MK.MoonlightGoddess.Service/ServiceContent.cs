@@ -29,6 +29,20 @@ namespace MK.MoonlightGoddess.Service
         }
 
         /// <summary>
+        /// 返回一个 <see cref="DataSet"/> 类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="xmlName"></param>
+        /// <param name="sqlName"></param>
+        /// <param name="cmdType"></param>
+        /// <returns></returns>
+        public static DataSet SelectDataSet(TModel model, string xmlName, string sqlName, bool allowNull = false, CommandType cmdType = CommandType.Text)
+        {
+            var _Data = DBContent<TModel>.GetDataSet(model, xmlName, sqlName, allowNull, cmdType);
+            return _Data;
+        }
+
+        /// <summary>
         ///  统一加载下拉框的函数，XML => MK_Info_SelectOptions.xml;
         /// 根据SqlName获取下拉框要绑定的数据，返回类型：List[<see cref="SelectOptionsResultModel"/>]。
         /// </summary>

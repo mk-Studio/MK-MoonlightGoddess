@@ -10,7 +10,8 @@
     <meta name="viewport" content="width=device-width" />
     <title>InitiateApprovals</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.4.2/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/mk-icon-hub/iconfont.css" rel="stylesheet" />
     <style type="text/css">
         .approvals-units {
             width: 650px;
@@ -22,254 +23,95 @@
         .approvals-units-item {
             width: 100%;
             height: 85px;
-            margin: 5px 5px 5px 0px;
             text-align: center;
             line-height: 85px;
+        }
+        .maxh {
+            max-height: 85px !important;
         }
 
         .layui-cursor-pointer {
             cursor: pointer;
-            border-radius:6px;
+            border-radius: 6px;
         }
+
         .layui-bg-pink {
-            background-color:pink;
+            background-color: pink !important;
+            color: #fff !important;
         }
+
         .layui-approvals-img {
             width: 54px;
             height: 54px;
             border-radius: 6px;
         }
+        .mk-iconsize-default {
+            font-size: 50px;
+        }
     </style>
 </head>
 <body>
-    <div class="layui-collapse">
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title"><span class="layui-badge layui-bg-cyan">基本</span> <span class="layui-badge">8</span></h2>
-            <div class="layui-colla-content layui-show">
-                
-                <div class="layui-row layui-col-space12">
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-red layui-cursor-pointer " approved-url="模块1" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块1">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg" class="layui-approvals-img" />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块1
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-blue layui-cursor-pointer " approved-url="模块2" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块2">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip ">
-                                审核模块2
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-orange layui-cursor-pointer " approved-url="模块3" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块3">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块3
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-cyan layui-cursor-pointer " approved-url="模块4" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块4">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块4
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-pink layui-cursor-pointer " approved-url="模块5" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块5">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块5
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-black layui-cursor-pointer " approved-url="模块6" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块6">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块6
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-gray layui-cursor-pointer " approved-url="模块7" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块7">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块7
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-green layui-cursor-pointer " approved-url="模块8" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块8">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块8
-                            </div>
-                        </div>
-                    </div>
-
-                    @*
-                        <div class="layui-col-xs6 layui-col-sm6 layui-col-md4  layui-col-lg2 ">
-                                <div class="approvals-units-item layui-bg-green"></div>
-                          </div>
-                    *@
-                </div>
-            </div>
-        </div>
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title"><span class="layui-badge layui-bg-cyan">业务</span> <span class="layui-badge">3</span></h2>
-            <div class="layui-colla-content layui-show">
-
-                <div class="layui-row layui-col-space12">
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-black layui-cursor-pointer " approved-url="模块11" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块11">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块11
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-orange layui-cursor-pointer " approved-url="模块12" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块12">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块12
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-blue layui-cursor-pointer " approved-url="模块13" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块13">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块13
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title"><span class="layui-badge layui-bg-cyan">其他</span> <span class="layui-badge">5</span></h2>
-            <div class="layui-colla-content layui-show">
-                <div class="layui-row layui-col-space12">
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-pink layui-cursor-pointer " approved-url="模块21" onclick="OnApprovalsUnit(this)" onclick="" data-toggle="tooltip" title="审核模块21">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块21
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-blue layui-cursor-pointer " approved-url="模块22" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块22">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块22
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-orange layui-cursor-pointer " approved-url="模块23" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块23">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块23
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-red layui-cursor-pointer " approved-url="模块24" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块24">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块24
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg2">
-                        <div class="approvals-units-item layui-bg-gray layui-cursor-pointer " approved-url="模块25" onclick="OnApprovalsUnit(this)" data-toggle="tooltip" title="审核模块25">
-                            <div class="layui-col-md4">
-                                <img src="~/Files/2018-05/20180530192331mingsnx-git.jpeg"  class="layui-approvals-img"  />
-                            </div>
-                            <div class="layui-col-md6 layui-elip">
-                                审核模块25
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
+    <div class="layui-collapse" lay-filter="ApprovalsColla"></div>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.4.2/layui/layui.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Js/MKCom.js"></script>
     <script>
         var layer;
         //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
         layui.use(['element','layer'], function () {
             var element = layui.element;
             layer = layui.layer;
-            $(function () { $("[data-toggle='tooltip']").tooltip(); });
-            //…
-           
+            var index = layer.load(0, { shade: false });
+            $.get("/Approvals/GetApprovalsColla", {}, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var html = "";
+                    html +=
+                        '<div class="layui-colla-item">' +
+                            '<h2 class="layui-colla-title"> <span class="layui-badge layui-bg-cyan">' + data[i].ApprovedGroupName + '</span> <span class="layui-badge">' + data[i].ApprovedTypes.length + '</span></h2>'+
+                            '<div class="layui-colla-content layui-show">' +
+                                 '<div class="layui-row layui-col-space12" >';
+
+                    for (var t = 0; t < data[i].ApprovedTypes.length; t++) {
+                        html += '<div class="layui-col-lg2">'+
+                            '    <div class="approvals-units-item layui-cursor-pointer " style="color:white; background-color:' + data[i].ApprovedTypes[t].BackgroundColor + '" id="' + data[i].ApprovedTypes[t].ID + '" hasTemplate="' + data[i].ApprovedTypes[t].HasTemplate+'" approved-url="'+data[i].ApprovedTypes[t].ApprovedTypeName+'" onclick = "OnApprovalsUnit(this)" data-toggle="tooltip" title = "'+data[i].ApprovedTypes[t].ApprovedTypeName+'" >'+
+                            '        <div class="maxh layui-col-md4">'+
+                            '            <i class="mk-iconfont '+data[i].ApprovedTypes[t].ClassIconfont+' mk-iconsize-default"></i>'+
+                            '        </div>'+
+                            '        <div class="layui-col-md5 layui-elip">'+
+                                        data[i].ApprovedTypes[t].ApprovedTypeName +
+                            '        </div>'+
+                            '    </div>'+
+                            '</div>';
+                    }
+
+                    html +='</div>' +
+                            '</div>' +
+                        '</div>';
+                    $(".layui-collapse").append(html);
+                    element.render("collapse", "ApprovalsColla");
+                    $("[data-toggle='tooltip']").tooltip();
+                }
+                layer.close(index);
+            }, "json");
         });
 
         function OnApprovalsUnit(obj) {
-            var appUnit = $(obj).attr("approved-url")
-            layer.msg(appUnit, { icon: 1 });
-            window.parent.activeTab(appUnit, appUnit, "https://www.mingsn.xyz");
+            var hasTemplate = $(obj).attr("hasTemplate")
+            , appUnit = $(obj).attr("approved-url")
+            , appID = $(obj).attr("id")
+            , url = "";
+            if (appID && hasTemplate === "true") {
+                var onIndex = layer.load(0, { shade: false })
+                url = "/Approvals/FormApprovals?id=" + appID;
+                window.location.href = url;
+                layer.close(onIndex);
+            }
+            else {
+                laytiperr("还没有该审批类型模板", obj, "w", 2599);
+            }
+            //window.parent.activeTab(appUnit, appUnit, url);
         }
     </script>
 </body>

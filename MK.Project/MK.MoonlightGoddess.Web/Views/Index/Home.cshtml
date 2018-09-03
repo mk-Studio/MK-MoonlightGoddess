@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Home</title>
-    <link href="~/Scripts/layui-v2.3.0-rc1/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Scripts/layui-v2.4.2/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
 
         .layui-tab-title .layui-this:after {
@@ -108,8 +108,9 @@
         </div>
 
         <ul class="rightmenu">
-            <li data-type="closethis"><i class="layui-icon layui-icon-note" style="font-size: 15px; color:#1E9FFF;"></i> 关闭当前</li>
+            @*<li data-type="closethis"><i class="layui-icon layui-icon-note" style="font-size: 15px; color:#1E9FFF;"></i> 关闭当前</li>*@
             <li data-type="closeall"><i class="layui-icon layui-icon-note" style="font-size: 15px; color:#FF5722;"></i> 关闭所有</li>
+            @*<li data-type="refresh"><i class="layui-icon layui-icon-refresh" style="font-size: 15px; color:#FF5722;"></i> 刷新</li>*@
         </ul>
 
         <div class="layui-footer">
@@ -118,14 +119,15 @@
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/layui-v2.3.0-rc1/layui/layui.js"></script>
+    <script src="~/Scripts/layui-v2.4.2/layui/layui.js"></script>
     <script src="~/Js/MKCom.js"></script>
     <script type="text/javascript">
         var
             $,
             element,
+            menusObj = {},
             //新增一个Tab项
-            addTab = (id, title, url) => {
+            addTab = function(id, title, url) {
                 //新增一个Tab项
                 element.tabAdd('homeContentTabs', {
                     title: title,
@@ -142,12 +144,12 @@
                     }
                 );
                 element.tabChange("homeContentTabs", r.length - 1);
-                element.init();
+                element.render("tab","homeContentTabs");
             },
 
             //激活并添加tab，供于除本页面以外的所有子页面调用
             //调用示列：window.parent.activeTab("mingsn", "mingsn", "https://www.mingsn.xyz");
-            activeTab = (id, title, url) => {
+            activeTab = function (id, title, url) {
                 var isHas = false;
                 $.each($(".layui-tab-title li"), function () {
                     if ($(this).attr("lay-id") === title) {
@@ -166,8 +168,9 @@
             var iframes = document.getElementsByName("iframe");
             try {
                 for (var i = 0; i < iframes.length; i++)
-                    //iframes[i].height = iframes[i].contentWindow.document.documentElement.scrollHeight;
-                    iframes[i].height = window.screen.height - 320;
+                    iframes[i].height = $(".layui-body").height() - $("#tabTitle").outerHeight() - 44//44为padding值;
+                    //iframes[i].height = iframes[i].contentWindow.document.documentElement.clientHeight;
+                    //iframes[i].height = window.screen.height - 320;
             } catch (ex) { }
         }
 
@@ -176,7 +179,7 @@
         function CustomRightClick(id) {
             //取消右键  rightmenu属性开始是隐藏的 ，当右击的时候显示，左击的时候隐藏
             $('.layui-tab-title li').on('contextmenu', function () { return false; })
-            $('.layui-tab-title,.layui-tab-title li').click(function () {
+            $(window).click(function () {
                 $('.rightmenu').hide();
             });
             //桌面点击右击
@@ -220,13 +223,16 @@
                                     r[i].Menus[m].PowerName +
                                 '</a>' +
                             '</dd>'
+                        menusObj[r[i].Menus[m].PowerName] = {
+                            url: r[i].Menus[m].MenuAddress + '?PowerID=' + r[i].Menus[m].ID
+                        }
                     }
                     navHtml +=
                         '   </dl>' +
                         '</li>';
                 }
                 $("#NavMenus").append(navHtml);
-                element.init();
+                element.render("nav","NavMenu");
             }, "json");
 
             //tab触发事件
@@ -253,23 +259,29 @@
             
             //注册tab右键菜单点击事件
             $(".rightmenu li").click(function () {
-                //右键菜单中的选项被点击之后，判断type的类型，决定关闭所有还是关闭当前。
-                if ($(this).attr("data-type") == "closethis") {
-                    //如果关闭当前，即根据显示右键菜单时所绑定的id，执行tabDelete
-                    active.tabDelete($(this).attr("data-id"))
+                //右键菜单中的选项被点击之后，判断type的类型。
+
+                switch ($(this).attr("data-type")) {
+                    case "closeall":
+                        var tabtitle = $(".layui-tab-title li");
+                        var ids = new Array();
+                        $.each(tabtitle, function (i) {
+                            ids[i] = $(this).attr("lay-id");
+                        })
+                        //如果关闭所有 ，即将所有的lay-id放进数组，执行tabDeleteAll
+                        active.tabDeleteAll(ids);
+                        break;
+                    case "refresh":
+                        laymsg("刷新");
+                        console.log(document.getElementsByName("iframe"));
+                        console.log($(this).attr("data-id"));
+                        console.log(element);
+                        
+                        break;
+                        //最后再隐藏右键菜单
+                        $('.rightmenu').hide();
                 }
-                else if ($(this).attr("data-type") == "closeall") {
-                    var tabtitle = $(".layui-tab-title li");
-                    var ids = new Array();
-                    $.each(tabtitle, function (i) {
-                        ids[i] = $(this).attr("lay-id");
-                    })
-                    //如果关闭所有 ，即将所有的lay-id放进数组，执行tabDeleteAll
-                    active.tabDeleteAll(ids);
-                }
-                //最后再隐藏右键菜单
-                $('.rightmenu').hide();
-            })
+            });
             
             // 点击空白处关闭右键弹窗
             $(document).click(function () {

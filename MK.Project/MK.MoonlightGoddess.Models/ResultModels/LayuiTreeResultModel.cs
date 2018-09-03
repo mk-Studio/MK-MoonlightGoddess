@@ -45,6 +45,21 @@ namespace MK.MoonlightGoddess.Models.ResultModels
             }
             outList = _root;
         }
+
+        public List<LayuiTreeResultModel> PowerGroupChildNode(DataTable data)
+        {
+            List<LayuiTreeResultModel> result = new List<LayuiTreeResultModel>();
+            LayuiTreeResultModel nodes = new LayuiTreeResultModel();
+            foreach (DataRow row in data.Rows)
+            {
+                LayuiTreeResultModel node = new LayuiTreeResultModel();
+                node.id = row["ID"].ToString();
+                node.name = row["Name"].ToString();
+                node.children = new List<LayuiTreeResultModel>();
+                result.Add(node);
+            }
+            return result;
+        }
     }
 
     public class NavigationbarTree
