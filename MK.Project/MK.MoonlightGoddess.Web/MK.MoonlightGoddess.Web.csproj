@@ -163,6 +163,7 @@
     <Compile Include="Controllers\BaseInfo\Form\FormDataDictionaryController.cs" />
     <Compile Include="Controllers\BaseInfo\MKTypeWuLiaoController.cs" />
     <Compile Include="Controllers\Com\ComViewController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\FunBarController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
