@@ -12,7 +12,7 @@ namespace MK.MoonlightGoddess.Data
     public class SqlDBHelper
     {
         //链接数据库
-        public static string connectionString = "server=111.230.71.118;database=MK_MoonlightGoddess;uid=sa;pwd=mingsn@456;";
+        public static string connectionString = "server=127.0.0.1;database=MK_DB;uid=sa;pwd=123456;";
 
         /// <summary>
         /// 根据sql查询表返回DataSet
